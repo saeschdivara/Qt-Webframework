@@ -1,20 +1,18 @@
 #include "AbstractWebsite.h"
-
-using namespace web::website;
+#include "private/AbstractWebsite_p.h"
 
 namespace web {
 namespace website {
 
-class AbstractWebsitePrivate
-{
-public:
-        QUrl url;
-};
-
 AbstractWebsite::AbstractWebsite(QObject *parent) :
-    QObject(parent),
-    d_ptr(new AbstractWebsitePrivate)
+    AbstractWebsite(new AbstractWebsitePrivate, parent)
 {
+}
+
+void AbstractWebsite::addPage(page::PageInterface *page)
+{
+    Q_D(AbstractWebsite);
+    d->pages.append(page);
 }
 
 AbstractWebsite::AbstractWebsite(AbstractWebsitePrivate *pr, QObject *parent) :

@@ -9,14 +9,21 @@ QT       -= gui
 TARGET = webframework-qt
 TEMPLATE = lib
 
+QMAKE_CXXFLAGS += -std=c++11
+
 DEFINES += WEBFRAMEWORKQT_LIBRARY
 
 SOURCES += \
-    website/AbstractWebsite.cpp
+    website/AbstractWebsite.cpp \
+    page/SimplePage.cpp
 
 HEADERS +=\
         webframework-qt_global.h \
-    website/AbstractWebsite.h
+    website/AbstractWebsite.h \
+    page/PageInterface.h \
+    page/StatefulPageInterface.h \
+    page/SimplePage.h \
+    website/private/AbstractWebsite_p.h
 
 unix:!symbian {
     maemo5 {
@@ -26,3 +33,10 @@ unix:!symbian {
     }
     INSTALLS += target
 }
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../3rdparty/tufao-debug/release/ -ltufao
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../3rdparty/tufao-debug/debug/ -ltufao
+else:unix:!macx: LIBS += -L$$PWD/../3rdparty/tufao-debug/ -ltufao
+
+INCLUDEPATH += $$PWD/../3rdparty/tufao/src
+DEPENDPATH += $$PWD/../3rdparty/tufao/src

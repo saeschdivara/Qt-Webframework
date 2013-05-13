@@ -10,7 +10,7 @@ namespace page
 
 class JsCodePrivate;
 
-class JsCode
+class WEBFRAMEWORKQTSHARED_EXPORT JsCode
 {
     public:
         JsCode();

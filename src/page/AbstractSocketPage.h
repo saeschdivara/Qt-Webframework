@@ -2,7 +2,8 @@
 #define ABSTRACTSOCKETPAGE_H
 
 #include "webframework-qt_global.h"
-#include "StatefulPageInterface.h"
+#include "page/StatefulPageInterface.h"
+#include "js/JsCode.h"
 
 namespace web
 {
@@ -16,7 +17,7 @@ class WEBFRAMEWORKQTSHARED_EXPORT AbstractSocketPage : public StatefulPageInterf
     public:
         AbstractSocketPage();
 
-        virtual void injectJavaScript() = 0;
+        virtual void injectJavaScript(JsCode &code) = 0;
 
     protected:
         AbstractSocketPage(AbstractSocketPagePrivate *pr);

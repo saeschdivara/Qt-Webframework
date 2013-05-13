@@ -16,9 +16,11 @@ class WEBFRAMEWORKQTSHARED_EXPORT AbstractSocketPage : public StatefulPageInterf
     public:
         AbstractSocketPage();
 
+        virtual void injectJavaScript() = 0;
+
     protected:
         AbstractSocketPage(AbstractSocketPagePrivate *pr);
-        AbstractSocketPage *d_ptr;
+        AbstractSocketPagePrivate *d_ptr;
 
     private:
         Q_DECLARE_PRIVATE(AbstractSocketPage)

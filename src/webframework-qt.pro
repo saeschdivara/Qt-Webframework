@@ -16,7 +16,8 @@ DEFINES += WEBFRAMEWORKQT_LIBRARY
 SOURCES += \
     website/AbstractWebsite.cpp \
     page/SimplePage.cpp \
-    page/AbstractSocketPage.cpp
+    page/AbstractSocketPage.cpp \
+    js/JsCode.cpp
 
 HEADERS +=\
         webframework-qt_global.h \
@@ -27,7 +28,8 @@ HEADERS +=\
     website/private/AbstractWebsite_p.h \
     page/InteractivePageInterface.h \
     page/AbstractSocketPage.h \
-    page/private/AbstractSocketPage_p.h
+    page/private/AbstractSocketPage_p.h \
+    js/JsCode.h
 
 unix:!symbian {
     maemo5 {

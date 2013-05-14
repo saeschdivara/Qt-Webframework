@@ -17,7 +17,7 @@ class WEBFRAMEWORKQTSHARED_EXPORT AbstractWebsite : public QObject
         Q_OBJECT
     public:
         explicit AbstractWebsite(QObject *parent = 0);
-        virtual void publish() = 0;
+        virtual void publish();
         void addPage(page::PageInterface *page);
 
     protected:

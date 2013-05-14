@@ -9,6 +9,23 @@ AbstractWebsite::AbstractWebsite(QObject *parent) :
 {
 }
 
+void AbstractWebsite::publish()
+{
+    Q_D(AbstractWebsite);
+
+    if ( d->server.isNull() ) {
+            d->server.reset(new Tufao::HttpServer);
+        }
+
+    if ( !d->server->isListening() ) {
+            connect( d->server.data(), &Tufao::HttpServer::requestReady,
+                     this, &AbstractWebsite::handleRequest
+                     );
+
+            d->server->listen(QHostAddress::Any, 9999);
+        }
+}
+
 void AbstractWebsite::addPage(page::PageInterface *page)
 {
     Q_D(AbstractWebsite);

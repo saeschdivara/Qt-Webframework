@@ -3,6 +3,8 @@
 
 #include <QtCore/QList>
 #include <QtCore/QUrl>
+#include <QtCore/QScopedPointer>
+#include <httpserver.h>
 #include "page/PageInterface.h"
 
 namespace web {
@@ -13,6 +15,7 @@ class AbstractWebsitePrivate
 public:
         QUrl url;
         QList<page::PageInterface *> pages;
+        QScopedPointer<Tufao::HttpServer> server;
 };
 
 }

@@ -14,6 +14,11 @@ SimplePage::SimplePage(QString fileName) :
 {
 }
 
+QByteArray SimplePage::getContent() const
+{
+    return QByteArray();
+}
+
 SimplePage::SimplePage(SimplePagePrivate *pr, QString fileName) :
     d_ptr(pr)
 {

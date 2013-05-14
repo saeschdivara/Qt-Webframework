@@ -3,6 +3,7 @@
 
 #include "webframework-qt_global.h"
 #include "page/PageInterface.h"
+#include <httpserver.h>
 
 namespace web
 {
@@ -23,7 +24,7 @@ class WEBFRAMEWORKQTSHARED_EXPORT AbstractWebsite : public QObject
         AbstractWebsite(AbstractWebsitePrivate *pr, QObject *parent = 0);
         AbstractWebsitePrivate *d_ptr;
 
-        virtual void handleRequest() = 0;
+        virtual void handleRequest(Tufao::HttpServerRequest &request, Tufao::HttpServerResponse &response) = 0;
 
     private:
         Q_DECLARE_PRIVATE(AbstractWebsite)

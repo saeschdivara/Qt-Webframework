@@ -9,17 +9,18 @@ namespace page
 class JsCodePrivate
 {
     public:
-        QByteArray code;
+        QString code;
 };
 
-JsCode::JsCode() :
+JsCode::JsCode(QString code) :
     d(new JsCodePrivate)
 {
+    d->code = code;
 }
 
-QByteArray &JsCode::code() const
+QByteArray JsCode::code() const
 {
-    return d->code;
+    return d->code.toUtf8();
 }
 
 }

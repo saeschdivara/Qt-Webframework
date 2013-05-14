@@ -13,8 +13,8 @@ class JsCodePrivate;
 class WEBFRAMEWORKQTSHARED_EXPORT JsCode
 {
     public:
-        JsCode();
-        inline QByteArray& code() const;
+        JsCode(QString code);
+        inline QByteArray code() const;
 
     private:
         JsCodePrivate *d;

@@ -17,14 +17,17 @@ class WEBFRAMEWORKQTSHARED_EXPORT AbstractWebsite : public QObject
         Q_OBJECT
     public:
         explicit AbstractWebsite(QObject *parent = 0);
+        ~AbstractWebsite();
+
         virtual void publish();
-        void addPage(page::PageInterface *page);
+        void addPage(QString name, page::PageInterface *page);
 
     protected:
         AbstractWebsite(AbstractWebsitePrivate *pr, QObject *parent = 0);
         AbstractWebsitePrivate *d_ptr;
 
-        virtual void handleRequest(Tufao::HttpServerRequest &request, Tufao::HttpServerResponse &response) = 0;
+        virtual void initPages() {}
+        virtual void handleRequest(Tufao::HttpServerRequest &request, Tufao::HttpServerResponse &response);
 
     private:
         Q_DECLARE_PRIVATE(AbstractWebsite)

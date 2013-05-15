@@ -15,6 +15,7 @@ class WEBFRAMEWORKQTSHARED_EXPORT SimplePage : public PageInterface
 {
     public:
         SimplePage(QString fileName);
+        ~SimplePage();
 
         virtual QByteArray getContent() const Q_DECL_OVERRIDE;
 

@@ -1,7 +1,7 @@
 #ifndef ABSTRACTWEBSITE_P_H
 #define ABSTRACTWEBSITE_P_H
 
-#include <QtCore/QList>
+#include <QtCore/QHash>
 #include <QtCore/QUrl>
 #include <QtCore/QScopedPointer>
 #include <httpserver.h>
@@ -14,7 +14,7 @@ class AbstractWebsitePrivate
 {
 public:
         QUrl url;
-        QList<page::PageInterface *> pages;
+        QHash<QString ,page::PageInterface *> pages;
         QScopedPointer<Tufao::HttpServer> server;
 };
 

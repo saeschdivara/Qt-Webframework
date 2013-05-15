@@ -9,7 +9,6 @@ namespace website {
 AbstractWebsite::AbstractWebsite(QObject *parent) :
     AbstractWebsite(new AbstractWebsitePrivate, parent)
 {
-    initPages();
 }
 
 AbstractWebsite::~AbstractWebsite()
@@ -23,6 +22,8 @@ AbstractWebsite::~AbstractWebsite()
 void AbstractWebsite::publish()
 {
     Q_D(AbstractWebsite);
+
+    initPages();
 
     if ( d->server.isNull() ) {
             d->server.reset(new Tufao::HttpServer);
@@ -53,7 +54,7 @@ void AbstractWebsite::handleRequest(Tufao::HttpServerRequest &request, Tufao::Ht
 {
     Q_D(AbstractWebsite);
 
-    QString url = QString("/") + request.url().toDisplayString();
+    QString url = request.url().toDisplayString();
     if ( d->pages.contains(url) ) {
             page::PageInterface *page = d->pages.value(url);
             response.writeHead(Tufao::HttpServerResponse::OK);

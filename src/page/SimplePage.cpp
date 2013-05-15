@@ -1,4 +1,5 @@
 #include "SimplePage.h"
+#include <QtCore/QFile>
 
 namespace web {
 namespace page {
@@ -6,7 +7,8 @@ namespace page {
 class SimplePagePrivate
 {
     public:
-        QString fileName;
+        QFile file;
+        QByteArray data;
 };
 
 SimplePage::SimplePage(QString fileName) :
@@ -16,19 +18,27 @@ SimplePage::SimplePage(QString fileName) :
 
 SimplePage::~SimplePage()
 {
-    delete d_ptr;
+    Q_D(SimplePage);
+    d->file.close();
 }
 
-QByteArray SimplePage::getContent() const
+QByteArray SimplePage::getContent()
 {
-    return QByteArray();
+    Q_D(SimplePage);
+
+    if ( !d->file.isOpen() ) {
+            d->file.open( QIODevice::ReadOnly );
+        }
+
+    return d->file.readAll();
 }
 
 SimplePage::SimplePage(SimplePagePrivate *pr, QString fileName) :
     d_ptr(pr)
 {
     Q_D(SimplePage);
-    d->fileName = fileName;
+    d->file.setFileName(fileName);
+
 }
 
 }

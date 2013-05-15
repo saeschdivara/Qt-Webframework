@@ -14,7 +14,7 @@ class WEBFRAMEWORKQTSHARED_EXPORT PageInterface
     public:
         virtual ~PageInterface() {}
 
-        virtual QByteArray getContent() const = 0;
+        virtual QByteArray getContent() = 0;
 };
 
 }

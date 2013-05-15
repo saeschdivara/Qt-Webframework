@@ -3,6 +3,7 @@
 
 #include "webframework-qt_global.h"
 #include "PageInterface.h"
+#include <QtCore/QScopedPointer>
 
 namespace web
 {
@@ -17,11 +18,11 @@ class WEBFRAMEWORKQTSHARED_EXPORT SimplePage : public PageInterface
         SimplePage(QString fileName);
         ~SimplePage();
 
-        virtual QByteArray getContent() const Q_DECL_OVERRIDE;
+        virtual QByteArray getContent() Q_DECL_OVERRIDE;
 
     protected:
         SimplePage(SimplePagePrivate *pr, QString fileName);
-        SimplePagePrivate *d_ptr;
+        QScopedPointer<SimplePagePrivate> d_ptr;
 
     private:
         Q_DECLARE_PRIVATE(SimplePage)

@@ -55,6 +55,7 @@ void AbstractWebsite::handleRequest(Tufao::HttpServerRequest &request, Tufao::Ht
     Q_D(AbstractWebsite);
 
     QString url = request.url().toDisplayString();
+
     if ( d->pages.contains(url) ) {
             page::PageInterface *page = d->pages.value(url);
             response.writeHead(Tufao::HttpServerResponse::OK);

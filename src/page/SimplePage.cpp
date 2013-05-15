@@ -1,5 +1,6 @@
 #include "SimplePage.h"
 #include <QtCore/QFile>
+#include <QtCore/QTimer>
 
 namespace web {
 namespace page {
@@ -9,28 +10,35 @@ class SimplePagePrivate
     public:
         QFile file;
         QByteArray data;
+        QTimer timer;
 };
+
+const qint32 CACHE_INTERVAL = 1000 * 60;
 
 SimplePage::SimplePage(QString fileName) :
     SimplePage(new SimplePagePrivate, fileName)
 {
 }
 
-SimplePage::~SimplePage()
-{
-    Q_D(SimplePage);
-    d->file.close();
-}
-
 QByteArray SimplePage::getContent()
 {
     Q_D(SimplePage);
 
-    if ( !d->file.isOpen() ) {
+    if ( d->data.isEmpty() ) {
             d->file.open( QIODevice::ReadOnly );
+            d->data = d->file.readAll();
+            d->file.close();
+
+            d->timer.setInterval( CACHE_INTERVAL );
+
+            QObject::connect( &d->timer, &QTimer::timeout, [=]() {
+                    d->data.clear();
+                });
+
+            d->timer.start();
         }
 
-    return d->file.readAll();
+    return d->data;
 }
 
 SimplePage::SimplePage(SimplePagePrivate *pr, QString fileName) :
@@ -38,7 +46,6 @@ SimplePage::SimplePage(SimplePagePrivate *pr, QString fileName) :
 {
     Q_D(SimplePage);
     d->file.setFileName(fileName);
-
 }
 
 }

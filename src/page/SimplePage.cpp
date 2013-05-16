@@ -1,6 +1,7 @@
 #include "SimplePage.h"
 #include <QtCore/QFile>
 #include <QtCore/QTimer>
+#include <QtCore/QCoreApplication>
 
 namespace web {
 namespace page {
@@ -26,7 +27,12 @@ QByteArray SimplePage::getContent()
 
     if ( d->data.isEmpty() ) {
             d->file.open( QIODevice::ReadOnly );
-            d->data = d->file.readAll();
+
+            while ( !d->file.atEnd() ) {
+                    d->data.append(d->file.read(10000));
+                    QCoreApplication::processEvents();
+                }
+
             d->file.close();
 
             d->timer.setInterval( CACHE_INTERVAL );

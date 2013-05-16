@@ -1,6 +1,5 @@
 #include "AbstractWebsite.h"
 #include "private/AbstractWebsite_p.h"
-#include <QtCore/QElapsedTimer>
 #include <httpserverresponse.h>
 #include <httpserverrequest.h>
 
@@ -54,8 +53,6 @@ AbstractWebsite::AbstractWebsite(AbstractWebsitePrivate *pr, QObject *parent) :
 void AbstractWebsite::handleRequest(Tufao::HttpServerRequest &request, Tufao::HttpServerResponse &response)
 {
     Q_D(AbstractWebsite);
-    QElapsedTimer timer;
-    timer.start();
 
     QString url = request.url().toDisplayString();
 
@@ -68,8 +65,6 @@ void AbstractWebsite::handleRequest(Tufao::HttpServerRequest &request, Tufao::Ht
             response.writeHead(Tufao::HttpServerResponse::NOT_FOUND);
             response.end("Not found");
         }
-
-    qDebug() << url << " -> (" << timer.elapsed() << " msecs / " << timer.nsecsElapsed() << " nsecs)";
 }
 
 }

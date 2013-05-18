@@ -3,6 +3,7 @@
 
 #include "webframework-qt_global.h"
 #include "StatefulPageInterface.h"
+#include "htmlelement/AbstractHtmlElement.h"
 
 namespace web
 {
@@ -23,6 +24,7 @@ class WEBFRAMEWORKQTSHARED_EXPORT AbstractRenderedPage : public  StatefulPageInt
         AbstractRenderedPagePrivate *d_ptr;
         AbstractRenderedPage(AbstractRenderedPagePrivate *d);
 
+        htmlelement::AbstractHtmlElement* rootElement();
         virtual void render() = 0;
 
     private:

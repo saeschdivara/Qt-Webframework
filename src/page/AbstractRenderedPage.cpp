@@ -30,6 +30,12 @@ void AbstractRenderedPage::setResponse(Tufao::HttpServerResponse *r)
     d->response = r;
 }
 
+htmlelement::AbstractHtmlElement *AbstractRenderedPage::rootElement()
+{
+    Q_D(AbstractRenderedPage);
+    return d->root;
+}
+
 AbstractRenderedPage::AbstractRenderedPage(AbstractRenderedPagePrivate *d) :
     d_ptr(d)
 {

@@ -19,7 +19,8 @@ SOURCES += \
     page/SimplePage.cpp \
     page/AbstractSocketPage.cpp \
     js/JsCode.cpp \
-    page/AbstractRenderedPage.cpp
+    page/AbstractRenderedPage.cpp \
+    htmlelement/AbstractHtmlElement.cpp
 
 HEADERS +=\
         webframework-qt_global.h \
@@ -33,7 +34,8 @@ HEADERS +=\
     page/private/AbstractSocketPage_p.h \
     js/JsCode.h \
     page/AbstractRenderedPage.h \
-    page/private/AbstractRenderedPage_p.h
+    page/private/AbstractRenderedPage_p.h \
+    htmlelement/AbstractHtmlElement.h
 
 unix:!symbian {
     maemo5 {

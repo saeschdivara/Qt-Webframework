@@ -5,6 +5,7 @@
 #include <QtCore/QUrl>
 #include <QtCore/QScopedPointer>
 #include <httpserver.h>
+#include <simplesessionstore.h>
 #include "page/PageInterface.h"
 
 namespace web {
@@ -16,6 +17,7 @@ public:
         QUrl url;
         QHash<QString ,page::PageInterface *> pages;
         QScopedPointer<Tufao::HttpServer> server;
+        Tufao::SimpleSessionStore sessionStore;
 };
 
 }

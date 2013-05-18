@@ -13,7 +13,7 @@ namespace page
 class WEBFRAMEWORKQTSHARED_EXPORT StatefulPageInterface : public PageInterface
 {
     public:
-        virtual void setSession(Tufao::Session *s) = 0;
+        virtual void setSession(Tufao::Session &s) = 0;
 };
 
 }

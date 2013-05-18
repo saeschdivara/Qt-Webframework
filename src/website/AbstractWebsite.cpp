@@ -1,5 +1,6 @@
 #include "AbstractWebsite.h"
 #include "private/AbstractWebsite_p.h"
+#include "page/StatefulPageInterface.h"
 #include <httpserverresponse.h>
 #include <httpserverrequest.h>
 
@@ -57,9 +58,16 @@ void AbstractWebsite::handleRequest(Tufao::HttpServerRequest &request, Tufao::Ht
     QString url = request.url().toDisplayString();
 
     if ( d->pages.contains(url) ) {
-            page::PageInterface *page = d->pages.value(url);
+            page::PageInterface *pageObj = d->pages.value(url);
+            page::StatefulPageInterface *statefulPage = Q_NULLPTR;
+
+            if ( (statefulPage = dynamic_cast<page::StatefulPageInterface *>(pageObj)) ) {
+                    Tufao::Session s(d->sessionStore, request, response);
+                    statefulPage->setSession(&s);
+                }
+
             response.writeHead(Tufao::HttpServerResponse::OK);
-            response.end(page->getContent());
+            response.end(pageObj->getContent());
         }
     else {
             response.writeHead(Tufao::HttpServerResponse::NOT_FOUND);

@@ -8,6 +8,7 @@ class HtmlElementPrivate : public AbstractHtmlElementPrivate
 {
     public:
         BodyElement *body;
+        HeadElement *head;
 };
 
 HtmlElement::HtmlElement() :
@@ -15,6 +16,19 @@ HtmlElement::HtmlElement() :
 {
     Q_D(HtmlElement);
     d->tag = QByteArray("html");
+}
+
+void HtmlElement::appendHeader(HeadElement *ele)
+{
+    Q_D(HtmlElement);
+    d->head = ele;
+    append(ele);
+}
+
+HeadElement *HtmlElement::head()
+{
+    Q_D(HtmlElement);
+    return d->head;
 }
 
 void HtmlElement::appendBody(BodyElement *ele)

@@ -13,6 +13,7 @@ class WEBFRAMEWORKQTSHARED_EXPORT ImageElement : public AbstractHtmlElement
 {
     public:
         ImageElement();
+        ImageElement(QByteArray src);
 
     private:
         Q_DECLARE_PRIVATE(ImageElement)

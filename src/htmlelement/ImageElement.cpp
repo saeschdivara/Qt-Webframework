@@ -16,5 +16,11 @@ ImageElement::ImageElement() :
     d->tag = QByteArray("img");
 }
 
+ImageElement::ImageElement(QByteArray src) :
+    ImageElement()
+{
+    addAttribute("src", src);
+}
+
 }
 }

@@ -4,6 +4,12 @@
 namespace web {
 namespace page {
 
+AbstractRenderedPage::~AbstractRenderedPage()
+{
+    Q_D(AbstractRenderedPage);
+    delete d->root;
+}
+
 QByteArray AbstractRenderedPage::getContent()
 {
     Q_D(AbstractRenderedPage);

@@ -14,7 +14,7 @@ class AbstractHtmlElementPrivate
         AbstractHtmlElement *parent;
         QList<AbstractHtmlElement *> children;
 
-        const QByteArray tag;
+        QByteArray tag;
 
         bool isVisible;
         bool isReadonly;

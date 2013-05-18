@@ -2,6 +2,7 @@
 #define ABSTRACTRENDEREDPAGE_P_H
 
 #include <QtCore/QByteArray>
+#include <sessionstore.h>
 
 namespace web {
 namespace page {
@@ -10,6 +11,7 @@ class AbstractRenderedPagePrivate
 {
     public:
         QByteArray data;
+        Tufao::SessionStore *session;
 };
 
 }

@@ -3,7 +3,7 @@
 
 #include "webframework-qt_global.h"
 #include "PageInterface.h"
-#include <session.h>
+#include <sessionstore.h>
 
 namespace web
 {
@@ -13,7 +13,7 @@ namespace page
 class WEBFRAMEWORKQTSHARED_EXPORT StatefulPageInterface : public PageInterface
 {
     public:
-        virtual void setSession(Tufao::Session &s) = 0;
+        virtual void setSession(Tufao::SessionStore *s) = 0;
 };
 
 }

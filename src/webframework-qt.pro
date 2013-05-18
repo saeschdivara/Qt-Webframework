@@ -35,7 +35,8 @@ HEADERS +=\
     js/JsCode.h \
     page/AbstractRenderedPage.h \
     page/private/AbstractRenderedPage_p.h \
-    htmlelement/AbstractHtmlElement.h
+    htmlelement/AbstractHtmlElement.h \
+    htmlelement/private/AbstractHtmlElement_p.h
 
 unix:!symbian {
     maemo5 {

@@ -17,7 +17,7 @@ class WEBFRAMEWORKQTSHARED_EXPORT AbstractSocketPage : public StatefulPageInterf
     public:
         AbstractSocketPage();
 
-        virtual void injectJavaScript(JsCode &code) = 0;
+        virtual void injectJavaScript(js::JsCode &code) = 0;
 
     protected:
         AbstractSocketPage(AbstractSocketPagePrivate *pr);

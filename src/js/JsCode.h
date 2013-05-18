@@ -5,7 +5,7 @@
 
 namespace web
 {
-namespace page
+namespace js
 {
 
 class JsCodePrivate;

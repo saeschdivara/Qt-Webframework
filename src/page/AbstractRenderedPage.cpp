@@ -18,6 +18,18 @@ void AbstractRenderedPage::setSession(Tufao::SessionStore *s)
     d->session = s;
 }
 
+void AbstractRenderedPage::setRequest(Tufao::HttpServerRequest *r)
+{
+    Q_D(AbstractRenderedPage);
+    d->request = r;
+}
+
+void AbstractRenderedPage::setResponse(Tufao::HttpServerResponse *r)
+{
+    Q_D(AbstractRenderedPage);
+    d->response = r;
+}
+
 AbstractRenderedPage::AbstractRenderedPage(AbstractRenderedPagePrivate *d) :
     d_ptr(d)
 {

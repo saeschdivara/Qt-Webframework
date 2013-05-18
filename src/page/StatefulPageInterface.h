@@ -3,6 +3,8 @@
 
 #include "webframework-qt_global.h"
 #include "PageInterface.h"
+#include <httpserverrequest.h>
+#include <httpserverresponse.h>
 #include <sessionstore.h>
 
 namespace web
@@ -14,6 +16,8 @@ class WEBFRAMEWORKQTSHARED_EXPORT StatefulPageInterface : public PageInterface
 {
     public:
         virtual void setSession(Tufao::SessionStore *s) = 0;
+        virtual void setRequest(Tufao::HttpServerRequest *r) = 0;
+        virtual void setResponse(Tufao::HttpServerResponse *r) = 0;
 };
 
 }

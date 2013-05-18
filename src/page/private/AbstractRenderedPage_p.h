@@ -2,6 +2,8 @@
 #define ABSTRACTRENDEREDPAGE_P_H
 
 #include <QtCore/QByteArray>
+#include <httpserverrequest.h>
+#include <httpserverresponse.h>
 #include <sessionstore.h>
 
 namespace web {
@@ -12,6 +14,8 @@ class AbstractRenderedPagePrivate
     public:
         QByteArray data;
         Tufao::SessionStore *session;
+        Tufao::HttpServerRequest *request;
+        Tufao::HttpServerResponse *response;
 };
 
 }

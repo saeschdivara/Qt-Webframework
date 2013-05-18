@@ -16,6 +16,8 @@ class WEBFRAMEWORKQTSHARED_EXPORT AbstractRenderedPage : public  StatefulPageInt
     public:
         virtual QByteArray getContent() Q_DECL_OVERRIDE;
         virtual void setSession(Tufao::SessionStore *s) Q_DECL_OVERRIDE;
+        virtual void setRequest(Tufao::HttpServerRequest *r) Q_DECL_OVERRIDE;
+        virtual void setResponse(Tufao::HttpServerResponse *r) Q_DECL_OVERRIDE;
 
     protected:
         AbstractRenderedPagePrivate *d_ptr;

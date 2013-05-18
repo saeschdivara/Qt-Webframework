@@ -84,16 +84,18 @@ QList<AbstractHtmlElement *> AbstractHtmlElement::children()
     return d->children;
 }
 
-void AbstractHtmlElement::append(AbstractHtmlElement *ele)
+AbstractHtmlElement *AbstractHtmlElement::append(AbstractHtmlElement *ele)
 {
     Q_D(AbstractHtmlElement);
     d->children.append(ele);
+    return ele;
 }
 
-void AbstractHtmlElement::addAttribute(QByteArray key, QByteArray value)
+AbstractHtmlElement *AbstractHtmlElement::addAttribute(QByteArray key, QByteArray value)
 {
     Q_D(AbstractHtmlElement);
     d->attributes.insert(key, value);
+    return this;
 }
 
 QByteArray AbstractHtmlElement::attribute(QByteArray key)

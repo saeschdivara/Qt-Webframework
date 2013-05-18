@@ -30,9 +30,9 @@ class WEBFRAMEWORKQTSHARED_EXPORT AbstractHtmlElement
         void setParent(AbstractHtmlElement *ele);
 
         QList<AbstractHtmlElement *> children();
-        void append(AbstractHtmlElement *ele);
+        AbstractHtmlElement* append(AbstractHtmlElement *ele);
 
-        void addAttribute(QByteArray key, QByteArray value);
+        AbstractHtmlElement* addAttribute(QByteArray key, QByteArray value);
         QByteArray attribute(QByteArray key);
 
     protected:

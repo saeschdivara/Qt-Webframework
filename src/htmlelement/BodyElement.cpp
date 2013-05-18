@@ -13,7 +13,7 @@ BodyElement::BodyElement() :
     AbstractHtmlElement(new BodyElementPrivate)
 {
     Q_D(BodyElement);
-    d->tag = QByteArray("Body");
+    d->tag = QByteArray("body");
 }
 
 }

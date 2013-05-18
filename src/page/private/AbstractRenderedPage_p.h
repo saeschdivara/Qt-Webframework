@@ -17,7 +17,7 @@ class AbstractRenderedPagePrivate
         Tufao::SessionStore *session;
         Tufao::HttpServerRequest *request;
         Tufao::HttpServerResponse *response;
-        htmlelement::AbstractHtmlElement *root;
+        htmlelement::AbstractHtmlElement *root = Q_NULLPTR;
 };
 
 }

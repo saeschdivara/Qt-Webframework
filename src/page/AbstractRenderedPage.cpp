@@ -9,7 +9,13 @@ QByteArray AbstractRenderedPage::getContent()
     Q_D(AbstractRenderedPage);
 
     render();
-    return d->data;
+
+    if ( d->root ) {
+            return d->root->toHtml();
+        }
+    else {
+            return d->data;
+        }
 }
 
 void AbstractRenderedPage::setSession(Tufao::SessionStore *s)

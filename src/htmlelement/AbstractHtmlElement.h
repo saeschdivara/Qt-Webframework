@@ -3,6 +3,7 @@
 
 #include "webframework-qt_global.h"
 #include <QtCore/QByteArray>
+#include <QtCore/QList>
 #include <QtCore/QScopedPointer>
 
 namespace web {
@@ -15,6 +16,8 @@ class WEBFRAMEWORKQTSHARED_EXPORT AbstractHtmlElement
     public:
         virtual ~AbstractHtmlElement();
 
+        QByteArray tag() const;
+
         QByteArray toHtml();
         QByteArray toJson();
 
@@ -25,6 +28,9 @@ class WEBFRAMEWORKQTSHARED_EXPORT AbstractHtmlElement
         bool isReadonly();
 
         void setParent(AbstractHtmlElement *ele);
+
+        QList<AbstractHtmlElement *> children();
+        void append(AbstractHtmlElement *ele);
 
     protected:
         QScopedPointer<AbstractHtmlElementPrivate> d_ptr;

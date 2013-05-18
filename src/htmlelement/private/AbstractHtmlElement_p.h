@@ -2,6 +2,7 @@
 #define ABSTRACTHTMLELEMENT_P_H
 
 #include "../AbstractHtmlElement.h"
+#include <QtCore/QByteArray>
 #include <QtCore/QList>
 
 namespace web {
@@ -12,6 +13,8 @@ class AbstractHtmlElementPrivate
     public:
         AbstractHtmlElement *parent;
         QList<AbstractHtmlElement *> children;
+
+        const QByteArray tag;
 
         bool isVisible;
         bool isReadonly;

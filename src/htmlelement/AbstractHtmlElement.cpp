@@ -19,6 +19,11 @@ QByteArray AbstractHtmlElement::tag() const
 QByteArray AbstractHtmlElement::toHtml()
 {
     Q_D(AbstractHtmlElement);
+
+    if ( !d->isVisible ) {
+            return QByteArray();
+        }
+
     QByteArray html = "<" + tag();
 
     QHashIterator<QByteArray, QByteArray> attIt(d->attributes);

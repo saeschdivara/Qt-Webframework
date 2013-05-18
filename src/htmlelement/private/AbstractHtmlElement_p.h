@@ -18,7 +18,7 @@ class AbstractHtmlElementPrivate
         QByteArray tag;
         QHash<QByteArray, QByteArray> attributes;
 
-        bool isVisible;
+        bool isVisible = true;
         bool isReadonly;
 };
 

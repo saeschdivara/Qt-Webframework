@@ -21,7 +21,9 @@ SOURCES += \
     js/JsCode.cpp \
     page/AbstractRenderedPage.cpp \
     htmlelement/AbstractHtmlElement.cpp \
-    htmlelement/HtmlElement.cpp
+    htmlelement/HtmlElement.cpp \
+    htmlelement/BodyElement.cpp \
+    htmlelement/ImageElement.cpp
 
 HEADERS +=\
         webframework-qt_global.h \
@@ -38,7 +40,9 @@ HEADERS +=\
     page/private/AbstractRenderedPage_p.h \
     htmlelement/AbstractHtmlElement.h \
     htmlelement/private/AbstractHtmlElement_p.h \
-    htmlelement/HtmlElement.h
+    htmlelement/HtmlElement.h \
+    htmlelement/BodyElement.h \
+    htmlelement/ImageElement.h
 
 unix:!symbian {
     maemo5 {

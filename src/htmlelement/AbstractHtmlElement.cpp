@@ -19,7 +19,18 @@ QByteArray AbstractHtmlElement::tag() const
 QByteArray AbstractHtmlElement::toHtml()
 {
     Q_D(AbstractHtmlElement);
-    QByteArray html = "<" + tag() + ">";
+    QByteArray html = "<" + tag();
+
+    QHashIterator<QByteArray, QByteArray> attIt(d->attributes);
+    while (attIt.hasNext()) {
+            attIt.next();
+            QByteArray attrKey = attIt.key();
+            QByteArray attrValue = attIt.value();
+
+            html += " " + attrKey + "=\"" + attrValue + "\"";
+        }
+
+    html += ">";
 
     QListIterator<AbstractHtmlElement *> it(d->children);
     while( it.hasNext() ) {
@@ -77,6 +88,18 @@ void AbstractHtmlElement::append(AbstractHtmlElement *ele)
 {
     Q_D(AbstractHtmlElement);
     d->children.append(ele);
+}
+
+void AbstractHtmlElement::addAttribute(QByteArray key, QByteArray value)
+{
+    Q_D(AbstractHtmlElement);
+    d->attributes.insert(key, value);
+}
+
+QByteArray AbstractHtmlElement::attribute(QByteArray key)
+{
+    Q_D(AbstractHtmlElement);
+    return d->attributes.value(key);
 }
 
 AbstractHtmlElement::AbstractHtmlElement(AbstractHtmlElementPrivate *d) :

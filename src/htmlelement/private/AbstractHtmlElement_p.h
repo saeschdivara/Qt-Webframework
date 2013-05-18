@@ -3,6 +3,7 @@
 
 #include "../AbstractHtmlElement.h"
 #include <QtCore/QByteArray>
+#include <QtCore/QHash>
 #include <QtCore/QList>
 
 namespace web {
@@ -15,6 +16,7 @@ class AbstractHtmlElementPrivate
         QList<AbstractHtmlElement *> children;
 
         QByteArray tag;
+        QHash<QByteArray, QByteArray> attributes;
 
         bool isVisible;
         bool isReadonly;

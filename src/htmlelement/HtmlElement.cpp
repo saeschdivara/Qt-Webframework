@@ -7,6 +7,7 @@ namespace htmlelement {
 class HtmlElementPrivate : public AbstractHtmlElementPrivate
 {
     public:
+        BodyElement *body;
 };
 
 HtmlElement::HtmlElement() :
@@ -14,6 +15,19 @@ HtmlElement::HtmlElement() :
 {
     Q_D(HtmlElement);
     d->tag = QByteArray("html");
+}
+
+void HtmlElement::appendBody(BodyElement *ele)
+{
+    Q_D(HtmlElement);
+    d->body = ele;
+    append(ele);
+}
+
+BodyElement *HtmlElement::body()
+{
+    Q_D(HtmlElement);
+    return d->body;
 }
 
 }

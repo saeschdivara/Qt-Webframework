@@ -32,7 +32,12 @@ QByteArray AbstractHtmlElement::toHtml()
             QByteArray attrKey = attIt.key();
             QByteArray attrValue = attIt.value();
 
-            html += " " + attrKey + "=\"" + attrValue + "\"";
+            if ( attrValue.isEmpty() ) {
+                    html += " " + attrKey;
+                }
+            else {
+                    html += " " + attrKey + "=\"" + attrValue + "\"";
+                }
         }
 
     html += ">";

@@ -18,13 +18,13 @@ DivElement::DivElement() :
 
 DivElement *DivElement::setHeight(quint32 h)
 {
-    addAttribute("height", QByteArray::number(h));
+    createStyle()->setAttribute("height", QByteArray::number(h));
     return this;
 }
 
 DivElement *DivElement::setWidth(quint32 h)
 {
-    addAttribute("width", QByteArray::number(h));
+    createStyle()->setAttribute("width", QByteArray::number(h));
     return this;
 }
 

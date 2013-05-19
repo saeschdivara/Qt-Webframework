@@ -37,7 +37,7 @@ class WEBFRAMEWORKQTSHARED_EXPORT AbstractHtmlElement
         QByteArray attribute(QByteArray key);
 
         css::ElementCss* style();
-        inline css::ElementCss* createStyle();
+        css::ElementCss* createStyle();
 
     protected:
         QScopedPointer<AbstractHtmlElementPrivate> d_ptr;

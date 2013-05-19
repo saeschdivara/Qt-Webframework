@@ -18,6 +18,7 @@ class WEBFRAMEWORKQTSHARED_EXPORT ElementCss
         ElementCss();
 
         QByteArray data();
+        ElementCss* setAttribute(QByteArray key, QByteArray value);
 
     protected:
         QScopedPointer<ElementCssPrivate> d_ptr;

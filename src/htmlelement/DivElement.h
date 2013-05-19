@@ -14,6 +14,9 @@ class WEBFRAMEWORKQTSHARED_EXPORT DivElement : public AbstractHtmlElement
     public:
         DivElement();
 
+        DivElement* setHeight(quint32 h);
+        DivElement* setWidth(quint32 h);
+
     private:
         Q_DECLARE_PRIVATE(DivElement)
 };

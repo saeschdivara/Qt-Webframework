@@ -16,5 +16,17 @@ DivElement::DivElement() :
     d->tag = QByteArray("div");
 }
 
+DivElement *DivElement::setHeight(quint32 h)
+{
+    addAttribute("height", QByteArray::number(h));
+    return this;
+}
+
+DivElement *DivElement::setWidth(quint32 h)
+{
+    addAttribute("width", QByteArray::number(h));
+    return this;
+}
+
 }
 }

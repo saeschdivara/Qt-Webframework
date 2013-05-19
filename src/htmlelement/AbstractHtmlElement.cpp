@@ -88,7 +88,7 @@ void AbstractHtmlElement::setParent(AbstractHtmlElement *ele)
     d->parent = ele;
 }
 
-QList<AbstractHtmlElement *> AbstractHtmlElement::children()
+QList<AbstractHtmlElement *> &AbstractHtmlElement::children()
 {
     Q_D(AbstractHtmlElement);
     return d->children;

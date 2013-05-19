@@ -18,8 +18,8 @@ class WEBFRAMEWORKQTSHARED_EXPORT AbstractHtmlElement
 
         QByteArray tag() const;
 
-        QByteArray toHtml();
-        QByteArray toJson();
+        virtual QByteArray toHtml();
+        virtual QByteArray toJson();
 
         void setVisible(bool b);
         bool isVisible();
@@ -29,7 +29,7 @@ class WEBFRAMEWORKQTSHARED_EXPORT AbstractHtmlElement
 
         void setParent(AbstractHtmlElement *ele);
 
-        QList<AbstractHtmlElement *> children();
+        QList<AbstractHtmlElement *>& children();
         AbstractHtmlElement* append(AbstractHtmlElement *ele);
 
         AbstractHtmlElement* addAttribute(QByteArray key, QByteArray value);

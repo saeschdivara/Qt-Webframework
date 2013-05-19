@@ -16,10 +16,10 @@ class WEBFRAMEWORKQTSHARED_EXPORT HtmlElement : public AbstractHtmlElement
     public:
         HtmlElement();
 
-        void appendHeader(HeadElement *ele);
+        void appendHeader(HeadElement *ele = new HeadElement);
         HeadElement* head();
 
-        void appendBody(BodyElement *ele);
+        void appendBody(BodyElement *ele = new BodyElement);
         BodyElement* body();
 
     private:

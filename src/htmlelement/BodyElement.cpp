@@ -16,5 +16,17 @@ BodyElement::BodyElement() :
     d->tag = QByteArray("body");
 }
 
+DivElement *BodyElement::appendDiv(DivElement *div)
+{
+    append(div);
+    return div;
+}
+
+VideoElement *BodyElement::appendVideo(VideoElement *v)
+{
+    append(v);
+    return v;
+}
+
 }
 }

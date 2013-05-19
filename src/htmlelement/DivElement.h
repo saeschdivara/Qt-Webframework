@@ -3,6 +3,7 @@
 
 #include "webframework-qt_global.h"
 #include "AbstractHtmlElement.h"
+#include "TextElement.h"
 
 namespace web {
 namespace htmlelement {
@@ -16,6 +17,8 @@ class WEBFRAMEWORKQTSHARED_EXPORT DivElement : public AbstractHtmlElement
 
         DivElement* setHeight(quint32 h);
         DivElement* setWidth(quint32 h);
+
+        TextElement* appendText(QByteArray text);
 
     private:
         Q_DECLARE_PRIVATE(DivElement)

@@ -28,7 +28,8 @@ SOURCES += \
     htmlelement/DivElement.cpp \
     htmlelement/InputElement.cpp \
     htmlelement/VideoElement.cpp \
-    htmlelement/TextElement.cpp
+    htmlelement/TextElement.cpp \
+    css/ElementCss.cpp
 
 HEADERS +=\
         webframework-qt_global.h \
@@ -52,7 +53,8 @@ HEADERS +=\
     htmlelement/DivElement.h \
     htmlelement/InputElement.h \
     htmlelement/VideoElement.h \
-    htmlelement/TextElement.h
+    htmlelement/TextElement.h \
+    css/ElementCss.h
 
 unix:!symbian {
     maemo5 {

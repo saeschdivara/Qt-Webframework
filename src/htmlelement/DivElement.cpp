@@ -28,5 +28,12 @@ DivElement *DivElement::setWidth(quint32 h)
     return this;
 }
 
+TextElement *DivElement::appendText(QByteArray text)
+{
+    TextElement* t = new TextElement(text);
+    append(t);
+    return t;
+}
+
 }
 }

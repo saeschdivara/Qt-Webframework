@@ -2,6 +2,7 @@
 #define ABSTRACTHTMLELEMENT_P_H
 
 #include "../AbstractHtmlElement.h"
+#include "css/ElementCss.h"
 #include <QtCore/QByteArray>
 #include <QtCore/QHash>
 #include <QtCore/QList>
@@ -17,6 +18,8 @@ class AbstractHtmlElementPrivate
 
         QByteArray tag;
         QHash<QByteArray, QByteArray> attributes;
+
+        css::ElementCss *style = Q_NULLPTR;
 
         bool isVisible = true;
         bool isReadonly;

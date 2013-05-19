@@ -2,6 +2,7 @@
 #define ABSTRACTHTMLELEMENT_H
 
 #include "webframework-qt_global.h"
+#include "css/ElementCss.h"
 #include <QtCore/QByteArray>
 #include <QtCore/QList>
 #include <QtCore/QScopedPointer>
@@ -34,6 +35,9 @@ class WEBFRAMEWORKQTSHARED_EXPORT AbstractHtmlElement
 
         AbstractHtmlElement* addAttribute(QByteArray key, QByteArray value);
         QByteArray attribute(QByteArray key);
+
+        css::ElementCss* style();
+        inline css::ElementCss* createStyle();
 
     protected:
         QScopedPointer<AbstractHtmlElementPrivate> d_ptr;

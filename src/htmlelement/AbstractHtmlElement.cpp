@@ -40,6 +40,10 @@ QByteArray AbstractHtmlElement::toHtml()
                 }
         }
 
+    if ( d->style ) {
+            html += " style=\"" + d->style->data() + "\"";
+        }
+
     html += ">";
 
     QListIterator<AbstractHtmlElement *> it(d->children);
@@ -112,6 +116,22 @@ QByteArray AbstractHtmlElement::attribute(QByteArray key)
 {
     Q_D(AbstractHtmlElement);
     return d->attributes.value(key);
+}
+
+css::ElementCss *AbstractHtmlElement::style()
+{
+    Q_D(AbstractHtmlElement);
+    return d->style;
+}
+
+css::ElementCss *AbstractHtmlElement::createStyle()
+{
+    Q_D(AbstractHtmlElement);
+    if ( !d->style ) {
+            d->style = new css::ElementCss;
+        }
+
+    return d->style;
 }
 
 AbstractHtmlElement::AbstractHtmlElement(AbstractHtmlElementPrivate *d) :

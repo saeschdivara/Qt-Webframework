@@ -42,6 +42,18 @@ void AbstractRenderedPage::setResponse(Tufao::HttpServerResponse *r)
     d->response = r;
 }
 
+void AbstractRenderedPage::setPostRequestData(QHash<QByteArray, QByteArray> data)
+{
+    Q_D(AbstractRenderedPage);
+    d->post = data;
+}
+
+void AbstractRenderedPage::setGetRequestData(QHash<QByteArray, QByteArray> data)
+{
+    Q_D(AbstractRenderedPage);
+    d->get = data;
+}
+
 htmlelement::AbstractHtmlElement *AbstractRenderedPage::rootElement()
 {
     Q_D(AbstractRenderedPage);

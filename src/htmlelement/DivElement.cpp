@@ -28,6 +28,12 @@ DivElement *DivElement::setWidth(quint32 h)
     return this;
 }
 
+FormElement *DivElement::appendForm(FormElement *form)
+{
+    append(form);
+    return form;
+}
+
 TextElement *DivElement::appendText(QByteArray text)
 {
     TextElement* t = new TextElement(text);

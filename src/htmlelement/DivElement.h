@@ -3,6 +3,7 @@
 
 #include "webframework-qt_global.h"
 #include "AbstractHtmlElement.h"
+#include "FormElement.h"
 #include "TextElement.h"
 
 namespace web {
@@ -18,6 +19,7 @@ class WEBFRAMEWORKQTSHARED_EXPORT DivElement : public AbstractHtmlElement
         DivElement* setHeight(quint32 h);
         DivElement* setWidth(quint32 h);
 
+        FormElement* appendForm(FormElement* form = new FormElement);
         TextElement* appendText(QByteArray text);
 
     private:

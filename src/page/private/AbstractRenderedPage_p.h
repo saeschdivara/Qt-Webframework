@@ -14,10 +14,15 @@ class AbstractRenderedPagePrivate
 {
     public:
         QByteArray data;
+
         Tufao::SessionStore *session;
         Tufao::HttpServerRequest *request;
         Tufao::HttpServerResponse *response;
+
         htmlelement::AbstractHtmlElement *root = Q_NULLPTR;
+
+        QHash<QByteArray, QByteArray> post;
+        QHash<QByteArray, QByteArray> get;
 };
 
 }

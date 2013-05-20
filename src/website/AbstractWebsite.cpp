@@ -1,11 +1,32 @@
 #include "AbstractWebsite.h"
 #include "private/AbstractWebsite_p.h"
 #include "page/StatefulPageInterface.h"
+#include <headers.h>
 #include <httpserverresponse.h>
 #include <httpserverrequest.h>
 
 namespace web {
 namespace website {
+
+QHash<QByteArray, QByteArray> parseUserData(QByteArray data) {
+    QHash<QByteArray, QByteArray> parsedData;
+    QList<QByteArray> pairedData = data.split('&');
+
+    QListIterator<QByteArray> it(pairedData);
+    while ( it.hasNext() ) {
+            QByteArray pair = it.next();
+            QList<QByteArray> userDataPairs = pair.split('=');
+
+            if (userDataPairs.size() == 1) {
+                    parsedData.insert(userDataPairs.at(0), "");
+                }
+            else if (userDataPairs.size() == 2){
+                    parsedData.insert(userDataPairs.at(0), userDataPairs.at(1));
+                }
+        }
+
+    return parsedData;
+}
 
 AbstractWebsite::AbstractWebsite(QObject *parent) :
     AbstractWebsite(new AbstractWebsitePrivate, parent)
@@ -65,6 +86,9 @@ void AbstractWebsite::handleRequest(Tufao::HttpServerRequest &request, Tufao::Ht
                     statefulPage->setSession(&d->sessionStore);
                     statefulPage->setRequest(&request);
                     statefulPage->setResponse(&response);
+
+                    statefulPage->setGetRequestData(parseUserData(request.url().query().toUtf8()));
+                    statefulPage->setPostRequestData(parseUserData(request.readBody()));
                 }
 
             response.writeHead(Tufao::HttpServerResponse::OK);

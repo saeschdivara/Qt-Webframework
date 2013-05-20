@@ -18,6 +18,7 @@ class WEBFRAMEWORKQTSHARED_EXPORT AbstractHtmlElement
         virtual ~AbstractHtmlElement();
 
         QByteArray tag() const;
+        QList<AbstractHtmlElement *> findAllElementsByTag(QByteArray tag);
 
         virtual QByteArray toHtml();
         virtual QByteArray toJson();
@@ -34,7 +35,11 @@ class WEBFRAMEWORKQTSHARED_EXPORT AbstractHtmlElement
         AbstractHtmlElement* append(AbstractHtmlElement *ele);
 
         AbstractHtmlElement* addAttribute(QByteArray key, QByteArray value);
+        AbstractHtmlElement* setID(QByteArray id);
+        QByteArray ID();
         QByteArray attribute(QByteArray key);
+
+        AbstractHtmlElement* findElementByID(QByteArray id);
 
         css::ElementCss* style();
         css::ElementCss* createStyle();

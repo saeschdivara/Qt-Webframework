@@ -31,7 +31,8 @@ SOURCES += \
     htmlelement/TextElement.cpp \
     css/ElementCss.cpp \
     htmlelement/FormElement.cpp \
-    htmlelement/BreakElement.cpp
+    htmlelement/BreakElement.cpp \
+    page/templates/AbstractTemplatePage.cpp
 
 HEADERS +=\
         webframework-qt_global.h \
@@ -58,7 +59,9 @@ HEADERS +=\
     htmlelement/TextElement.h \
     css/ElementCss.h \
     htmlelement/FormElement.h \
-    htmlelement/BreakElement.h
+    htmlelement/BreakElement.h \
+    page/templates/AbstractTemplatePage.h \
+    page/templates/private/AbstractTemplatePage_p.h
 
 unix:!symbian {
     maemo5 {

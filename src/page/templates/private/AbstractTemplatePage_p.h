@@ -21,6 +21,13 @@ class AbstractTemplatePagePrivate
 
         QHash<QByteArray, QByteArray> post;
         QHash<QByteArray, QByteArray> get;
+
+        QHash<QString, QByteArray> templates;
+
+        QString pageFilename;
+        QByteArray pageData;
+
+        QByteArray content;
 };
 
 }

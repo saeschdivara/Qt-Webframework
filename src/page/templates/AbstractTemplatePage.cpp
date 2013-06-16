@@ -73,7 +73,6 @@ void AbstractTemplatePage::initPage()
 {
     Q_D(AbstractTemplatePage);
     QString filepath = QCoreApplication::applicationDirPath() + QDir::separator() + d->pageFilename;
-    qDebug() << filepath;
     QFile f(filepath);
     if ( f.open(QIODevice::ReadOnly) ) {
             QByteArray data = f.readAll();

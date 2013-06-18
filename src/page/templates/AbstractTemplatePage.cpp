@@ -29,6 +29,8 @@ QByteArray AbstractTemplatePage::getContent()
             initTemplates();
         }
 
+    initModels();
+
     render();
 
     return d->content;

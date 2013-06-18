@@ -3,6 +3,13 @@
 
 #include <QObject>
 
+namespace web
+{
+namespace page
+{
+namespace model
+{
+
 class AbstractPageModel : public QObject
 {
         Q_OBJECT
@@ -14,5 +21,9 @@ class AbstractPageModel : public QObject
     public slots:
         
 };
+
+}
+}
+}
 
 #endif // ABSTRACTPAGEMODEL_H

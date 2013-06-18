@@ -4,6 +4,7 @@
 #include <httpserverrequest.h>
 #include <httpserverresponse.h>
 #include <sessionstore.h>
+#include "page/model/AbstractPageModel.h"
 
 namespace web
 {
@@ -28,6 +29,8 @@ class AbstractTemplatePagePrivate
         QByteArray pageData;
 
         QByteArray content;
+
+        model::AbstractPageModel *pageModel;
 };
 
 }

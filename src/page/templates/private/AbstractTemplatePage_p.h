@@ -33,7 +33,7 @@ class AbstractTemplatePagePrivate
         QByteArray content;
 
         model::AbstractModel *pageModel;
-        model::AbstractListModel *templateModels;
+        QHash<QString, model::AbstractListModel *> templateModels;
 };
 
 }

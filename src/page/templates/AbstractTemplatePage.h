@@ -32,6 +32,8 @@ class WEBFRAMEWORKQTSHARED_EXPORT AbstractTemplatePage : public StatefulPageInte
         virtual void setPostRequestData(QHash<QByteArray, QByteArray> data) Q_DECL_OVERRIDE;
         virtual void setGetRequestData(QHash<QByteArray, QByteArray> data) Q_DECL_OVERRIDE;
 
+        virtual void createModels() = 0;
+
     protected:
         AbstractTemplatePagePrivate *d_ptr;
         AbstractTemplatePage(AbstractTemplatePagePrivate *d);

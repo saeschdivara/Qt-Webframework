@@ -10,16 +10,13 @@ namespace page
 namespace model
 {
 
-class AbstractPageModel : public QObject
+class AbstractModel : public QObject
 {
         Q_OBJECT
     public:
-        explicit AbstractPageModel(QObject *parent = 0);
-        
-    signals:
-        
-    public slots:
-        
+        explicit AbstractModel(QObject *parent = 0);
+
+        virtual void load() = 0;
 };
 
 }

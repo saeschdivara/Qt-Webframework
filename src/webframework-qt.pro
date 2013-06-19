@@ -33,7 +33,7 @@ SOURCES += \
     htmlelement/FormElement.cpp \
     htmlelement/BreakElement.cpp \
     page/templates/AbstractTemplatePage.cpp \
-    page/model/AbstractPageModel.cpp
+    page/model/AbstractModel.cpp
 
 HEADERS +=\
         webframework-qt_global.h \
@@ -63,7 +63,7 @@ HEADERS +=\
     htmlelement/BreakElement.h \
     page/templates/AbstractTemplatePage.h \
     page/templates/private/AbstractTemplatePage_p.h \
-    page/model/AbstractPageModel.h
+    page/model/AbstractModel.h
 
 unix:!symbian {
     maemo5 {

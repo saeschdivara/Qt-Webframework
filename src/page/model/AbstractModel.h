@@ -17,6 +17,7 @@ class AbstractModel : public QObject
         explicit AbstractModel(QObject *parent = 0);
 
         virtual void load() = 0;
+        virtual void unload() = 0;
 };
 
 }

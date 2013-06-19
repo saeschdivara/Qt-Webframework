@@ -4,6 +4,8 @@
 #include <httpserverrequest.h>
 #include <httpserverresponse.h>
 #include <sessionstore.h>
+#include <QtCore/QHash>
+#include "page/model/AbstractListModel.h"
 #include "page/model/AbstractModel.h"
 
 namespace web
@@ -31,6 +33,7 @@ class AbstractTemplatePagePrivate
         QByteArray content;
 
         model::AbstractModel *pageModel;
+        model::AbstractListModel *templateModels;
 };
 
 }

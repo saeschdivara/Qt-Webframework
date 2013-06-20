@@ -14,7 +14,7 @@ class SimplePagePrivate
         QTimer timer;
 };
 
-const qint32 CACHE_INTERVAL = 1000 * 60;
+const qint32 CACHE_INTERVAL = 1000 * 60 * 60;
 
 SimplePage::SimplePage(QString fileName) :
     SimplePage(new SimplePagePrivate, fileName)
@@ -29,7 +29,7 @@ QByteArray SimplePage::getContent()
             d->file.open( QIODevice::ReadOnly );
 
             while ( !d->file.atEnd() ) {
-                    d->data.append(d->file.read(10000));
+                    d->data.append(d->file.read(800));
                     QCoreApplication::processEvents();
                 }
 

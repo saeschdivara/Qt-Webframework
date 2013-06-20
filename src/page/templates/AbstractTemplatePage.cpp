@@ -5,6 +5,7 @@
 #include <QtCore/QDebug>
 #include <QtCore/QDir>
 #include <QtCore/QFile>
+#include <QtXml/QDomDocument>
 
 namespace web
 {
@@ -98,6 +99,53 @@ void AbstractTemplatePage::initTemplate(QString name, QString filename)
     else {
             qDebug() << f.errorString();
         }
+}
+
+void AbstractTemplatePage::render()
+{
+    Q_D(AbstractTemplatePage);
+
+    QDomDocument doc;
+    QString errMsg;
+    int errLine, errColumn;
+    doc.setContent(d->pageData, false, &errMsg, &errLine, &errColumn);
+
+    QDomNodeList templates = doc.elementsByTagName("tpl");
+    for (int i = 0; i < templates.size(); ++i) {
+            QDomElement element = templates.item(i).toElement();
+
+            if (element.hasAttribute("src") && element.hasAttribute("model")) {
+                    QDomNode parentNode = element.parentNode();
+                    QString tplName = element.attribute("src");
+                    QString modelName = element.attribute("model");
+                    QList<web::page::model::AbstractModel *> modelList = d->templateModels[modelName]->models();
+
+                    QString templateStartTag = QStringLiteral("<tpl>");
+                    QString templateEndTag = QStringLiteral("</tpl>");
+                    QString templateContent = d->templates[tplName].replace(templateStartTag, "").replace(templateEndTag, "");
+                    QString templateFilled;
+
+                    for (int i = 0; i < modelList.size(); ++i) {
+                            QString modelTemplate = templateContent;
+                            d->replaceModelPlaceholders(modelTemplate, modelList.at(i));
+
+                            templateFilled += modelTemplate;
+                        }
+
+                    templateFilled = templateStartTag + templateFilled + templateEndTag;
+                    QDomDocument tplDoc;
+                    tplDoc.setContent(templateFilled, false, &errMsg, &errLine, &errColumn);
+
+                    parentNode.replaceChild(tplDoc.documentElement(), element);
+                }
+            else {
+                }
+        }
+
+    QString content = doc.toString();
+    d->replaceModelPlaceholders(content, d->pageModel);
+
+    d->content = content.toUtf8();
 }
 
 }

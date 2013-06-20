@@ -45,7 +45,7 @@ class WEBFRAMEWORKQTSHARED_EXPORT AbstractTemplatePage : public StatefulPageInte
 
         virtual void initModels() = 0;
 
-        virtual void render() = 0;
+        virtual void render();
 
     private:
         Q_DECLARE_PRIVATE(AbstractTemplatePage)

@@ -44,6 +44,7 @@ class WEBFRAMEWORKQTSHARED_EXPORT AbstractTemplatePage : public StatefulPageInte
         void initTemplate(QString name, QString filename);
 
         virtual void initModels() = 0;
+        virtual void destroyModels() = 0;
 
         virtual void render();
 

@@ -34,6 +34,8 @@ QByteArray AbstractTemplatePage::getContent()
 
     render();
 
+    destroyModels();
+
     return d->content;
 }
 

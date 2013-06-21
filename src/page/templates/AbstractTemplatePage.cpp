@@ -118,7 +118,10 @@ void AbstractTemplatePage::render()
                     QDomNode parentNode = element.parentNode();
                     QString tplName = element.attribute("src");
                     QString modelName = element.attribute("model");
-                    QList<web::page::model::AbstractModel *> modelList = d->templateModels[modelName]->models();
+
+                    web::page::model::AbstractListModel *model = d->templateModels[modelName];
+                    model->load();
+                    QList<web::page::model::AbstractModel *> modelList = model->models();
 
                     QString templateStartTag = QStringLiteral("<tpl>");
                     QString templateEndTag = QStringLiteral("</tpl>");
@@ -137,6 +140,8 @@ void AbstractTemplatePage::render()
                     tplDoc.setContent(templateFilled, false, &errMsg, &errLine, &errColumn);
 
                     parentNode.replaceChild(tplDoc.documentElement(), element);
+
+                    model->unload();
                 }
             else {
                 }

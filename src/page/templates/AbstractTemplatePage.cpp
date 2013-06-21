@@ -124,7 +124,7 @@ void AbstractTemplatePage::render()
 
                     if (element.hasAttribute("if")) {
                             QString ifAttribute = element.attribute("if");
-                            isAllowedToShow = d->isTemplateAllowed(ifAttribute);
+                            isAllowedToShow = d->isTemplateAllowed(ifAttribute, d->pageModel);
                         }
 
                     if (isAllowedToShow) {
@@ -136,12 +136,20 @@ void AbstractTemplatePage::render()
                             QString templateEndTag = QStringLiteral("</tpl>");
                             QString templateContent = d->templates[tplName].replace(templateStartTag, "").replace(templateEndTag, "");
                             QString templateFilled;
+                            QString modelIfAttribute;
+
+                            if (element.hasAttribute("if-model")) {
+                                    modelIfAttribute = element.attribute("if-model");
+                                }
 
                             for (int i = 0; i < modelList.size(); ++i) {
                                     QString modelTemplate = templateContent;
-                                    d->replaceModelPlaceholders(modelTemplate, modelList.at(i));
+                                    web::page::model::AbstractModel *templateModel = modelList.at(i);
 
-                                    templateFilled += modelTemplate;
+                                    if (d->isTemplateAllowed(modelIfAttribute, templateModel)) {
+                                            d->replaceModelPlaceholders(modelTemplate, templateModel);
+                                            templateFilled += modelTemplate;
+                                        }
                                 }
 
                             templateFilled = templateStartTag + templateFilled + templateEndTag;

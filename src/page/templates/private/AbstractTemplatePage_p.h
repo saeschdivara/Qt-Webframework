@@ -56,8 +56,8 @@ class AbstractTemplatePagePrivate
                 }
         }
 
-        bool isTemplateAllowed(QString ifAttribute) {
-            QVariant ifProperty = this->pageModel->property(ifAttribute.toUtf8().data());
+        bool isTemplateAllowed(QString ifAttribute, web::page::model::AbstractModel *model) {
+            QVariant ifProperty = model->property(ifAttribute.toUtf8().data());
             if (ifProperty.isValid()) {
                     return ifProperty.toBool();
                 }

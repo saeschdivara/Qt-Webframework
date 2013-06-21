@@ -120,30 +120,40 @@ void AbstractTemplatePage::render()
                     QDomNode parentNode = element.parentNode();
                     QString tplName = element.attribute("src");
                     QString modelName = element.attribute("model");
+                    bool isAllowedToShow = true;
 
-                    web::page::model::AbstractListModel *model = d->templateModels[modelName];
-                    model->load();
-                    QList<web::page::model::AbstractModel *> modelList = model->models();
-
-                    QString templateStartTag = QStringLiteral("<tpl>");
-                    QString templateEndTag = QStringLiteral("</tpl>");
-                    QString templateContent = d->templates[tplName].replace(templateStartTag, "").replace(templateEndTag, "");
-                    QString templateFilled;
-
-                    for (int i = 0; i < modelList.size(); ++i) {
-                            QString modelTemplate = templateContent;
-                            d->replaceModelPlaceholders(modelTemplate, modelList.at(i));
-
-                            templateFilled += modelTemplate;
+                    if (element.hasAttribute("if")) {
+                            QString ifAttribute = element.attribute("if");
+                            isAllowedToShow = d->isTemplateAllowed(ifAttribute);
                         }
 
-                    templateFilled = templateStartTag + templateFilled + templateEndTag;
-                    QDomDocument tplDoc;
-                    tplDoc.setContent(templateFilled, false, &errMsg, &errLine, &errColumn);
+                    if (isAllowedToShow) {
+                            web::page::model::AbstractListModel *model = d->templateModels[modelName];
+                            model->load();
+                            QList<web::page::model::AbstractModel *> modelList = model->models();
 
-                    parentNode.replaceChild(tplDoc.documentElement(), element);
+                            QString templateStartTag = QStringLiteral("<tpl>");
+                            QString templateEndTag = QStringLiteral("</tpl>");
+                            QString templateContent = d->templates[tplName].replace(templateStartTag, "").replace(templateEndTag, "");
+                            QString templateFilled;
 
-                    model->unload();
+                            for (int i = 0; i < modelList.size(); ++i) {
+                                    QString modelTemplate = templateContent;
+                                    d->replaceModelPlaceholders(modelTemplate, modelList.at(i));
+
+                                    templateFilled += modelTemplate;
+                                }
+
+                            templateFilled = templateStartTag + templateFilled + templateEndTag;
+                            QDomDocument tplDoc;
+                            tplDoc.setContent(templateFilled, false, &errMsg, &errLine, &errColumn);
+
+                            parentNode.replaceChild(tplDoc.documentElement(), element);
+
+                            model->unload();
+                        } else {
+                            parentNode.removeChild(element);
+                        }
                 }
             else {
                 }

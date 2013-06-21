@@ -7,7 +7,11 @@
 #include <httpserverrequest.h>
 #include <httpserverresponse.h>
 #include <sessionstore.h>
+
+#include <QtCore/QDebug>
 #include <QtCore/QHash>
+#include <QtCore/QMetaMethod>
+#include <QtCore/QMetaObject>
 
 #include <QRegularExpression>
 
@@ -47,9 +51,18 @@ class AbstractTemplatePagePrivate
                     QString toReplacingString = match.captured(0);
                     QString placeholderName = match.captured(1);
 
-                    QString replacingString = model->property(placeholderName.toLatin1().data()).toString();
+                    QString replacingString = model->property(placeholderName.toUtf8().data()).toString();
                     pageContent.replace(toReplacingString, replacingString);
                 }
+        }
+
+        bool isTemplateAllowed(QString ifAttribute) {
+            QVariant ifProperty = this->pageModel->property(ifAttribute.toUtf8().data());
+            if (ifProperty.isValid()) {
+                    return ifProperty.toBool();
+                }
+
+            return false;
         }
 };
 

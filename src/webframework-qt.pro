@@ -34,7 +34,8 @@ SOURCES += \
     htmlelement/BreakElement.cpp \
     page/templates/AbstractTemplatePage.cpp \
     page/model/AbstractModel.cpp \
-    page/model/AbstractListModel.cpp
+    page/model/AbstractListModel.cpp \
+    internationalisation/I18nManager.cpp
 
 HEADERS +=\
         webframework-qt_global.h \
@@ -65,7 +66,8 @@ HEADERS +=\
     page/templates/AbstractTemplatePage.h \
     page/templates/private/AbstractTemplatePage_p.h \
     page/model/AbstractModel.h \
-    page/model/AbstractListModel.h
+    page/model/AbstractListModel.h \
+    internationalisation/I18nManager.h
 
 unix:!symbian {
     maemo5 {
@@ -76,9 +78,17 @@ unix:!symbian {
     INSTALLS += target
 }
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../3rdparty/tufao-debug/release/ -ltufao
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../3rdparty/tufao-debug/debug/ -ltufao
-else:unix:!macx: LIBS += -L$$PWD/../3rdparty/tufao-debug/ -ltufao
-
 INCLUDEPATH += $$PWD/../3rdparty/tufao/src
 DEPENDPATH += $$PWD/../3rdparty/tufao/src
+
+INCLUDEPATH += $$PWD/../../arangodb-driver/src
+DEPENDPATH += $$PWD/../../arangodb-driver/src
+
+CONFIG(release, debug|release) {
+LIBS += -L$$PWD/../3rdparty/tufao-release/ -ltufao
+LIBS += -L$$PWD/../../arangodb-driver-dist/release/ -larangodb-driver
+}
+CONFIG(debug, debug|release) {
+LIBS += -L$$PWD/../3rdparty/tufao-debug/ -ltufao
+LIBS += -L$$PWD/../../arangodb-driver-dist/debug/ -larangodb-driver
+}

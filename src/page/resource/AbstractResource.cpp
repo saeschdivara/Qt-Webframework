@@ -4,16 +4,21 @@ namespace web
 {
 namespace page
 {
-namespace model
+namespace resource
 {
 
-AbstractResource::AbstractResource()
+AbstractResource::~AbstractResource()
 {
 }
 
 QByteArray AbstractResource::getContent()
 {
     return QByteArrayLiteral("");
+}
+
+AbstractResource::AbstractResource(AbstractResourcePrivate *d) :
+    d_ptr(d)
+{
 }
 
 }

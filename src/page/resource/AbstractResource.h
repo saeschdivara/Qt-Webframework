@@ -8,16 +8,24 @@ namespace web
 {
 namespace page
 {
-namespace model
+namespace resource
 {
+
+class AbstractResourcePrivate;
 
 class WEBFRAMEWORKQTSHARED_EXPORT AbstractResource : public PageInterface
 {
     public:
-        AbstractResource();
         virtual ~AbstractResource();
 
         virtual QByteArray getContent() Q_DECL_OVERRIDE;
+
+    protected:
+        AbstractResourcePrivate *d_ptr;
+        AbstractResource(AbstractResourcePrivate *d);
+
+    private:
+        Q_DECLARE_PRIVATE(AbstractResource)
 };
 
 }

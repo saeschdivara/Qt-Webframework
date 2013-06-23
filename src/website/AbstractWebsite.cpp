@@ -75,11 +75,11 @@ AbstractWebsite::AbstractWebsite(AbstractWebsitePrivate *pr, QObject *parent) :
 {
 }
 
-void AbstractWebsite::handleRequest(Tufao::HttpServerRequest &request, Tufao::HttpServerResponse &response)
+void AbstractWebsite::handleRequest(Tufao::HttpServerRequest *request, Tufao::HttpServerResponse *response)
 {
     Q_D(AbstractWebsite);
 
-    QString url = request.url().toDisplayString();
+    QString url = request->url();
 
     if ( d->pages.contains(url) ) {
             page::PageInterface *pageObj = d->pages.value(url);
@@ -87,19 +87,19 @@ void AbstractWebsite::handleRequest(Tufao::HttpServerRequest &request, Tufao::Ht
 
             if ( (statefulPage = dynamic_cast<page::StatefulPageInterface *>(pageObj)) ) {
                     statefulPage->setSession(&d->sessionStore);
-                    statefulPage->setRequest(&request);
-                    statefulPage->setResponse(&response);
+                    statefulPage->setRequest(request);
+                    statefulPage->setResponse(response);
 
-                    statefulPage->setGetRequestData(parseUserData(request.url().query().toUtf8()));
-                    statefulPage->setPostRequestData(parseUserData(request.readBody()));
+                    statefulPage->setGetRequestData(parseUserData(url.toUtf8()));
+                    //statefulPage->setPostRequestData(parseUserData(request.toDisplayString()));
                 }
 
-            response.writeHead(Tufao::HttpServerResponse::OK);
-            response.end(pageObj->getContent());
+            response->writeHead(Tufao::HttpServerResponse::OK);
+            response->end(pageObj->getContent());
         }
     else {
-            response.writeHead(Tufao::HttpServerResponse::NOT_FOUND);
-            response.end("Not found");
+            response->writeHead(Tufao::HttpServerResponse::NOT_FOUND);
+            response->end("Not found");
         }
 }
 

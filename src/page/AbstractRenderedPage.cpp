@@ -42,13 +42,13 @@ void AbstractRenderedPage::setResponse(Tufao::HttpServerResponse *r)
     d->response = r;
 }
 
-void AbstractRenderedPage::setPostRequestData(QHash<QByteArray, QByteArray> data)
+void AbstractRenderedPage::setPostRequestData(QMap<QByteArray, QByteArray> data)
 {
     Q_D(AbstractRenderedPage);
     d->post = data;
 }
 
-void AbstractRenderedPage::setGetRequestData(QHash<QByteArray, QByteArray> data)
+void AbstractRenderedPage::setGetRequestData(QMap<QByteArray, QByteArray> data)
 {
     Q_D(AbstractRenderedPage);
     d->get = data;

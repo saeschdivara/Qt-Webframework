@@ -2,34 +2,16 @@
 #include "internationalisation/I18nManager.h"
 #include "private/AbstractWebsite_p.h"
 #include "page/StatefulPageInterface.h"
+#include "page/resource/AbstractResource.h"
 
 #include <headers.h>
 #include <httpserverresponse.h>
 #include <httpserverrequest.h>
+#include <querystring.h>
 #include <url.h>
 
 namespace web {
 namespace website {
-
-QHash<QByteArray, QByteArray> parseUserData(QByteArray data) {
-    QHash<QByteArray, QByteArray> parsedData;
-    QList<QByteArray> pairedData = data.split('&');
-
-    QListIterator<QByteArray> it(pairedData);
-    while ( it.hasNext() ) {
-            QByteArray pair = it.next();
-            QList<QByteArray> userDataPairs = pair.split('=');
-
-            if (userDataPairs.size() == 1) {
-                    parsedData.insert(userDataPairs.at(0), "");
-                }
-            else if (userDataPairs.size() == 2){
-                    parsedData.insert(userDataPairs.at(0), userDataPairs.at(1));
-                }
-        }
-
-    return parsedData;
-}
 
 AbstractWebsite::AbstractWebsite(QObject *parent) :
     AbstractWebsite(new AbstractWebsitePrivate, parent)
@@ -93,9 +75,10 @@ void AbstractWebsite::handleRequest(Tufao::HttpServerRequest *request, Tufao::Ht
                     statefulPage->setRequest(request);
                     statefulPage->setResponse(response);
 
-                    statefulPage->setGetRequestData(parseUserData(url.query().toUtf8()));
-                    statefulPage->setPostRequestData(parseUserData(request->body()));
+                    statefulPage->setGetRequestData(Tufao::QueryString::parse(url.query().toUtf8()));
+                    statefulPage->setPostRequestData(Tufao::QueryString::parse(request->body()));
                 }
+
 
             response->writeHead(Tufao::HttpServerResponse::OK);
             response->end(pageObj->getContent());

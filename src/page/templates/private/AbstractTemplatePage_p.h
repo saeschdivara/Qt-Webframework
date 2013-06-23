@@ -29,8 +29,8 @@ class AbstractTemplatePagePrivate
         Tufao::HttpServerRequest *request;
         Tufao::HttpServerResponse *response;
 
-        QHash<QByteArray, QByteArray> post;
-        QHash<QByteArray, QByteArray> get;
+        QMap<QByteArray, QByteArray> post;
+        QMap<QByteArray, QByteArray> get;
 
         QHash<QString, QByteArray> templates;
 

@@ -57,13 +57,13 @@ void AbstractTemplatePage::setResponse(Tufao::HttpServerResponse *r)
     d->response = r;
 }
 
-void AbstractTemplatePage::setPostRequestData(QHash<QByteArray, QByteArray> data)
+void AbstractTemplatePage::setPostRequestData(QMap<QByteArray, QByteArray> data)
 {
     Q_D(AbstractTemplatePage);
     d->post = data;
 }
 
-void AbstractTemplatePage::setGetRequestData(QHash<QByteArray, QByteArray> data)
+void AbstractTemplatePage::setGetRequestData(QMap<QByteArray, QByteArray> data)
 {
     Q_D(AbstractTemplatePage);
     d->get = data;

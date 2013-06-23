@@ -2,7 +2,10 @@
 #define ABSTRACTRENDEREDPAGE_P_H
 
 #include "htmlelement/AbstractHtmlElement.h"
+
 #include <QtCore/QByteArray>
+#include <QtCore/QMap>
+
 #include <httpserverrequest.h>
 #include <httpserverresponse.h>
 #include <sessionstore.h>
@@ -21,8 +24,8 @@ class AbstractRenderedPagePrivate
 
         htmlelement::AbstractHtmlElement *root = Q_NULLPTR;
 
-        QHash<QByteArray, QByteArray> post;
-        QHash<QByteArray, QByteArray> get;
+        QMap<QByteArray, QByteArray> post;
+        QMap<QByteArray, QByteArray> get;
 };
 
 }

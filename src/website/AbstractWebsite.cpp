@@ -2,9 +2,11 @@
 #include "internationalisation/I18nManager.h"
 #include "private/AbstractWebsite_p.h"
 #include "page/StatefulPageInterface.h"
+
 #include <headers.h>
 #include <httpserverresponse.h>
 #include <httpserverrequest.h>
+#include <url.h>
 
 namespace web {
 namespace website {
@@ -78,11 +80,12 @@ AbstractWebsite::AbstractWebsite(AbstractWebsitePrivate *pr, QObject *parent) :
 void AbstractWebsite::handleRequest(Tufao::HttpServerRequest *request, Tufao::HttpServerResponse *response)
 {
     Q_D(AbstractWebsite);
+    using namespace Tufao;
 
-    QString url = request->url();
+    Url url(request->url());
 
-    if ( d->pages.contains(url) ) {
-            page::PageInterface *pageObj = d->pages.value(url);
+    if ( d->pages.contains(url.path()) ) {
+            page::PageInterface *pageObj = d->pages.value(url.path());
             page::StatefulPageInterface *statefulPage = Q_NULLPTR;
 
             if ( (statefulPage = dynamic_cast<page::StatefulPageInterface *>(pageObj)) ) {
@@ -90,8 +93,8 @@ void AbstractWebsite::handleRequest(Tufao::HttpServerRequest *request, Tufao::Ht
                     statefulPage->setRequest(request);
                     statefulPage->setResponse(response);
 
-                    statefulPage->setGetRequestData(parseUserData(url.toUtf8()));
-                    //statefulPage->setPostRequestData(parseUserData(request.toDisplayString()));
+                    statefulPage->setGetRequestData(parseUserData(url.query().toUtf8()));
+                    statefulPage->setPostRequestData(parseUserData(request->body()));
                 }
 
             response->writeHead(Tufao::HttpServerResponse::OK);

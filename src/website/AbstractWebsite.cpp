@@ -1,4 +1,5 @@
 #include "AbstractWebsite.h"
+#include "internationalisation/I18nManager.h"
 #include "private/AbstractWebsite_p.h"
 #include "page/StatefulPageInterface.h"
 #include <headers.h>
@@ -58,6 +59,8 @@ void AbstractWebsite::publish()
 
             d->server->listen(QHostAddress::Any, 9999);
         }
+
+    internationalisation::I18nManager::globalInstance()->loadLanguageTexts("en");
 }
 
 void AbstractWebsite::addPage(QString name, page::PageInterface *page)

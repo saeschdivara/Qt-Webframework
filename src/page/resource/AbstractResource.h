@@ -4,6 +4,8 @@
 #include "webframework-qt_global.h"
 #include "page/PageInterface.h"
 
+#include <httpserverresponse.h>
+
 namespace web
 {
 namespace page
@@ -18,6 +20,7 @@ class WEBFRAMEWORKQTSHARED_EXPORT AbstractResource : public PageInterface
     public:
         virtual ~AbstractResource();
 
+        void setResponse(Tufao::HttpServerResponse *response);
         virtual QByteArray getContent() Q_DECL_OVERRIDE;
 
     protected:

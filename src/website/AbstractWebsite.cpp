@@ -3,6 +3,7 @@
 #include "private/AbstractWebsite_p.h"
 #include "page/StatefulPageInterface.h"
 #include "page/resource/AbstractResource.h"
+#include "page/resource/ImageResource.h"
 
 #include <headers.h>
 #include <httpserverresponse.h>
@@ -69,16 +70,22 @@ void AbstractWebsite::handleRequest(Tufao::HttpServerRequest *request, Tufao::Ht
     if ( d->pages.contains(url.path()) ) {
             page::PageInterface *pageObj = d->pages.value(url.path());
             page::StatefulPageInterface *statefulPage = Q_NULLPTR;
+            page::resource::AbstractResource *resource = Q_NULLPTR;
 
             if ( (statefulPage = dynamic_cast<page::StatefulPageInterface *>(pageObj)) ) {
                     statefulPage->setSession(&d->sessionStore);
                     statefulPage->setRequest(request);
                     statefulPage->setResponse(response);
 
-                    statefulPage->setGetRequestData(Tufao::QueryString::parse(url.query().toUtf8()));
-                    statefulPage->setPostRequestData(Tufao::QueryString::parse(request->body()));
-                }
+                    if ( !url.query().isEmpty() )
+                        statefulPage->setGetRequestData(Tufao::QueryString::parse(url.query().toUtf8()));
 
+                    if ( !request->body().isEmpty() )
+                        statefulPage->setPostRequestData(Tufao::QueryString::parse(request->body()));
+                }
+            else if ( (resource = dynamic_cast<page::resource::AbstractResource *>(pageObj)) ) {
+                    resource->setResponse(response);
+                }
 
             response->writeHead(Tufao::HttpServerResponse::OK);
             response->end(pageObj->getContent());

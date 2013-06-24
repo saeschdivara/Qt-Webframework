@@ -5,8 +5,8 @@
 #include "page/resource/AbstractResource.h"
 
 #include <headers.h>
-#include <httpserverresponse.h>
 #include <httpserverrequest.h>
+#include <httpserverresponse.h>
 #include <querystring.h>
 #include <url.h>
 
@@ -75,10 +75,12 @@ void AbstractWebsite::handleRequest(Tufao::HttpServerRequest *request, Tufao::Ht
                     statefulPage->setRequest(request);
                     statefulPage->setResponse(response);
 
-                    statefulPage->setGetRequestData(Tufao::QueryString::parse(url.query().toUtf8()));
-                    statefulPage->setPostRequestData(Tufao::QueryString::parse(request->body()));
-                }
+                    if ( !url.query().isEmpty() )
+                        statefulPage->setGetRequestData(Tufao::QueryString::parse(url.query().toUtf8()));
 
+                    if ( !request->body().isEmpty() )
+                        statefulPage->setPostRequestData(Tufao::QueryString::parse(request->body()));
+                }
 
             response->writeHead(Tufao::HttpServerResponse::OK);
             response->end(pageObj->getContent());

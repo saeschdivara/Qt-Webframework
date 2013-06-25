@@ -36,7 +36,6 @@ QByteArray AbstractResource::getContent()
                     data = file.read(2000);
                     d->response->write(data);
                     qApp->processEvents();
-                    qDebug() << d->fileName;
                 }
 
             file.close();

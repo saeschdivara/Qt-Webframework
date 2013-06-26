@@ -24,7 +24,7 @@ QByteArray AbstractRenderedPage::getContent()
         }
 }
 
-void AbstractRenderedPage::setSession(Tufao::SessionStore *s)
+void AbstractRenderedPage::setSession(website::WebSession *s)
 {
     Q_D(AbstractRenderedPage);
     d->session = s;

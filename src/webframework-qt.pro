@@ -37,7 +37,8 @@ SOURCES += \
     page/model/AbstractListModel.cpp \
     internationalisation/I18nManager.cpp \
     page/resource/AbstractResource.cpp \
-    page/resource/ImageResource.cpp
+    page/resource/ImageResource.cpp \
+    website/WebSession.cpp
 
 HEADERS +=\
         webframework-qt_global.h \
@@ -72,7 +73,8 @@ HEADERS +=\
     internationalisation/I18nManager.h \
     page/resource/AbstractResource.h \
     page/resource/private/AbstractResource_p.h \
-    page/resource/ImageResource.h
+    page/resource/ImageResource.h \
+    website/WebSession.h
 
 unix:!symbian {
     maemo5 {

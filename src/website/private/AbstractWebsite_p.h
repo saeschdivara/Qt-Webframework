@@ -1,12 +1,17 @@
 #ifndef ABSTRACTWEBSITE_P_H
 #define ABSTRACTWEBSITE_P_H
 
-#include <QtCore/QHash>
-#include <QtCore/QUrl>
-#include <QtCore/QScopedPointer>
-#include <httpserver.h>
-#include <simplesessionstore.h>
 #include "page/PageInterface.h"
+#include "website/WebSession.h"
+
+#include <httpserver.h>
+#include <httpserverrequest.h>
+#include <httpserverresponse.h>
+#include <simplesessionstore.h>
+
+#include <QtCore/QHash>
+#include <QtCore/QScopedPointer>
+#include <QtCore/QUrl>
 
 namespace web {
 namespace website {
@@ -18,6 +23,12 @@ public:
         QHash<QString ,page::PageInterface *> pages;
         QScopedPointer<Tufao::HttpServer> server;
         Tufao::SimpleSessionStore sessionStore;
+
+        WebSession *session(Tufao::HttpServerRequest *request, Tufao::HttpServerResponse *response) {
+            if (sessionStore.hasSession(*request)) {
+                } else {
+                }
+        }
 };
 
 }

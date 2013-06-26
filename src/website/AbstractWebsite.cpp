@@ -73,7 +73,7 @@ void AbstractWebsite::handleRequest(Tufao::HttpServerRequest *request, Tufao::Ht
             page::resource::AbstractResource *resource = Q_NULLPTR;
 
             if ( (statefulPage = dynamic_cast<page::StatefulPageInterface *>(pageObj)) ) {
-                    statefulPage->setSession(&d->sessionStore);
+                    statefulPage->setSession(d->session(request, response));
                     statefulPage->setRequest(request);
                     statefulPage->setResponse(response);
 

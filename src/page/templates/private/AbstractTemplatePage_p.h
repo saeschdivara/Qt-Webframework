@@ -3,6 +3,7 @@
 
 #include "page/model/AbstractListModel.h"
 #include "page/model/AbstractModel.h"
+#include "website/WebSession.h"
 
 #include <httpserverrequest.h>
 #include <httpserverresponse.h>
@@ -25,7 +26,7 @@ namespace templates
 class AbstractTemplatePagePrivate
 {
     public:
-        Tufao::SessionStore *session;
+        website::WebSession *session;
         Tufao::HttpServerRequest *request;
         Tufao::HttpServerResponse *response;
 

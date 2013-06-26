@@ -39,7 +39,7 @@ QByteArray AbstractTemplatePage::getContent()
     return d->content;
 }
 
-void AbstractTemplatePage::setSession(Tufao::SessionStore *s)
+void AbstractTemplatePage::setSession(website::WebSession *s)
 {
     Q_D(AbstractTemplatePage);
     d->session = s;

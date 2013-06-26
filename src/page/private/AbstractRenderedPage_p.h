@@ -2,6 +2,7 @@
 #define ABSTRACTRENDEREDPAGE_P_H
 
 #include "htmlelement/AbstractHtmlElement.h"
+#include "website/WebSession.h"
 
 #include <QtCore/QByteArray>
 #include <QtCore/QMap>
@@ -18,7 +19,7 @@ class AbstractRenderedPagePrivate
     public:
         QByteArray data;
 
-        Tufao::SessionStore *session;
+        website::WebSession *session;
         Tufao::HttpServerRequest *request;
         Tufao::HttpServerResponse *response;
 

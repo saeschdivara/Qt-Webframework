@@ -78,20 +78,20 @@ void AbstractWebsite::handleRequest(Tufao::HttpServerRequest *request, Tufao::Ht
                     statefulPage->setResponse(response);
 
                     if ( !url.query().isEmpty() )
-                        statefulPage->setGetRequestData(Tufao::QueryString::parse(url.query().toUtf8()));
+                        statefulPage->setGetRequestData(QueryString::parse(url.query().toUtf8()));
 
                     if ( !request->body().isEmpty() )
-                        statefulPage->setPostRequestData(Tufao::QueryString::parse(request->body()));
+                        statefulPage->setPostRequestData(QueryString::parse(request->body()));
                 }
             else if ( (resource = dynamic_cast<page::resource::AbstractResource *>(pageObj)) ) {
                     resource->setResponse(response);
                 }
 
-            response->writeHead(Tufao::HttpServerResponse::OK);
+            response->writeHead(HttpServerResponse::OK);
             response->end(pageObj->getContent());
         }
     else {
-            response->writeHead(Tufao::HttpServerResponse::NOT_FOUND);
+            response->writeHead(HttpServerResponse::NOT_FOUND);
             response->end("Not found");
         }
 }

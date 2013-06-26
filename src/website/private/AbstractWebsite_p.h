@@ -9,6 +9,7 @@
 #include <httpserverresponse.h>
 #include <simplesessionstore.h>
 
+#include <QtCore/QDebug>
 #include <QtCore/QHash>
 #include <QtCore/QScopedPointer>
 #include <QtCore/QUrl>
@@ -23,10 +24,21 @@ public:
         QHash<QString ,page::PageInterface *> pages;
         QScopedPointer<Tufao::HttpServer> server;
         Tufao::SimpleSessionStore sessionStore;
+        QHash<QString, WebSession *> sessions;
 
-        WebSession *session(Tufao::HttpServerRequest *request, Tufao::HttpServerResponse *response) {
-            if (sessionStore.hasSession(*request)) {
+        ~AbstractWebsitePrivate() {
+            qDeleteAll(sessions);
+        }
+
+        inline WebSession *session(Tufao::HttpServerRequest *request, Tufao::HttpServerResponse *response) {
+            QString peerAddress = request->socket()->peerAddress().toString();
+
+            if (sessions.contains(peerAddress)) {
+                    return sessions[peerAddress];
                 } else {
+                    WebSession *s = new WebSession(request, response, &sessionStore);
+                    sessions.insert(peerAddress, s);
+                    return s;
                 }
         }
 };

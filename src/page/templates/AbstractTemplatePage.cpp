@@ -16,6 +16,12 @@ namespace templates
 
 AbstractTemplatePage::~AbstractTemplatePage()
 {
+    Q_D(AbstractTemplatePage);
+
+    delete d->pageModel;
+    qDeleteAll(d->templateModels);
+
+    delete d_ptr;
 }
 
 QByteArray AbstractTemplatePage::getContent()
@@ -113,43 +119,56 @@ void AbstractTemplatePage::render()
     doc.setContent(d->pageData, false, &errMsg, &errLine, &errColumn);
 
     QDomNodeList templates = doc.elementsByTagName("tpl");
-    for (int i = 0; i < templates.size(); ++i) {
+    const int templateSize = templates.size();
+    // We need to go backwards because otherwise the deleting of nodes doesnt work
+    for (int i = templateSize-1; i >= 0 ; --i) {
             QDomElement element = templates.item(i).toElement();
+            QDomNode parentNode = element.parentNode();
 
-            if (element.hasAttribute("src") && element.hasAttribute("model")) {
-                    QDomNode parentNode = element.parentNode();
+            if (element.hasAttribute("src")) {
                     QString tplName = element.attribute("src");
-                    QString modelName = element.attribute("model");
                     bool isAllowedToShow = true;
 
                     if (element.hasAttribute("if")) {
                             QString ifAttribute = element.attribute("if");
                             isAllowedToShow = d->isTemplateAllowed(ifAttribute, d->pageModel);
                         }
+                    else if (element.hasAttribute("if-not")) {
+                            QString ifAttribute = element.attribute("if-not");
+                            isAllowedToShow = !d->isTemplateAllowed(ifAttribute, d->pageModel);
+                        }
 
                     if (isAllowedToShow) {
-                            web::page::model::AbstractListModel *model = d->templateModels[modelName];
-                            model->load();
-                            QList<web::page::model::AbstractModel *> modelList = model->models();
 
                             QString templateStartTag = QStringLiteral("<tpl>");
                             QString templateEndTag = QStringLiteral("</tpl>");
                             QString templateContent = d->templates[tplName].replace(templateStartTag, "").replace(templateEndTag, "");
                             QString templateFilled;
-                            QString modelIfAttribute;
 
-                            if (element.hasAttribute("if-model")) {
-                                    modelIfAttribute = element.attribute("if-model");
-                                }
+                            if (element.hasAttribute("model")) {
+                                    QString modelName = element.attribute("model");
+                                    web::page::model::AbstractListModel *model = d->templateModels[modelName];
+                                    model->load();
+                                    QList<web::page::model::AbstractModel *> modelList = model->models();
+                                    QString modelIfAttribute;
 
-                            for (int i = 0; i < modelList.size(); ++i) {
-                                    QString modelTemplate = templateContent;
-                                    web::page::model::AbstractModel *templateModel = modelList.at(i);
-
-                                    if (d->isTemplateAllowed(modelIfAttribute, templateModel)) {
-                                            d->replaceModelPlaceholders(modelTemplate, templateModel);
-                                            templateFilled += modelTemplate;
+                                    if (element.hasAttribute("if-model")) {
+                                            modelIfAttribute = element.attribute("if-model");
                                         }
+
+                                    for (int i = 0; i < modelList.size(); ++i) {
+                                            QString modelTemplate = templateContent;
+                                            web::page::model::AbstractModel *templateModel = modelList.at(i);
+
+                                            if (d->isTemplateAllowed(modelIfAttribute, templateModel)) {
+                                                    d->replaceModelPlaceholders(modelTemplate, templateModel);
+                                                    templateFilled += modelTemplate;
+                                                }
+
+                                            model->unload();
+                                        }
+                                } else {
+                                    templateFilled = templateContent;
                                 }
 
                             templateFilled = templateStartTag + templateFilled + templateEndTag;
@@ -157,13 +176,12 @@ void AbstractTemplatePage::render()
                             tplDoc.setContent(templateFilled, false, &errMsg, &errLine, &errColumn);
 
                             parentNode.replaceChild(tplDoc.documentElement(), element);
-
-                            model->unload();
                         } else {
                             parentNode.removeChild(element);
                         }
                 }
             else {
+                    parentNode.removeChild(element);
                 }
         }
 

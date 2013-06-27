@@ -30,12 +30,16 @@ class WebSession
             m_store->setProperty(*m_request, *m_response, key, value);
         }
 
+        inline void removeProperty(const QByteArray &key) {
+            m_store->removeProperty(*m_request, *m_response, key);
+        }
+
         inline QVariant getProperty(const QByteArray &key) const {
             return m_store->property(*m_request, *m_response, key);
         }
 
-        inline void removeProperty(const QByteArray &key) {
-            m_store->removeProperty(*m_request, *m_response, key);
+        inline bool hasProperty(const QByteArray &key) const {
+            return m_store->hasProperty(*m_request, *m_response, key);
         }
 
         inline QList<QByteArray> properties() const {

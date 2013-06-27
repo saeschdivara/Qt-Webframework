@@ -30,7 +30,10 @@ class WEBFRAMEWORKQTSHARED_EXPORT AbstractTemplatePage : public StatefulPageInte
         virtual void setResponse(Tufao::HttpServerResponse *r) Q_DECL_OVERRIDE;
 
         virtual void setPostRequestData(QMap<QByteArray, QByteArray> data) Q_DECL_OVERRIDE;
+        virtual void clearPostRequestData() Q_DECL_OVERRIDE;
+
         virtual void setGetRequestData(QMap<QByteArray, QByteArray> data) Q_DECL_OVERRIDE;
+        virtual void clearGetRequestData() Q_DECL_OVERRIDE;
 
         virtual void createModels() = 0;
 

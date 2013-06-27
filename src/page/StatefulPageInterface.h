@@ -20,7 +20,10 @@ class WEBFRAMEWORKQTSHARED_EXPORT StatefulPageInterface : public PageInterface
         virtual void setResponse(Tufao::HttpServerResponse *r) = 0;
 
         virtual void setPostRequestData(QMap<QByteArray, QByteArray> data) = 0;
+        virtual void clearPostRequestData() = 0;
+
         virtual void setGetRequestData(QMap<QByteArray, QByteArray> data) = 0;
+        virtual void clearGetRequestData() = 0;
 };
 
 }

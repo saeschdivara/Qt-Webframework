@@ -77,11 +77,17 @@ void AbstractWebsite::handleRequest(Tufao::HttpServerRequest *request, Tufao::Ht
                     statefulPage->setRequest(request);
                     statefulPage->setResponse(response);
 
+                    // Handle get data
                     if ( !url.query().isEmpty() )
                         statefulPage->setGetRequestData(QueryString::parse(url.query().toUtf8()));
+                    else
+                        statefulPage->clearGetRequestData();
 
+                    // Handle post data
                     if ( !request->body().isEmpty() )
                         statefulPage->setPostRequestData(QueryString::parse(request->body()));
+                    else
+                        statefulPage->clearPostRequestData();
                 }
             else if ( (resource = dynamic_cast<page::resource::AbstractResource *>(pageObj)) ) {
                     resource->setResponse(response);

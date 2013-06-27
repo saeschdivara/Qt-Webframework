@@ -69,10 +69,22 @@ void AbstractTemplatePage::setPostRequestData(QMap<QByteArray, QByteArray> data)
     d->post = data;
 }
 
+void AbstractTemplatePage::clearPostRequestData()
+{
+    Q_D(AbstractTemplatePage);
+    d->post.clear();
+}
+
 void AbstractTemplatePage::setGetRequestData(QMap<QByteArray, QByteArray> data)
 {
     Q_D(AbstractTemplatePage);
     d->get = data;
+}
+
+void AbstractTemplatePage::clearGetRequestData()
+{
+    Q_D(AbstractTemplatePage);
+    d->get.clear();
 }
 
 AbstractTemplatePage::AbstractTemplatePage(AbstractTemplatePagePrivate *d) :

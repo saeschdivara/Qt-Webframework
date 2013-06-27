@@ -48,10 +48,22 @@ void AbstractRenderedPage::setPostRequestData(QMap<QByteArray, QByteArray> data)
     d->post = data;
 }
 
+void AbstractRenderedPage::clearPostRequestData()
+{
+    Q_D(AbstractRenderedPage);
+    d->post.clear();
+}
+
 void AbstractRenderedPage::setGetRequestData(QMap<QByteArray, QByteArray> data)
 {
     Q_D(AbstractRenderedPage);
     d->get = data;
+}
+
+void AbstractRenderedPage::clearGetRequestData()
+{
+    Q_D(AbstractRenderedPage);
+    d->get.clear();
 }
 
 htmlelement::AbstractHtmlElement *AbstractRenderedPage::rootElement()

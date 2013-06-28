@@ -1,5 +1,8 @@
 #include "I18nManager.h"
+
 #include <Arangodbdriver.h>
+
+#include <QtCore/QHash>
 
 namespace web
 {
@@ -10,7 +13,10 @@ class I18nManagerPrivate
 {
     public:
         arangodb::Arangodbdriver *nosql;
+        QHash<QString, arangodb::Document *> languageTexts;
 };
+
+const QString I18N_COLLECTION_NAME = QString("i18n");
 
 Q_GLOBAL_STATIC_WITH_ARGS(I18nManager, i18n, ())
 
@@ -35,6 +41,22 @@ I18nManager *I18nManager::globalInstance()
 
 void I18nManager::loadLanguageTexts(QString language)
 {
+    Q_D(I18nManager);
+    arangodb::Document *languageText = Q_NULLPTR;
+
+    if (d->languageTexts.contains(language)) {
+            languageText = d->languageTexts.value(language);
+            languageText->updateStatus();
+            I18N_WAIT(languageText);
+
+            if (!languageText->isCurrent()) {
+                    languageText->sync();
+                    I18N_WAIT(languageText);
+                }
+        } else {
+            languageText = d->nosql->createDocument(I18N_COLLECTION_NAME, language);
+            languageText->save();
+        }
 }
 
 }

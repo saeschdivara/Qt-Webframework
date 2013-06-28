@@ -26,15 +26,15 @@ public:
         Tufao::SimpleSessionStore sessionStore;
         QHash<QString, WebSession *> sessions;
 
-        ~AbstractWebsitePrivate() {
-            qDeleteAll(sessions);
-        }
-
         inline WebSession *session(Tufao::HttpServerRequest *request, Tufao::HttpServerResponse *response) {
             QString peerAddress = request->socket()->peerAddress().toString();
 
             if (sessions.contains(peerAddress)) {
-                    return sessions[peerAddress];
+                    WebSession *s = sessions.value(peerAddress);
+                    s->setRequest(request);
+                    s->setResponse(response);
+
+                    return s;
                 } else {
                     WebSession *s = new WebSession(request, response, &sessionStore);
                     sessions.insert(peerAddress, s);

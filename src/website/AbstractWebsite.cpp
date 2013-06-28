@@ -63,7 +63,6 @@ AbstractWebsite::AbstractWebsite(AbstractWebsitePrivate *pr, QObject *parent) :
 void AbstractWebsite::handleRequest(Tufao::HttpServerRequest *request, Tufao::HttpServerResponse *response)
 {
     Q_D(AbstractWebsite);
-    using namespace Tufao;
 
     Url url(request->url());
 

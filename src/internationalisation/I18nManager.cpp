@@ -2,6 +2,7 @@
 
 #include <Arangodbdriver.h>
 
+#include <QtCore/QDebug>
 #include <QtCore/QHash>
 
 namespace web
@@ -48,6 +49,7 @@ void I18nManager::loadLanguageTexts(const QString &language)
     if (d->allLanguageTexts.contains(language)) {
             LanguageTexts *texts = d->allLanguageTexts.value(language);
             languageText = texts->document();
+
             languageText->updateStatus();
             I18N_WAIT(languageText);
 
@@ -56,11 +58,22 @@ void I18nManager::loadLanguageTexts(const QString &language)
                     I18N_WAIT(languageText);
                 }
         } else {
-            languageText = d->nosql->createDocument(I18N_COLLECTION_NAME, language);
-            languageText->save();
-            d->allLanguageTexts.insert(language, new LanguageTexts(languageText));
-
+            languageText = d->nosql->getDocument(I18N_COLLECTION_NAME + QStringLiteral("/") + language);
             I18N_WAIT(languageText);
+
+            if (languageText->hasErrorOccurred()) {
+                    // Delete old document
+                    languageText->deleteLater();
+
+                    // Create a new document
+                    languageText = d->nosql->createDocument(I18N_COLLECTION_NAME, language);
+
+                    languageText->save();
+                    I18N_WAIT(languageText);
+                }
+
+            // Register the language texts for one language
+            d->allLanguageTexts.insert(language, new LanguageTexts(languageText));
         }
 }
 

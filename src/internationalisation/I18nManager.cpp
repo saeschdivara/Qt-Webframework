@@ -13,7 +13,7 @@ class I18nManagerPrivate
 {
     public:
         arangodb::Arangodbdriver *nosql;
-        QHash<QString, arangodb::Document *> languageTexts;
+        QHash<QString, LanguageTexts *> allLanguageTexts;
 };
 
 const QString I18N_COLLECTION_NAME = QString("i18n");
@@ -31,6 +31,7 @@ I18nManager::~I18nManager()
 {
     Q_D(I18nManager);
     delete d->nosql;
+    qDeleteAll(d->allLanguageTexts);
     delete d;
 }
 
@@ -39,13 +40,14 @@ I18nManager *I18nManager::globalInstance()
     return i18n();
 }
 
-void I18nManager::loadLanguageTexts(QString language)
+void I18nManager::loadLanguageTexts(const QString &language)
 {
     Q_D(I18nManager);
     arangodb::Document *languageText = Q_NULLPTR;
 
-    if (d->languageTexts.contains(language)) {
-            languageText = d->languageTexts.value(language);
+    if (d->allLanguageTexts.contains(language)) {
+            LanguageTexts *texts = d->allLanguageTexts.value(language);
+            languageText = texts->document();
             languageText->updateStatus();
             I18N_WAIT(languageText);
 
@@ -56,7 +58,23 @@ void I18nManager::loadLanguageTexts(QString language)
         } else {
             languageText = d->nosql->createDocument(I18N_COLLECTION_NAME, language);
             languageText->save();
+            d->allLanguageTexts.insert(language, new LanguageTexts(languageText));
+
+            I18N_WAIT(languageText);
         }
+}
+
+LanguageTexts *I18nManager::languageTexts(const QString &language)
+{
+    Q_D(I18nManager);
+    return d->allLanguageTexts.value(language);
+}
+
+QString I18nManager::text(const QString &language, const QString &key) const
+{
+    Q_D(const I18nManager);
+    LanguageTexts *texts = d->allLanguageTexts.value(language);
+    return texts->text(key);
 }
 
 }

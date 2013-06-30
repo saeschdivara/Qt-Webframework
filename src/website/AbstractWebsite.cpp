@@ -46,6 +46,7 @@ void AbstractWebsite::publish()
         }
 
     internationalisation::I18nManager::globalInstance()->loadLanguageTexts("en");
+    internationalisation::I18nManager::globalInstance()->loadLanguageTexts("fr");
 }
 
 void AbstractWebsite::addPage(QString name, page::PageInterface *page)

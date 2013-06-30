@@ -38,7 +38,8 @@ SOURCES += \
     internationalisation/I18nManager.cpp \
     page/resource/AbstractResource.cpp \
     page/resource/ImageResource.cpp \
-    website/WebSession.cpp
+    website/WebSession.cpp \
+    internationalisation/LanguageTexts.cpp
 
 HEADERS +=\
         webframework-qt_global.h \
@@ -74,7 +75,8 @@ HEADERS +=\
     page/resource/AbstractResource.h \
     page/resource/private/AbstractResource_p.h \
     page/resource/ImageResource.h \
-    website/WebSession.h
+    website/WebSession.h \
+    internationalisation/LanguageTexts.h
 
 unix:!symbian {
     maemo5 {

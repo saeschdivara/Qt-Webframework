@@ -61,6 +61,7 @@ void I18nManager::loadLanguageTexts(const QString &language)
             languageText = d->nosql->getDocument(I18N_COLLECTION_NAME + QStringLiteral("/") + language);
             I18N_WAIT(languageText);
 
+            // if the language texts don't exist
             if (languageText->hasErrorOccurred()) {
                     // Delete old document
                     languageText->deleteLater();

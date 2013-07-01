@@ -39,7 +39,9 @@ SOURCES += \
     page/resource/AbstractResource.cpp \
     page/resource/ImageResource.cpp \
     website/WebSession.cpp \
-    internationalisation/LanguageTexts.cpp
+    internationalisation/LanguageTexts.cpp \
+    page/templates/AbstractTranslatableTemplate.cpp \
+    page/model/AbstractTranslatableModel.cpp
 
 HEADERS +=\
         webframework-qt_global.h \
@@ -76,7 +78,10 @@ HEADERS +=\
     page/resource/private/AbstractResource_p.h \
     page/resource/ImageResource.h \
     website/WebSession.h \
-    internationalisation/LanguageTexts.h
+    internationalisation/LanguageTexts.h \
+    page/templates/AbstractTranslatableTemplate.h \
+    page/templates/private/AbstractTranslatableTemplate_p.h \
+    page/model/AbstractTranslatableModel.h
 
 unix:!symbian {
     maemo5 {

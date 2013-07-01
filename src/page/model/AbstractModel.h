@@ -14,10 +14,11 @@ class AbstractModel : public QObject
 {
         Q_OBJECT
     public:
-        explicit AbstractModel(QObject *parent = 0);
-
         virtual void load() = 0;
         virtual void unload() = 0;
+
+    protected:
+        AbstractModel(QObject *parent = 0);
 };
 
 }

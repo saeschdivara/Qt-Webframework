@@ -4,6 +4,8 @@
 #include "webframework-qt_global.h"
 #include "LanguageTexts.h"
 
+#include <httpserverrequest.h>
+
 #include <QtCore/QCoreApplication>
 #include <QtCore/QGlobalStatic>
 #include <QtCore/QString>
@@ -96,6 +98,17 @@ class WEBFRAMEWORKQTSHARED_EXPORT I18nManager
          * @since 0.4
          */
         QString text(const QString &language, const QString &key) const;
+
+        /**
+         * @brief requestLanguage
+         *
+         * @param request
+         *
+         * @return
+         *
+         * @since 0.4
+         */
+        QString requestLanguage(Tufao::HttpServerRequest *request);
 
     protected:
         I18nManagerPrivate *d_ptr;

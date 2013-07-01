@@ -45,8 +45,8 @@ void AbstractWebsite::publish()
             d->server->listen(QHostAddress::Any, 9999);
         }
 
+    internationalisation::I18nManager::globalInstance()->loadLanguageTexts("de");
     internationalisation::I18nManager::globalInstance()->loadLanguageTexts("en");
-    internationalisation::I18nManager::globalInstance()->loadLanguageTexts("fr");
 }
 
 void AbstractWebsite::addPage(QString name, page::PageInterface *page)

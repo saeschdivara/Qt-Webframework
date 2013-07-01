@@ -1,9 +1,18 @@
 #include "I18nManager.h"
 
 #include <Arangodbdriver.h>
+#include <headers.h>
+#include <ibytearray.h>
 
 #include <QtCore/QDebug>
 #include <QtCore/QHash>
+
+#define I18N_RETURN_IF_LANGUAGE(clientLanguage, clientLanguageIf, returnLanguage) \
+    do { \
+        if ( clientLanguageIf.compare(clientLanguage, Qt::CaseInsensitive) ) { \
+            return returnLanguage; \
+        } \
+    } while(0)
 
 namespace web
 {
@@ -87,8 +96,27 @@ LanguageTexts *I18nManager::languageTexts(const QString &language)
 QString I18nManager::text(const QString &language, const QString &key) const
 {
     Q_D(const I18nManager);
-    LanguageTexts *texts = d->allLanguageTexts.value(language);
-    return texts->text(key);
+    if ( d->allLanguageTexts.contains(language) ) {
+            LanguageTexts *texts = d->allLanguageTexts.value(language);
+            return texts->text(key);
+        }
+    else {
+            return QStringLiteral("");
+        }
+}
+
+QString I18nManager::requestLanguage(Tufao::HttpServerRequest *request)
+{
+    Q_D(I18nManager);
+
+    if (request->headers().contains(Tufao::IByteArray("Accept-Language"))) {
+            QString language = request->headers().value(Tufao::IByteArray("Accept-Language"));
+
+            I18N_RETURN_IF_LANGUAGE(language, QStringLiteral("en-US"), QStringLiteral("en"));
+        }
+
+    return QStringLiteral("");
+
 }
 
 }

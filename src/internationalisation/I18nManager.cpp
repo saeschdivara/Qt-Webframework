@@ -7,9 +7,9 @@
 #include <QtCore/QDebug>
 #include <QtCore/QHash>
 
-#define I18N_RETURN_IF_LANGUAGE(clientLanguage, clientLanguageIf, returnLanguage) \
+#define I18N_RETURN_IF_LANGUAGE(clientLanguageIf, clientLanguage, returnLanguage) \
     do { \
-        if ( clientLanguageIf.compare(clientLanguage, Qt::CaseInsensitive) ) { \
+        if ( clientLanguageIf.contains(clientLanguage, Qt::CaseInsensitive) ) { \
             return returnLanguage; \
         } \
     } while(0)
@@ -107,8 +107,6 @@ QString I18nManager::text(const QString &language, const QString &key) const
 
 QString I18nManager::requestLanguage(Tufao::HttpServerRequest *request)
 {
-    Q_D(I18nManager);
-
     if (request->headers().contains(Tufao::IByteArray("Accept-Language"))) {
             QString language = request->headers().value(Tufao::IByteArray("Accept-Language"));
 

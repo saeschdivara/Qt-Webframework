@@ -20,7 +20,7 @@ class WEBFRAMEWORKQTSHARED_EXPORT AbstractTranslatableTemplate : public Abstract
 
     protected:
         AbstractTranslatableTemplate(AbstractTranslatableTemplatePrivate *d);
-        model::AbstractTranslatableModel *initTranslatableModel(model::AbstractTranslatableModel *model);
+        model::AbstractModel *setLanguageForModel(model::AbstractModel *model);
 
     private:
         Q_DECLARE_PRIVATE(AbstractTranslatableTemplate)

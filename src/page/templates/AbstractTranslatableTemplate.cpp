@@ -21,10 +21,15 @@ AbstractTranslatableTemplate::AbstractTranslatableTemplate(AbstractTranslatableT
 {
 }
 
-model::AbstractTranslatableModel *AbstractTranslatableTemplate::initTranslatableModel(model::AbstractTranslatableModel *model)
+model::AbstractModel *AbstractTranslatableTemplate::setLanguageForModel(model::AbstractModel *model)
 {
     Q_D(AbstractTranslatableTemplate);
-    model->setLanguage(d->clientLanguage);
+    model::AbstractTranslatableModel *translatableModel = Q_NULLPTR;
+
+    if ( (translatableModel = dynamic_cast<model::AbstractTranslatableModel *>(model)) ) {
+            translatableModel->setLanguage(d->clientLanguage);
+        }
+
     return model;
 }
 

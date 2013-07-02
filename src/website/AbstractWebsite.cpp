@@ -11,6 +11,8 @@
 #include <querystring.h>
 #include <url.h>
 
+#include <QtCore/QDir>
+
 namespace web {
 namespace website {
 
@@ -53,6 +55,21 @@ void AbstractWebsite::addPage(QString name, page::PageInterface *page)
 {
     Q_D(AbstractWebsite);
     d->pages.insert(name, page);
+}
+
+void AbstractWebsite::addImageFolder(QString name, QString folder)
+{
+    Q_D(AbstractWebsite);
+
+    QDir dir(folder);
+    dir.setFilter(QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks);
+
+    QStringList allFiles = dir.entryList();
+    for ( QString file : allFiles ) {
+            QString entry = name + QDir::separator() + file;
+            QString path = folder + file;
+            d->pages.insert(entry, new page::resource::ImageResource(path));
+        }
 }
 
 AbstractWebsite::AbstractWebsite(AbstractWebsitePrivate *pr, QObject *parent) :

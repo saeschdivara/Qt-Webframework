@@ -21,6 +21,7 @@ class WEBFRAMEWORKQTSHARED_EXPORT AbstractWebsite : public QObject
 
         virtual void publish();
         void addPage(QString name, page::PageInterface *page);
+        void addImageFolder(QString name, QString folder);
 
     protected:
         AbstractWebsite(AbstractWebsitePrivate *pr, QObject *parent = 0);

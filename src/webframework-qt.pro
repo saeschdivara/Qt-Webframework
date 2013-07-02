@@ -42,7 +42,8 @@ SOURCES += \
     internationalisation/LanguageTexts.cpp \
     page/templates/AbstractTranslatableTemplate.cpp \
     page/model/AbstractTranslatableModel.cpp \
-    security/User.cpp
+    security/User.cpp \
+    page/resource/DartResource.cpp
 
 HEADERS +=\
         webframework-qt_global.h \
@@ -83,7 +84,8 @@ HEADERS +=\
     page/templates/AbstractTranslatableTemplate.h \
     page/templates/private/AbstractTranslatableTemplate_p.h \
     page/model/AbstractTranslatableModel.h \
-    security/User.h
+    security/User.h \
+    page/resource/DartResource.h
 
 unix:!symbian {
     maemo5 {
@@ -105,6 +107,7 @@ LIBS += -L$$PWD/../3rdparty/tufao-release/ -ltufao
 LIBS += -L$$PWD/../../arangodb-driver-dist/release/ -larangodb-driver
 }
 CONFIG(debug, debug|release) {
+DEFINES += QT_WEBFRAMEWORK_DEBUG
 LIBS += -L$$PWD/../3rdparty/tufao-debug/ -ltufao
 LIBS += -L$$PWD/../../arangodb-driver-dist/debug/ -larangodb-driver
 }

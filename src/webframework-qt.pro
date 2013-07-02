@@ -41,7 +41,8 @@ SOURCES += \
     website/WebSession.cpp \
     internationalisation/LanguageTexts.cpp \
     page/templates/AbstractTranslatableTemplate.cpp \
-    page/model/AbstractTranslatableModel.cpp
+    page/model/AbstractTranslatableModel.cpp \
+    security/User.cpp
 
 HEADERS +=\
         webframework-qt_global.h \
@@ -81,7 +82,8 @@ HEADERS +=\
     internationalisation/LanguageTexts.h \
     page/templates/AbstractTranslatableTemplate.h \
     page/templates/private/AbstractTranslatableTemplate_p.h \
-    page/model/AbstractTranslatableModel.h
+    page/model/AbstractTranslatableModel.h \
+    security/User.h
 
 unix:!symbian {
     maemo5 {

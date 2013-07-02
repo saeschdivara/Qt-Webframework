@@ -39,6 +39,9 @@ void DartResource::compileDartFile()
               << QStringLiteral("--out=") + d->fileName
               << d->dartFileName;
 #else
+    arguments << QStringLiteral("--minify")
+              << QStringLiteral("--out=") + d->fileName
+              << d->dartFileName;
 #endif
 
     QProcess::startDetached(DART2JS_SCRIPT, arguments);

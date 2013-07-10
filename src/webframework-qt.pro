@@ -43,7 +43,8 @@ SOURCES += \
     page/templates/AbstractTranslatableTemplate.cpp \
     page/model/AbstractTranslatableModel.cpp \
     security/User.cpp \
-    page/resource/DartResource.cpp
+    page/resource/DartResource.cpp \
+    security/SecurityController.cpp
 
 HEADERS +=\
         webframework-qt_global.h \
@@ -85,7 +86,8 @@ HEADERS +=\
     page/templates/private/AbstractTranslatableTemplate_p.h \
     page/model/AbstractTranslatableModel.h \
     security/User.h \
-    page/resource/DartResource.h
+    page/resource/DartResource.h \
+    security/SecurityController.h
 
 unix:!symbian {
     maemo5 {

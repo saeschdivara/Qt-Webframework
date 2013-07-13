@@ -15,7 +15,7 @@ class WEBFRAMEWORKQTSHARED_EXPORT SecurityController
 {
     public:
         SecurityController();
-        SecurityController * globalInstance();
+        static SecurityController * globalInstance();
 
         User * login(const QString & username, const QString & password);
         User * registerUser(const QString & username, const QString & password);

@@ -1,6 +1,9 @@
 #include "SecurityController.h"
 
 #include <Arangodbdriver.h>
+#include <QueryBuilder.h>
+#include <QBSelect.h>
+#include <QBCursor.h>
 
 #include <QtCore/QCryptographicHash>
 #include <QtCore/QDebug>
@@ -62,7 +65,19 @@ SecurityController *SecurityController::globalInstance()
 User *SecurityController::login(const QString & username, const QString & password)
 {
     Q_D(SecurityController);
-    Document * userDoc = d->nosql->getDocument(WEB_USER_COLLECTION + QStringLiteral("/") + username);
+    QueryBuilder qb;
+    QSharedPointer<QBSelect> select = qb.createSelect(WEB_USER_COLLECTION, 1);
+    select->setWhere(QStringLiteral("username"), username);
+    QSharedPointer<QBCursor> cursor = d->nosql->executeSelect(select);
+    cursor->waitForResult();
+
+    qDebug() << "sdkkd";
+
+    if (cursor->count() == 0) {
+        return Q_NULLPTR;
+    }
+
+    Document * userDoc = cursor->data().first();
     User * user = Q_NULLPTR;
     QString userPassword = userDoc->get(QStringLiteral("password")).toString();
 

@@ -55,8 +55,7 @@ class WEBFRAMEWORKQTSHARED_EXPORT AbstractTemplatePage : public StatefulPageInte
         Q_DECLARE_PRIVATE(AbstractTemplatePage)
 };
 
-template<class Type>
-Type createTemplatePage();
+AbstractTemplatePage * createTemplatePage(AbstractTemplatePage *t);
 
 }
 }

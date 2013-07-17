@@ -203,12 +203,10 @@ void AbstractTemplatePage::render()
     d->content = content.toUtf8();
 }
 
-template<class Type>
-Type createTemplatePage()
+AbstractTemplatePage *createTemplatePage(AbstractTemplatePage *t)
 {
-    AbstractTemplatePage * page = new Type();
-    page->createModels();
-    return page;
+    t->createModels();
+    return t;
 }
 
 }

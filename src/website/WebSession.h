@@ -1,6 +1,8 @@
 #ifndef WEBSESSION_H
 #define WEBSESSION_H
 
+#include "security/User.h"
+
 #include <httpserverrequest.h>
 #include <httpserverresponse.h>
 #include <sessionstore.h>
@@ -54,10 +56,19 @@ class WebSession
             return m_store->properties(m_request, m_response);
         }
 
+        inline void setUser(security::User * user) {
+            m_user = user;
+        }
+
+        inline security::User * user() const {
+            return m_user;
+        }
+
     private:
         HttpServerRequest *m_request;
         HttpServerResponse *m_response;
         SessionStore *m_store;
+        security::User *m_user;
 };
 
 }

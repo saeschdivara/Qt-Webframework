@@ -2,6 +2,7 @@
 #include "private/AbstractResource_p.h"
 
 #include <QtCore/QDebug>
+#include <QtCore/QDir>
 #include <QtCore/QProcess>
 
 namespace web
@@ -17,7 +18,7 @@ class DartResourcePrivate : public AbstractResourcePrivate
         QString dartFileName;
 };
 
-const QString DART2JS_SCRIPT = QStringLiteral("../../../../dart/dart-sdk/bin/dart2js");
+const QString DART2JS_SCRIPT = QStringLiteral("./../../../../../Dart/dart-sdk/bin/dart2js");
 
 DartResource::DartResource(const QString &dartFile, const QString &jsFile) :
     AbstractResource(new DartResourcePrivate)
@@ -34,6 +35,7 @@ void DartResource::compileDartFile()
 {
     Q_D(DartResource);
     QStringList arguments;
+
 #ifdef QT_WEBFRAMEWORK_DEBUG
     arguments << QStringLiteral("--checked")
               << QStringLiteral("--out=") + d->fileName

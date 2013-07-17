@@ -5,8 +5,10 @@
 #include <QBSelect.h>
 #include <QBCursor.h>
 
+#include <QtCore/QByteArray>
 #include <QtCore/QCryptographicHash>
 #include <QtCore/QDebug>
+#include <QtCore/QString>
 #include <QtCore/QVariant>
 
 #include <random>
@@ -47,7 +49,7 @@ class SecurityControllerPrivate
         }
 
         inline QString hash(const QString &data, int times) const {
-            QByteArray hashedData = data.toUtf8();
+            QByteArray hashedData = data.toLatin1();
             for (int i = 0; i < times; ++i) {
                 hashedData = QCryptographicHash::hash(hashedData, QCryptographicHash::Sha3_512);
             }
@@ -65,13 +67,13 @@ class SecurityControllerPrivate
             QString randomString = splittedPassword.at(1);
             QString userInputPw = hashPassword(inputPassword, randomString);
 
-            qDebug() << userInputPw;
-
             return realUserPw == userInputPw;
         }
 };
 
 const QString WEB_USER_COLLECTION = QString("webuser");
+const QString WEB_USER_NAME = QString("username");
+const QString WEB_USER_PASSWORD = QString("password");
 
 Q_GLOBAL_STATIC(SecurityController, securityInst)
 
@@ -90,7 +92,7 @@ User *SecurityController::login(const QString & username, const QString & passwo
     Q_D(SecurityController);
     QueryBuilder qb;
     QSharedPointer<QBSelect> select = qb.createSelect(WEB_USER_COLLECTION, 1);
-    select->setWhere(QStringLiteral("username"), username);
+    select->setWhere(WEB_USER_NAME, username);
     QSharedPointer<QBCursor> cursor = d->nosql->executeSelect(select);
     cursor->waitForResult();
 
@@ -99,11 +101,15 @@ User *SecurityController::login(const QString & username, const QString & passwo
     }
 
     Document * userDoc = cursor->data().first();
+    d->nosql->connectDocument(userDoc);
+    userDoc->sync();
+    userDoc->waitForResult();
+
     User * user = Q_NULLPTR;
-    QString userPassword = userDoc->get(QStringLiteral("password")).toString();
+    QString userPassword = QByteArray::fromBase64(userDoc->get(WEB_USER_PASSWORD).toByteArray());
 
     if (d->isCorrectUserPassword(userPassword, password)) {
-        user = new User(username, userPassword);
+        user = new User(username, userPassword, userDoc);
     }
 
     return user;
@@ -112,7 +118,14 @@ User *SecurityController::login(const QString & username, const QString & passwo
 User *SecurityController::registerUser(const QString & username, const QString & password)
 {
     Q_D(SecurityController);
-    return new User(username, d->hashPassword(password));
+    QString hashedPassword = d->hashPassword(password);
+    arangodb::Document * doc = d->nosql->createDocument(WEB_USER_COLLECTION);
+    doc->set(WEB_USER_NAME, username);
+    doc->set(WEB_USER_PASSWORD, hashedPassword.toLocal8Bit().toBase64());
+    doc->save();
+    doc->waitForResult();
+
+    return new User(username, hashedPassword, doc);
 }
 
 SecurityController::SecurityController(SecurityControllerPrivate * d) :

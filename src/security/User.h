@@ -2,6 +2,8 @@
 #define USER_H
 
 #include "webframework-qt_global.h"
+#include "Document.h"
+
 #include <QtCore/QString>
 
 namespace web {
@@ -12,10 +14,12 @@ class UserPrivate;
 class WEBFRAMEWORKQTSHARED_EXPORT User
 {
     public:
-        User(const QString & username, const QString & password);
+        User(const QString & username, const QString & password, arangodb::Document * doc);
 
         QString name() const;
         QString password() const;
+
+        arangodb::Document * document() const;
 
     protected:
         UserPrivate *d_ptr;

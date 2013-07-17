@@ -10,7 +10,7 @@ namespace page
 namespace model
 {
 
-class AbstractTranslatableModel : public AbstractModel
+class WEBFRAMEWORKQTSHARED_EXPORT AbstractTranslatableModel : public AbstractModel
 {
         Q_OBJECT
     public:

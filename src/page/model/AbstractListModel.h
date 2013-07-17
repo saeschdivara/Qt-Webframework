@@ -11,7 +11,7 @@ namespace page
 namespace model
 {
 
-class AbstractListModel : public AbstractModel
+class WEBFRAMEWORKQTSHARED_EXPORT AbstractListModel : public AbstractModel
 {
         Q_OBJECT
     public:

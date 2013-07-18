@@ -118,7 +118,21 @@ void AbstractTemplatePage::initTemplate(QString name, QString filename)
         }
     else {
             qDebug() << f.errorString();
-        }
+    }
+}
+
+void AbstractTemplatePage::loadModel(const QString & name)
+{
+    Q_D(AbstractTemplatePage);
+    model::AbstractListModel * model = d->templateModels.value(name);
+    model->load();
+}
+
+void AbstractTemplatePage::unloadModel(const QString & name)
+{
+    Q_D(AbstractTemplatePage);
+    model::AbstractListModel * model = d->templateModels.value(name);
+    model->unload();
 }
 
 void AbstractTemplatePage::render()

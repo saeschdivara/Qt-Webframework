@@ -18,7 +18,7 @@ enum DirFileType {
 
 #define IF_FILE_TYPE(fileStr, fileEnding, fileType) \
     do { \
-    if (fileStr == QStringLiteral(fileEnding)) \
+    if (fileStr.endsWith(QStringLiteral(fileEnding))) \
             return fileType;\
     } while(0)
 
@@ -58,11 +58,10 @@ QList<AbstractModel *> DirListModel::models()
 void DirListModel::generateAllModels(const QString & dirPath)
 {
     QDir dir(dirPath);
-    QStringList folderItems = dir.entryList(QDir::NoDotAndDotDot | QDir::NoSymLinks);
+    QStringList folderItems = dir.entryList();
     for (int i = 0; i < folderItems.count(); ++i) {
         QString item = folderItems.at(i);
         DirFileType type = getFileType(item);
-        qDebug() << item;
         switch (type) {
             case DirFileType::ImageType:
                 m_folderContent.append(new ImageModel(item));

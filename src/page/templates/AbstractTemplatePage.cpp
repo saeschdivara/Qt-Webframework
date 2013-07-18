@@ -178,15 +178,18 @@ void AbstractTemplatePage::render()
                                     QList<web::page::model::AbstractModel *> modelList = model->models();
                                     QString modelIfAttribute;
 
+                                    bool hasIfAttribute = false;
+
                                     if (element.hasAttribute("if-model")) {
                                             modelIfAttribute = element.attribute("if-model");
+                                            hasIfAttribute = true;
                                         }
 
                                     for (int i = 0; i < modelList.size(); ++i) {
                                             QString modelTemplate = templateContent;
                                             web::page::model::AbstractModel *templateModel = modelList.at(i);
 
-                                            if (d->isTemplateAllowed(modelIfAttribute, templateModel)) {
+                                            if (d->isTemplateAllowed(modelIfAttribute, templateModel) || !hasIfAttribute) {
                                                     d->replaceModelPlaceholders(modelTemplate, templateModel);
                                                     templateFilled += modelTemplate;
                                                 }

@@ -177,6 +177,8 @@ void AbstractTemplatePage::render()
                                     model->load();
                                     QList<web::page::model::AbstractModel *> modelList = model->models();
                                     QString modelIfAttribute;
+                                    int modelCountAttribute = -1;
+                                    int modelStartCountAttribute = -1;
 
                                     bool hasIfAttribute = false;
 
@@ -185,7 +187,23 @@ void AbstractTemplatePage::render()
                                             hasIfAttribute = true;
                                         }
 
-                                    for (int i = 0; i < modelList.size(); ++i) {
+                                    if (element.hasAttribute("model-start-count")) {
+                                        modelStartCountAttribute = element.attribute("model-start-count").toInt();
+                                    }
+
+                                    if (element.hasAttribute("model-count")) {
+                                        modelCountAttribute = element.attribute("model-count").toInt();
+                                    }
+
+                                    if ( modelStartCountAttribute < 0 ) {
+                                        modelStartCountAttribute = 0;
+                                    }
+
+                                    if ( modelCountAttribute <= 0 ) {
+                                        modelCountAttribute  = modelList.size();
+                                    }
+
+                                    for (int i = modelStartCountAttribute; i < modelCountAttribute; ++i) {
                                             QString modelTemplate = templateContent;
                                             web::page::model::AbstractModel *templateModel = modelList.at(i);
 

@@ -69,7 +69,19 @@ void AbstractWebsite::addImageFolder(QString name, QString folder)
             QString entry = name + QDir::separator() + file;
             QString path = folder + file;
             d->pages.insert(entry, new page::resource::ImageResource(path));
-        }
+    }
+}
+
+void AbstractWebsite::addFolderWithImageFolders(const QString & name, const QString & folder)
+{
+    QDir dir(folder);
+    dir.setFilter(QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
+    QStringList allFiles = dir.entryList();
+    for ( QString dir : allFiles ) {
+            QString entry = name + QDir::separator() + dir;
+            QString path = folder + dir;
+            addImageFolder(entry, path);
+    }
 }
 
 AbstractWebsite::AbstractWebsite(AbstractWebsitePrivate *pr, QObject *parent) :

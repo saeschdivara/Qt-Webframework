@@ -46,7 +46,8 @@ SOURCES += \
     page/resource/DartResource.cpp \
     security/SecurityController.cpp \
     page/model/DirListModel.cpp \
-    page/model/ImageModel.cpp
+    page/model/ImageModel.cpp \
+    page/model/DirListMapModel.cpp
 
 HEADERS +=\
         webframework-qt_global.h \
@@ -91,7 +92,8 @@ HEADERS +=\
     page/resource/DartResource.h \
     security/SecurityController.h \
     page/model/DirListModel.h \
-    page/model/ImageModel.h
+    page/model/ImageModel.h \
+    page/model/DirListMapModel.h
 
 unix:!symbian {
     maemo5 {

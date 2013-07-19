@@ -28,10 +28,10 @@ DirFileType getFileType(const QString & file) {
     return DirFileType::NoType;
 }
 
-DirListModel::DirListModel(const QString & dirPath, QObject *parent) :
+DirListModel::DirListModel(const QString & dirPath, const QString & addressPath, QObject *parent) :
     AbstractListModel(parent)
 {
-    generateAllModels(dirPath);
+    generateAllModels(dirPath, addressPath);
 }
 
 void DirListModel::load()
@@ -55,7 +55,7 @@ QList<AbstractModel *> DirListModel::models()
     return m_folderContent;
 }
 
-void DirListModel::generateAllModels(const QString & dirPath)
+void DirListModel::generateAllModels(const QString & dirPath, const QString & addressPath)
 {
     QDir dir(dirPath);
     QStringList folderItems = dir.entryList();
@@ -64,7 +64,7 @@ void DirListModel::generateAllModels(const QString & dirPath)
         DirFileType type = getFileType(item);
         switch (type) {
             case DirFileType::ImageType:
-                m_folderContent.append(new ImageModel(item));
+                m_folderContent.append(new ImageModel(item, addressPath));
                 break;
             default:
                 break;

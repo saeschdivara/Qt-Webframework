@@ -79,7 +79,7 @@ void AbstractWebsite::addFolderWithImageFolders(const QString & name, const QStr
     QStringList allFiles = dir.entryList();
     for ( QString dir : allFiles ) {
             QString entry = name + QDir::separator() + dir;
-            QString path = folder + dir;
+            QString path = folder + dir + QDir::separator();
             addImageFolder(entry, path);
     }
 }

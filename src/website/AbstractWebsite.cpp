@@ -93,6 +93,7 @@ void AbstractWebsite::handleRequest(Tufao::HttpServerRequest *request, Tufao::Ht
                     statefulPage->setSession(d->session(request, response));
                     statefulPage->setRequest(request);
                     statefulPage->setResponse(response);
+                    statefulPage->setRequestPath(url.path());
 
                     // Handle get data
                     if ( !url.query().isEmpty() )

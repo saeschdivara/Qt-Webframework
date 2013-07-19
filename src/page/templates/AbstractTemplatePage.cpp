@@ -87,6 +87,12 @@ void AbstractTemplatePage::clearGetRequestData()
     d->get.clear();
 }
 
+void AbstractTemplatePage::setRequestPath(const QString & path)
+{
+    Q_D(AbstractTemplatePage);
+    d->requestPath = path;
+}
+
 AbstractTemplatePage::AbstractTemplatePage(AbstractTemplatePagePrivate *d) :
     d_ptr(d)
 {

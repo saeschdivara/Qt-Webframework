@@ -24,6 +24,8 @@ class WEBFRAMEWORKQTSHARED_EXPORT StatefulPageInterface : public PageInterface
 
         virtual void setGetRequestData(QMap<QByteArray, QByteArray> data) = 0;
         virtual void clearGetRequestData() = 0;
+
+        virtual void setRequestPath(const QString & path) = 0;
 };
 
 }

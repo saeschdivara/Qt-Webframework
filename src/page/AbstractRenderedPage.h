@@ -29,6 +29,8 @@ class WEBFRAMEWORKQTSHARED_EXPORT AbstractRenderedPage : public  StatefulPageInt
         virtual void setGetRequestData(QMap<QByteArray, QByteArray> data) Q_DECL_OVERRIDE;
         virtual void clearGetRequestData() Q_DECL_OVERRIDE;
 
+        virtual void setRequestPath(const QString &path) Q_DECL_OVERRIDE;
+
     protected:
         AbstractRenderedPagePrivate *d_ptr;
         AbstractRenderedPage(AbstractRenderedPagePrivate *d);

@@ -35,6 +35,8 @@ class WEBFRAMEWORKQTSHARED_EXPORT AbstractTemplatePage : public StatefulPageInte
         virtual void setGetRequestData(QMap<QByteArray, QByteArray> data) Q_DECL_OVERRIDE;
         virtual void clearGetRequestData() Q_DECL_OVERRIDE;
 
+        virtual void setRequestPath(const QString & path) Q_DECL_OVERRIDE;
+
         virtual void createModels() = 0;
 
     protected:

@@ -37,6 +37,7 @@ class AbstractTemplatePagePrivate
         QHash<QString, QByteArray> templates;
 
         QString pageFilename;
+        QString requestPath;
         QByteArray pageData;
 
         QByteArray content;

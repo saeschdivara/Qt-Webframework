@@ -66,6 +66,12 @@ void AbstractRenderedPage::clearGetRequestData()
     d->get.clear();
 }
 
+void AbstractRenderedPage::setRequestPath(const QString & path)
+{
+    Q_D(AbstractRenderedPage);
+    d->requestPath = path;
+}
+
 htmlelement::AbstractHtmlElement *AbstractRenderedPage::rootElement()
 {
     Q_D(AbstractRenderedPage);

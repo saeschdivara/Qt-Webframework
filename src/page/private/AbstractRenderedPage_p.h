@@ -27,6 +27,8 @@ class AbstractRenderedPagePrivate
 
         QMap<QByteArray, QByteArray> post;
         QMap<QByteArray, QByteArray> get;
+
+        QString requestPath;
 };
 
 }

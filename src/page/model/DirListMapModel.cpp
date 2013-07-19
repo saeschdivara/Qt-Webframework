@@ -19,19 +19,19 @@ DirListMapModel::DirListMapModel(const QString & dirPath, const QString & addres
 void DirListMapModel::load()
 {
     AbstractListModel * model = m_listModels.value(m_loadingModelsName);
-    model->load();
+    if (model) model->load();
 }
 
 void DirListMapModel::unload()
 {
     AbstractListModel * model = m_listModels.value(m_loadingModelsName);
-    model->unload();
+    if (model) model->unload();
 }
 
 QList<AbstractModel *> DirListMapModel::models()
 {
     AbstractListModel * model = m_listModels.value(m_loadingModelsName);
-    return model->models();
+    return (model) ? model->models() : QList<AbstractModel *>();
 }
 
 void DirListMapModel::generateAllModels(const QString & dirPath, const QString & addressPath)

@@ -109,7 +109,7 @@ void AbstractTemplatePage::initPage()
             f.close();
         }
     else {
-            qDebug() << f.errorString();
+            qDebug() << Q_FUNC_INFO << f.errorString();
         }
 }
 
@@ -123,7 +123,7 @@ void AbstractTemplatePage::initTemplate(QString name, QString filename)
             f.close();
         }
     else {
-            qDebug() << f.errorString();
+            qDebug() << Q_FUNC_INFO << f.errorString();
     }
 }
 

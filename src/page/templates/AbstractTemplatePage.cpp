@@ -202,6 +202,9 @@ void AbstractTemplatePage::render()
                                     if ( modelCountAttribute <= 0 ) {
                                         modelCountAttribute  = modelList.size();
                                     }
+                                    else {
+                                        modelCountAttribute = modelStartCountAttribute + modelCountAttribute;
+                                    }
 
                                     for (int i = modelStartCountAttribute; i < modelCountAttribute; ++i) {
                                             QString modelTemplate = templateContent;

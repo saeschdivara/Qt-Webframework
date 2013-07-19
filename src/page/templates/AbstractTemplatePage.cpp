@@ -216,7 +216,9 @@ void AbstractTemplatePage::render()
                                         modelCountAttribute = modelStartCountAttribute + modelCountAttribute;
                                     }
 
-                                    for (int i = modelStartCountAttribute; i < modelCountAttribute; ++i) {
+                                    const int maxCount = modelList.size();
+
+                                    for (int i = modelStartCountAttribute; i < modelCountAttribute && i < maxCount; ++i) {
                                             QString modelTemplate = templateContent;
                                             web::page::model::AbstractModel *templateModel = modelList.at(i);
 

@@ -188,11 +188,15 @@ void AbstractTemplatePage::render()
                                         }
 
                                     if (element.hasAttribute("model-start-count")) {
-                                        modelStartCountAttribute = element.attribute("model-start-count").toInt();
+                                        modelStartCountAttribute = d->getTemplateAttribute<int>(element,
+                                                                                                "model-start-count",
+                                                                                                d->pageModel);
                                     }
 
                                     if (element.hasAttribute("model-count")) {
-                                        modelCountAttribute = element.attribute("model-count").toInt();
+                                        modelCountAttribute = d->getTemplateAttribute<int>(element,
+                                                                                           "model-count",
+                                                                                           d->pageModel);
                                     }
 
                                     if ( modelStartCountAttribute < 0 ) {

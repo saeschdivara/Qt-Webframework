@@ -14,6 +14,7 @@
 #include <QtCore/QMetaMethod>
 #include <QtCore/QMetaObject>
 
+#include <QtXml/QDomElement>
 #include <QRegularExpression>
 
 namespace web
@@ -55,6 +56,17 @@ class AbstractTemplatePagePrivate
                     QString replacingString = model->property(placeholderName.toUtf8().data()).toString();
                     pageContent.replace(toReplacingString, replacingString);
                 }
+        }
+
+        template<class T>
+        T getTemplateAttribute(QDomElement & ele, const QString & attr, web::page::model::AbstractModel *model) {
+            QString domAttribute = ele.attribute(attr);
+            if (domAttribute.startsWith('$') && domAttribute.endsWith('$')) {
+                T v = model->property(domAttribute.remove('$').toUtf8().data()).value<T>();
+                return v;
+            }
+
+            return QVariant(domAttribute).value<T>();
         }
 
         bool isTemplateAllowed(QString ifAttribute, web::page::model::AbstractModel *model) {

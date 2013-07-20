@@ -93,7 +93,8 @@ HEADERS +=\
     security/SecurityController.h \
     page/model/DirListModel.h \
     page/model/ImageModel.h \
-    page/model/DirListMapModel.h
+    page/model/DirListMapModel.h \
+    page/SecureContentInterface.h
 
 unix:!symbian {
     maemo5 {

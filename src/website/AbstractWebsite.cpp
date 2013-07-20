@@ -1,6 +1,7 @@
 #include "AbstractWebsite.h"
 #include "internationalisation/I18nManager.h"
 #include "private/AbstractWebsite_p.h"
+#include "page/SecureContentInterface.h"
 #include "page/StatefulPageInterface.h"
 #include "page/resource/AbstractResource.h"
 #include "page/resource/ImageResource.h"
@@ -45,61 +46,62 @@ void AbstractWebsite::publish()
                      );
 
             d->server->listen(QHostAddress::Any, 9999);
-        }
+    }
 
-    internationalisation::I18nManager::globalInstance()->loadLanguageTexts("de");
-    internationalisation::I18nManager::globalInstance()->loadLanguageTexts("en");
+internationalisation::I18nManager::globalInstance()->loadLanguageTexts("de");
+internationalisation::I18nManager::globalInstance()->loadLanguageTexts("en");
 }
 
 void AbstractWebsite::addPage(QString name, page::PageInterface *page)
 {
-    Q_D(AbstractWebsite);
-    d->pages.insert(name, page);
+Q_D(AbstractWebsite);
+d->pages.insert(name, page);
 }
 
 void AbstractWebsite::addImageFolder(QString name, QString folder)
 {
-    Q_D(AbstractWebsite);
+Q_D(AbstractWebsite);
 
-    QDir dir(folder);
-    dir.setFilter(QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks);
+QDir dir(folder);
+dir.setFilter(QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks);
 
-    QStringList allFiles = dir.entryList();
-    for ( QString file : allFiles ) {
-            QString entry = name + QDir::separator() + file;
-            QString path = folder + file;
-            d->pages.insert(entry, new page::resource::ImageResource(path));
-    }
+QStringList allFiles = dir.entryList();
+for ( QString file : allFiles ) {
+        QString entry = name + QDir::separator() + file;
+        QString path = folder + file;
+        d->pages.insert(entry, new page::resource::ImageResource(path));
+}
 }
 
 void AbstractWebsite::addFolderWithImageFolders(const QString & name, const QString & folder)
 {
-    QDir dir(folder);
-    dir.setFilter(QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
-    QStringList allFiles = dir.entryList();
-    for ( QString dir : allFiles ) {
-            QString entry = name + QDir::separator() + dir;
-            QString path = folder + dir + QDir::separator();
-            addImageFolder(entry, path);
-    }
+QDir dir(folder);
+dir.setFilter(QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
+QStringList allFiles = dir.entryList();
+for ( QString dir : allFiles ) {
+        QString entry = name + QDir::separator() + dir;
+        QString path = folder + dir + QDir::separator();
+        addImageFolder(entry, path);
+}
 }
 
 AbstractWebsite::AbstractWebsite(AbstractWebsitePrivate *pr, QObject *parent) :
-    QObject(parent),
-    d_ptr(pr)
+QObject(parent),
+d_ptr(pr)
 {
 }
 
 void AbstractWebsite::handleRequest(Tufao::HttpServerRequest *request, Tufao::HttpServerResponse *response)
 {
-    Q_D(AbstractWebsite);
+Q_D(AbstractWebsite);
 
-    Url url(request->url());
+Url url(request->url());
 
-    if ( d->pages.contains(url.path()) ) {
-            page::PageInterface *pageObj = d->pages.value(url.path());
-            page::StatefulPageInterface *statefulPage = Q_NULLPTR;
-            page::resource::AbstractResource *resource = Q_NULLPTR;
+if ( d->pages.contains(url.path()) ) {
+        page::PageInterface *pageObj = d->pages.value(url.path());
+        page::SecureContentInterface * secureContent = Q_NULLPTR;
+        page::StatefulPageInterface *statefulPage = Q_NULLPTR;
+        page::resource::AbstractResource *resource = Q_NULLPTR;
 
             if ( (statefulPage = dynamic_cast<page::StatefulPageInterface *>(pageObj)) ) {
                     statefulPage->setSession(d->session(request, response));
@@ -122,6 +124,15 @@ void AbstractWebsite::handleRequest(Tufao::HttpServerRequest *request, Tufao::Ht
             else if ( (resource = dynamic_cast<page::resource::AbstractResource *>(pageObj)) ) {
                     resource->setResponse(response);
                 }
+
+            if ( (secureContent = dynamic_cast<page::SecureContentInterface *>(pageObj)) ) {
+                // The secure content decides if the user can see this content
+                if (!secureContent->isUserAllowedToSeeThisContent()) {
+                    response->writeHead(HttpServerResponse::UNAUTHORIZED);
+                    response->end(QByteArrayLiteral("Not allowed"));
+                    return;
+                }
+            }
 
             response->writeHead(HttpServerResponse::OK);
             response->end(pageObj->getContent());

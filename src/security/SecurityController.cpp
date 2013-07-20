@@ -74,6 +74,7 @@ class SecurityControllerPrivate
 const QString WEB_USER_COLLECTION = QString("webuser");
 const QString WEB_USER_NAME = QString("username");
 const QString WEB_USER_PASSWORD = QString("password");
+const QString WEB_USER_RIGHT = QString("right");
 
 Q_GLOBAL_STATIC(SecurityController, securityInst)
 
@@ -107,9 +108,10 @@ User *SecurityController::login(const QString & username, const QString & passwo
 
     User * user = Q_NULLPTR;
     QString userPassword = QByteArray::fromBase64(userDoc->get(WEB_USER_PASSWORD).toByteArray());
+    Right right = Right(userDoc->get(WEB_USER_RIGHT).toInt());
 
     if (d->isCorrectUserPassword(userPassword, password)) {
-        user = new User(username, userPassword, userDoc);
+        user = new User(username, userPassword, right, userDoc);
     }
 
     return user;
@@ -122,10 +124,11 @@ User *SecurityController::registerUser(const QString & username, const QString &
     arangodb::Document * doc = d->nosql->createDocument(WEB_USER_COLLECTION);
     doc->set(WEB_USER_NAME, username);
     doc->set(WEB_USER_PASSWORD, hashedPassword.toLocal8Bit().toBase64());
+    doc->set(WEB_USER_RIGHT, quint16(Right::NoRight));
     doc->save();
     doc->waitForResult();
 
-    return new User(username, hashedPassword, doc);
+    return new User(username, hashedPassword, Right::NoRight, doc);
 }
 
 SecurityController::SecurityController(SecurityControllerPrivate * d) :

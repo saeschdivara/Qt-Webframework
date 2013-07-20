@@ -69,7 +69,7 @@ QStringList allFiles = dir.entryList();
 for ( QString file : allFiles ) {
         QString entry = name + QDir::separator() + file;
         QString path = folder + file;
-        d->pages.insert(entry, new page::resource::ImageResource(path));
+        d->pages.insert(entry.replace(" ", "%20"), new page::resource::ImageResource(path));
 }
 }
 
@@ -81,7 +81,7 @@ QStringList allFiles = dir.entryList();
 for ( QString dir : allFiles ) {
         QString entry = name + QDir::separator() + dir;
         QString path = folder + dir + QDir::separator();
-        addImageFolder(entry, path);
+        addImageFolder(entry.replace(" ", "%20"), path);
 }
 }
 

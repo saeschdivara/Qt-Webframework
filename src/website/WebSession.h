@@ -56,6 +56,16 @@ class WebSession
             return m_store->properties(m_request, m_response);
         }
 
+        inline void setLoggedIn(bool b) {
+            setProperty(QByteArrayLiteral("isLoggedIn"), b);
+        }
+
+        inline bool isLoggedIn() {
+            return hasProperty(QByteArrayLiteral("isLoggedIn"))
+                    ? getProperty(QByteArrayLiteral("isLoggedIn")).toBool()
+                    : false;
+        }
+
         inline void setUser(security::User * user) {
             m_user = user;
         }

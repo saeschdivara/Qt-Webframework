@@ -233,7 +233,7 @@ void AbstractTemplatePage::render()
                                     templateFilled = templateContent;
                                 }
 
-                            templateFilled = templateStartTag + templateFilled + templateEndTag;
+                            templateFilled = QStringLiteral("<div>") + templateFilled + QStringLiteral("</div>");
                             QDomDocument tplDoc;
                             tplDoc.setContent(templateFilled, false, &errMsg, &errLine, &errColumn);
 

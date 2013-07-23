@@ -58,12 +58,6 @@ void AbstractWebsite::addPage(QString name, page::PageInterface *page)
     d->pages.insert(name, page);
 }
 
-void AbstractWebsite::addPage(const char * name, page::PageInterface * page)
-{
-    Q_D(AbstractWebsite);
-    d->pages.insert(QStringLiteral(name), page);
-}
-
 void AbstractWebsite::addImageFolder(QString name, QString folder)
 {
     Q_D(AbstractWebsite);

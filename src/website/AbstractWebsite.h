@@ -30,6 +30,8 @@ class WEBFRAMEWORKQTSHARED_EXPORT AbstractWebsite : public QObject
 
         virtual void initPages() = 0;
         virtual void handleRequest(Tufao::HttpServerRequest *request, Tufao::HttpServerResponse *response);
+        virtual void handleData(Tufao::HttpServerRequest * request, QByteArray data);
+        virtual void handleRequestEnd(Tufao::HttpServerRequest * request);
 
     private:
         Q_DECLARE_PRIVATE(AbstractWebsite)

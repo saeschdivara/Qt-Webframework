@@ -109,6 +109,30 @@ void AbstractWebsite::handleRequest(Tufao::HttpServerRequest *request, Tufao::Ht
             statefulPage->setResponse(response);
             statefulPage->setRequestPath(url.path());
 
+            if (statefulPage->isFileUploadAllowed() &&
+                request->headers().contains(IByteArray("Content-Type"))) {
+
+                QByteArray contentType = request->headers().value(IByteArray("Content-Type"));
+
+                QMetaObject::Connection dataConnection = connect(request, &Tufao::HttpServerRequest::data,
+                                                                 [=](QByteArray data) {
+                    qDebug() << request->url();
+                    handleData(request, data);
+                });
+
+                QMetaObject::Connection endConnection = connect(request, &Tufao::HttpServerRequest::end, [=] {
+                    disconnect(dataConnection);
+                    disconnect(endConnection);
+                    handleRequestEnd(request);
+                });
+
+                QList<QByteArray> da = contentType.split(';');
+                qDebug() << da;
+
+                if (statefulPage->isWaitingForFileUploadToFinish()) {
+                }
+            }
+
             // Handle get data
             if ( !url.query().isEmpty() )
                 statefulPage->setGetRequestData(QueryString::parse(url.query().toUtf8()));
@@ -141,6 +165,19 @@ void AbstractWebsite::handleRequest(Tufao::HttpServerRequest *request, Tufao::Ht
         response->writeHead(HttpServerResponse::NOT_FOUND);
         response->end("Not found");
     }
+
+    qDebug() << "end of mine";
+}
+
+void AbstractWebsite::handleData(HttpServerRequest * request, QByteArray data)
+{
+    Q_UNUSED(request);
+    qDebug() << "data : " << data.size();
+}
+
+void AbstractWebsite::handleRequestEnd(HttpServerRequest * request)
+{
+    Q_UNUSED(request);
 }
 
 }

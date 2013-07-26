@@ -26,6 +26,9 @@ class WEBFRAMEWORKQTSHARED_EXPORT StatefulPageInterface : public PageInterface
         virtual void clearGetRequestData() = 0;
 
         virtual void setRequestPath(const QString & path) = 0;
+
+        virtual bool isFileUploadAllowed() = 0;
+        virtual bool isWaitingForFileUploadToFinish() = 0;
 };
 
 }

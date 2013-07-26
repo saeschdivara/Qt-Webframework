@@ -93,6 +93,16 @@ void AbstractTemplatePage::setRequestPath(const QString & path)
     d->requestPath = path;
 }
 
+bool AbstractTemplatePage::isFileUploadAllowed()
+{
+    return false;
+}
+
+bool AbstractTemplatePage::isWaitingForFileUploadToFinish()
+{
+    return false;
+}
+
 AbstractTemplatePage::AbstractTemplatePage(AbstractTemplatePagePrivate *d) :
     d_ptr(d)
 {

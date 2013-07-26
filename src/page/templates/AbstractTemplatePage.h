@@ -37,6 +37,9 @@ class WEBFRAMEWORKQTSHARED_EXPORT AbstractTemplatePage : public StatefulPageInte
 
         virtual void setRequestPath(const QString & path) Q_DECL_OVERRIDE;
 
+        virtual bool isFileUploadAllowed() Q_DECL_OVERRIDE;
+        virtual bool isWaitingForFileUploadToFinish() Q_DECL_OVERRIDE;
+
         virtual void createModels() = 0;
 
     protected:

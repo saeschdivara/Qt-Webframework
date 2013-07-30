@@ -167,13 +167,11 @@ void AbstractWebsite::handleRequest(Tufao::HttpServerRequest *request, Tufao::Ht
                     *connEnd  = connect(request, &Tufao::HttpServerRequest::end,
                                         [this, request, statefulPage, boundary, urlpath,
                                         connData, connEnd] {
-                        // TODO: Handle disconnect
                         if ( !statefulPage->isWaitingForFileUploadToFinish() ) {
                             QObject::disconnect(*connData);
                             QObject::disconnect(*connEnd);
                         }
 
-                        qDebug() << "_end";
                         handleRequestEnd(request, boundary, urlpath);
                     });
 
@@ -336,7 +334,7 @@ void AbstractWebsite::handleRequestEnd(HttpServerRequest * request, const QByteA
             QString filePath(QString("temp/") + QTime::currentTime().toString(QString("hh_mm_ss_zzz/")));
             QDir::current().mkpath(filePath);
 
-            QByteArray uuidForFilename = QUuid::createUuid().toByteArray().replace('-', '_');
+            QByteArray uuidForFilename = QUuid::createUuid().toByteArray();
             fileName = uuidForFilename + fileName;
             QFile file(filePath + fileName);
 

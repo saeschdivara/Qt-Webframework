@@ -2,7 +2,6 @@
 #include "internationalisation/I18nManager.h"
 #include "private/AbstractWebsite_p.h"
 #include "page/SecureContentInterface.h"
-#include "page/StatefulPageInterface.h"
 #include "page/resource/AbstractResource.h"
 #include "page/resource/ImageResource.h"
 
@@ -13,9 +12,42 @@
 #include <url.h>
 
 #include <QtCore/QDir>
+#include <QtCore/QFile>
+#include <QtCore/QTimer>
+#include <QtCore/QUuid>
+
+#include <memory>
 
 namespace web {
 namespace website {
+
+namespace internal
+{
+
+inline void _web_wait(Tufao::HttpServerRequest * request) {
+    bool isWaiting = true;
+    QMetaObject::Connection con1 = QObject::connect(request, &Tufao::HttpServerRequest::end, [&isWaiting] {
+        isWaiting = false;
+    });
+
+    QTimer timer;
+    timer.setSingleShot(true);
+    timer.setInterval(1000 * 20);
+
+    QMetaObject::Connection con2 = QObject::connect(&timer, &QTimer::timeout, [&isWaiting] {
+        isWaiting = false;
+    });
+
+    timer.start();
+    while (isWaiting) {
+        qApp->processEvents();
+    }
+
+    QObject::disconnect(con1);
+    QObject::disconnect(con2);
+}
+
+}
 
 AbstractWebsite::AbstractWebsite(QObject *parent) :
     AbstractWebsite(new AbstractWebsitePrivate, parent)
@@ -96,9 +128,11 @@ void AbstractWebsite::handleRequest(Tufao::HttpServerRequest *request, Tufao::Ht
     Q_D(AbstractWebsite);
 
     Url url(request->url());
+    QString urlpath = url.path();
+    bool isWaiting = false;
 
-    if ( d->pages.contains(url.path()) ) {
-        page::PageInterface *pageObj = d->pages.value(url.path());
+    if ( d->pages.contains(urlpath) ) {
+        page::PageInterface *pageObj = d->pages.value(urlpath);
         page::SecureContentInterface * secureContent = Q_NULLPTR;
         page::StatefulPageInterface *statefulPage = Q_NULLPTR;
         page::resource::AbstractResource *resource = Q_NULLPTR;
@@ -114,22 +148,38 @@ void AbstractWebsite::handleRequest(Tufao::HttpServerRequest *request, Tufao::Ht
 
                 QByteArray contentType = request->headers().value(IByteArray("Content-Type"));
 
-                QMetaObject::Connection dataConnection = connect(request, &Tufao::HttpServerRequest::data,
-                                                                 [=](QByteArray data) {
-                    qDebug() << request->url();
-                    handleData(request, data);
-                });
+                contentType.replace(' ', "");
+                QList<QByteArray> splittedContentType = contentType.split(';');
 
-                QMetaObject::Connection endConnection = connect(request, &Tufao::HttpServerRequest::end, [=] {
-                    disconnect(dataConnection);
-                    disconnect(endConnection);
-                    handleRequestEnd(request);
-                });
+                if(splittedContentType.size() == 2
+                   &&
+                   splittedContentType.at(0) == "multipart/form-data") {
+                    QByteArray boundary = splittedContentType.at(1);
 
-                QList<QByteArray> da = contentType.split(';');
-                qDebug() << da;
+                    auto connData = std::make_shared<QMetaObject::Connection>();
+                    *connData = connect(request, &Tufao::HttpServerRequest::data,
+                                        [this, request, boundary, urlpath](QByteArray data)
+                    {
+                        handleData(request, urlpath, data);
+                    });
 
-                if (statefulPage->isWaitingForFileUploadToFinish()) {
+                    auto connEnd = std::make_shared<QMetaObject::Connection>();
+                    *connEnd  = connect(request, &Tufao::HttpServerRequest::end,
+                                        [this, request, statefulPage, boundary, urlpath,
+                                        connData, connEnd] {
+                        // TODO: Handle disconnect
+                        if ( !statefulPage->isWaitingForFileUploadToFinish() ) {
+                            QObject::disconnect(*connData);
+                            QObject::disconnect(*connEnd);
+                        }
+
+                        qDebug() << "_end";
+                        handleRequestEnd(request, boundary, urlpath);
+                    });
+
+                    if (statefulPage->isWaitingForFileUploadToFinish()) {
+                        isWaiting = true;
+                    }
                 }
             }
 
@@ -160,24 +210,162 @@ void AbstractWebsite::handleRequest(Tufao::HttpServerRequest *request, Tufao::Ht
 
         response->writeHead(HttpServerResponse::OK);
         response->end(pageObj->getContent());
+
+        if (isWaiting) {
+            internal::_web_wait(request);
+        }
     }
     else {
         response->writeHead(HttpServerResponse::NOT_FOUND);
         response->end("Not found");
     }
-
-    qDebug() << "end of mine";
 }
 
-void AbstractWebsite::handleData(HttpServerRequest * request, QByteArray data)
+void AbstractWebsite::handleData(HttpServerRequest * request, const QString & path, QByteArray data)
 {
-    Q_UNUSED(request);
-    qDebug() << "data : " << data.size();
+    Q_D(AbstractWebsite);
+    QByteArray newData = d->getRequestData(request, path);
+    newData += data;
+    d->setRequestData(request, path, newData);
 }
 
-void AbstractWebsite::handleRequestEnd(HttpServerRequest * request)
+void AbstractWebsite::handleRequestEnd(HttpServerRequest * request, const QByteArray & boundary, const QString & path)
 {
-    Q_UNUSED(request);
+    Q_D(AbstractWebsite);
+
+    QByteArray data = d->getRequestData(request, path);
+
+    QString boundaryString = boundary;
+    boundaryString.replace("boundary=", "");
+
+    boundaryString = QStringLiteral("--") + boundaryString;
+    boundaryString += "\r\n";
+
+    QList<QByteArray> splittedData;
+    int startPosition = -1;
+    int endPosition = -1;
+    const int boundryLength = boundaryString.length();
+
+    QByteArray tempDataForList;
+
+    // Here is the data splitted
+    Q_FOREVER {
+        startPosition = data.indexOf(boundaryString);
+
+        // if there hasn't been found break out of the loop
+        if (startPosition == -1) break;
+
+        endPosition = data.indexOf(boundaryString, startPosition + boundryLength);
+        endPosition = (endPosition == -1) ? data.length() : endPosition;
+
+        tempDataForList = data.left(startPosition + endPosition);
+        splittedData << tempDataForList;
+
+        // Now we remove this piece of chunk
+        data.remove(0, startPosition + endPosition);
+
+        if ( data.isEmpty() ) break;
+    }
+
+    QMap<QByteArray, QByteArray> postData;
+
+    const int totalSplittedData = splittedData.size();
+    for (int i = 0; i < totalSplittedData; ++i) {
+        QByteArray splittedDataChunk = splittedData.at(i);
+        // We don't need the boundry
+        splittedDataChunk.remove(0, boundryLength);
+
+        // After the boundary comes this
+        QString contentDisposition("Content-Disposition: form-data; ");
+        if (splittedDataChunk.indexOf(contentDisposition) != 0) continue;
+
+        splittedDataChunk.remove(0, contentDisposition.size());
+
+        // Now comes the name of the form data
+        QString nameString("name=\"");
+        if (splittedDataChunk.indexOf(nameString) != 0) continue;
+
+        splittedDataChunk.remove(0, nameString.size());
+
+        // Now we want to find the end of the name
+        QString nameStringEnd("\"\r\n\r\n");
+        int stringEndPos = splittedDataChunk.indexOf(nameStringEnd);
+
+        QString fileNameStringEnd("\"; filename=\"");
+        int fileNameStringPos = splittedDataChunk.indexOf(fileNameStringEnd);
+        if  (stringEndPos == -1 && fileNameStringPos == -1) continue;
+
+        QByteArray postDataName;
+        QByteArray postDataChunk;
+        if ( stringEndPos != -1 ) {
+            postDataName = splittedDataChunk.left(stringEndPos);
+            // Remove post data name
+            splittedDataChunk.remove(0, stringEndPos);
+
+            // Remove the chunk between the name and the data
+            splittedDataChunk.remove(0, nameStringEnd.size());
+
+            // The data ends with \r\n which we don't want
+            postDataChunk = splittedDataChunk.left(splittedDataChunk.size() - 2);
+        }
+        // This has to be a file
+        else {
+            postDataName = splittedDataChunk.left(fileNameStringPos);
+            // Remove post data name
+            splittedDataChunk.remove(0, fileNameStringPos);
+
+            // Remove chunk between filename and post data name
+            splittedDataChunk.remove(0, fileNameStringEnd.size());
+
+            // Now we only need to remove the content type
+            QString contentType("\"\r\nContent-Type: ");
+            int contentTypePos = splittedDataChunk.indexOf(contentType);
+            if (contentTypePos == -1) continue;
+
+            QByteArray fileName = splittedDataChunk.left(contentTypePos);
+
+            splittedDataChunk.remove(0, contentTypePos);
+            QString contentTypeEndString("\r\n\r\n");
+            int contentTypeEndPos = splittedDataChunk.indexOf(contentTypeEndString);
+            if (contentTypeEndPos == -1) continue;
+
+            splittedDataChunk.remove(0, contentTypeEndPos);
+            splittedDataChunk.remove(0, contentTypeEndString.size());
+
+            // Now we create the file
+            QString filePath(QString("temp/") + QTime::currentTime().toString(QString("hh_mm_ss_zzz/")));
+            QDir::current().mkpath(filePath);
+
+            QByteArray uuidForFilename = QUuid::createUuid().toByteArray().replace('-', '_');
+            fileName = uuidForFilename + fileName;
+            QFile file(filePath + fileName);
+
+            if (file.open(QIODevice::WriteOnly | QIODevice::Append)) {
+                const int dataSize = splittedDataChunk.size();
+                qint64 currentSize = 0;
+
+                QByteArray writingData;
+                const int writingSize = 1000;
+                while (currentSize != dataSize) {
+                    writingData = splittedDataChunk.left(writingSize);
+                    splittedDataChunk.remove(0, writingData.size());
+                    currentSize += file.write(writingData);
+                    qApp->processEvents();
+                }
+
+                postDataChunk = file.fileName().toUtf8();
+
+                file.close();
+            } else {
+                qWarning() << Q_FUNC_INFO << "File error:" << file.errorString();
+            }
+        }
+
+        postData.insert(postDataName, postDataChunk);
+
+        page::StatefulPageInterface * page = dynamic_cast<page::StatefulPageInterface *>(d->pages.value(path));
+        page->setPostRequestData(postData);
+    }
 }
 
 }

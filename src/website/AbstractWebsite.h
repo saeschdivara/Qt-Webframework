@@ -3,6 +3,7 @@
 
 #include "webframework-qt_global.h"
 #include "page/PageInterface.h"
+#include "page/StatefulPageInterface.h"
 #include <httpserver.h>
 
 namespace web
@@ -30,8 +31,8 @@ class WEBFRAMEWORKQTSHARED_EXPORT AbstractWebsite : public QObject
 
         virtual void initPages() = 0;
         virtual void handleRequest(Tufao::HttpServerRequest *request, Tufao::HttpServerResponse *response);
-        virtual void handleData(Tufao::HttpServerRequest * request, QByteArray data);
-        virtual void handleRequestEnd(Tufao::HttpServerRequest * request);
+        virtual void handleData(Tufao::HttpServerRequest * request, const QString & path, QByteArray data);
+        virtual void handleRequestEnd(Tufao::HttpServerRequest * request, const QByteArray & boundary, const QString & path);
 
     private:
         Q_DECLARE_PRIVATE(AbstractWebsite)

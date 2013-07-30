@@ -17,6 +17,8 @@
 namespace web {
 namespace website {
 
+typedef QHash<Tufao::HttpServerRequest *, QHash<QString, QByteArray> > RequestDataList;
+
 class AbstractWebsitePrivate
 {
 public:
@@ -25,6 +27,15 @@ public:
         QScopedPointer<Tufao::HttpServer> server;
         Tufao::SimpleSessionStore sessionStore;
         QHash<QString, WebSession *> sessions;
+        RequestDataList requestdataList;
+
+        QByteArray getRequestData(Tufao::HttpServerRequest * request, const QString & requestPath) {
+            return requestdataList[request][requestPath];
+        }
+
+        void setRequestData(Tufao::HttpServerRequest * request, const QString & requestPath, QByteArray data) {
+            requestdataList[request][requestPath] = data;
+        }
 
         inline WebSession *session(Tufao::HttpServerRequest *request, Tufao::HttpServerResponse *response) {
             QString peerAddress = request->socket()->peerAddress().toString();

@@ -21,34 +21,6 @@
 namespace web {
 namespace website {
 
-namespace internal
-{
-
-inline void _web_wait(Tufao::HttpServerRequest * request) {
-    bool isWaiting = true;
-    QMetaObject::Connection con1 = QObject::connect(request, &Tufao::HttpServerRequest::end, [&isWaiting] {
-        isWaiting = false;
-    });
-
-    QTimer timer;
-    timer.setSingleShot(true);
-    timer.setInterval(1000 * 20);
-
-    QMetaObject::Connection con2 = QObject::connect(&timer, &QTimer::timeout, [&isWaiting] {
-        isWaiting = false;
-    });
-
-    timer.start();
-    while (isWaiting) {
-        qApp->processEvents();
-    }
-
-    QObject::disconnect(con1);
-    QObject::disconnect(con2);
-}
-
-}
-
 AbstractWebsite::AbstractWebsite(QObject *parent) :
     AbstractWebsite(new AbstractWebsitePrivate, parent)
 {
@@ -129,7 +101,6 @@ void AbstractWebsite::handleRequest(Tufao::HttpServerRequest *request, Tufao::Ht
 
     Url url(request->url());
     QString urlpath = url.path();
-    bool isWaiting = false;
 
     if ( d->pages.contains(urlpath) ) {
         page::PageInterface *pageObj = d->pages.value(urlpath);
@@ -166,17 +137,24 @@ void AbstractWebsite::handleRequest(Tufao::HttpServerRequest *request, Tufao::Ht
                     auto connEnd = std::make_shared<QMetaObject::Connection>();
                     *connEnd  = connect(request, &Tufao::HttpServerRequest::end,
                                         [this, request, statefulPage, boundary, urlpath,
-                                        connData, connEnd] {
-                        if ( !statefulPage->isWaitingForFileUploadToFinish() ) {
-                            QObject::disconnect(*connData);
-                            QObject::disconnect(*connEnd);
-                        }
+                                        connData, connEnd,
+                                        response]
+                    {
+                        QObject::disconnect(*connData);
+                        QObject::disconnect(*connEnd);
 
                         handleRequestEnd(request, boundary, urlpath);
+
+                        if ( statefulPage->isWaitingForFileUploadToFinish() ) {
+                            response->writeHead(HttpServerResponse::OK);
+                            response->end(statefulPage->getContent());
+                        } else {
+                            statefulPage->onFileUploadFinished();
+                        }
                     });
 
                     if (statefulPage->isWaitingForFileUploadToFinish()) {
-                        isWaiting = true;
+                        return;
                     }
                 }
             }
@@ -208,10 +186,6 @@ void AbstractWebsite::handleRequest(Tufao::HttpServerRequest *request, Tufao::Ht
 
         response->writeHead(HttpServerResponse::OK);
         response->end(pageObj->getContent());
-
-        if (isWaiting) {
-            internal::_web_wait(request);
-        }
     }
     else {
         response->writeHead(HttpServerResponse::NOT_FOUND);
@@ -331,7 +305,7 @@ void AbstractWebsite::handleRequestEnd(HttpServerRequest * request, const QByteA
             splittedDataChunk.remove(0, contentTypeEndString.size());
 
             // Now we create the file
-            QString filePath(QString("temp/") + QTime::currentTime().toString(QString("hh_mm_ss_zzz/")));
+            QString filePath(QString("temp/uploads/") + QTime::currentTime().toString(QString("hh_mm_ss_zzz/")));
             QDir::current().mkpath(filePath);
 
             QByteArray uuidForFilename = QUuid::createUuid().toByteArray();

@@ -103,6 +103,11 @@ bool AbstractTemplatePage::isWaitingForFileUploadToFinish()
     return false;
 }
 
+void AbstractTemplatePage::onFileUploadFinished()
+{
+    return; // Do nothing
+}
+
 AbstractTemplatePage::AbstractTemplatePage(AbstractTemplatePagePrivate *d) :
     d_ptr(d)
 {

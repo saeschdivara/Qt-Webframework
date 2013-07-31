@@ -39,6 +39,7 @@ class WEBFRAMEWORKQTSHARED_EXPORT AbstractTemplatePage : public StatefulPageInte
 
         virtual bool isFileUploadAllowed() Q_DECL_OVERRIDE;
         virtual bool isWaitingForFileUploadToFinish() Q_DECL_OVERRIDE;
+        virtual void onFileUploadFinished() Q_DECL_OVERRIDE;
 
         virtual void createModels() = 0;
 

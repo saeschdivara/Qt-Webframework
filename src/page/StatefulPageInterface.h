@@ -29,6 +29,7 @@ class WEBFRAMEWORKQTSHARED_EXPORT StatefulPageInterface : public PageInterface
 
         virtual bool isFileUploadAllowed() = 0;
         virtual bool isWaitingForFileUploadToFinish() = 0;
+        virtual void onFileUploadFinished() = 0;
 };
 
 }

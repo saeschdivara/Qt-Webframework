@@ -41,20 +41,79 @@ class WEBFRAMEWORKQTSHARED_EXPORT AbstractTemplatePage : public StatefulPageInte
         virtual bool isWaitingForFileUploadToFinish() Q_DECL_OVERRIDE;
         virtual void onFileUploadFinished() Q_DECL_OVERRIDE;
 
+        /**
+         * @brief This is the oppotunity to create the models for the page
+         *
+         * @author Sascha Häusler <saeschdivara@gmail.com>
+         * @since 0.2
+         */
         virtual void createModels() = 0;
 
     protected:
         AbstractTemplatePagePrivate *d_ptr;
         AbstractTemplatePage(AbstractTemplatePagePrivate *d);
 
+        /**
+         * @brief initPage
+         *
+         * @author Sascha Häusler <saeschdivara@gmail.com>
+         * @since 0.2
+         */
         virtual void initPage();
 
+        /**
+         * @brief initTemplates
+         *
+         * @author Sascha Häusler <saeschdivara@gmail.com>
+         * @since 0.2
+         */
         virtual void initTemplates() = 0;
+
+        /**
+         * @brief initTemplate
+         *
+         * @param name
+         * @param filename
+         *
+         * @author Sascha Häusler <saeschdivara@gmail.com>
+         * @since 0.2
+         */
         void initTemplate(QString name, QString filename);
 
+        /**
+         * @brief initModels
+         *
+         * @author Sascha Häusler <saeschdivara@gmail.com>
+         * @since 0.2
+         */
         virtual void initModels() = 0;
+
+        /**
+         * @brief loadModel
+         *
+         * @param name
+         *
+         * @author Sascha Häusler <saeschdivara@gmail.com>
+         * @since 0.2
+         */
         void loadModel(const QString & name);
+
+        /**
+         * @brief destroyModels
+         *
+         * @author Sascha Häusler <saeschdivara@gmail.com>
+         * @since 0.2
+         */
         virtual void destroyModels() = 0;
+
+        /**
+         * @brief unloadModel
+         *
+         * @param name
+         *
+         * @author Sascha Häusler <saeschdivara@gmail.com>
+         * @since 0.2
+         */
         void unloadModel(const QString & name);
 
         virtual void render();
@@ -63,6 +122,16 @@ class WEBFRAMEWORKQTSHARED_EXPORT AbstractTemplatePage : public StatefulPageInte
         Q_DECLARE_PRIVATE(AbstractTemplatePage)
 };
 
+/**
+ * @brief createTemplatePage
+ *
+ * @param t
+ *
+ * @return
+ *
+ * @author Sascha Häusler <saeschdivara@gmail.com>
+ * @since 0.2
+ */
 AbstractTemplatePage * createTemplatePage(AbstractTemplatePage *t);
 
 }

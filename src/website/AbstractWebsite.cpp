@@ -317,7 +317,7 @@ void AbstractWebsite::handleRequestEnd(HttpServerRequest * request, const QByteA
                 qint64 currentSize = 0;
 
                 QByteArray writingData;
-                const int writingSize = 1000;
+                const int writingSize = 33000;
                 while (currentSize != dataSize) {
                     writingData = splittedDataChunk.left(writingSize);
                     splittedDataChunk.remove(0, writingData.size());

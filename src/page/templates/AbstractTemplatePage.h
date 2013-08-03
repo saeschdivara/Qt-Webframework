@@ -13,30 +13,112 @@ namespace templates
 
 class AbstractTemplatePagePrivate;
 
+/**
+ * @brief The AbstractTemplatePage class
+ *
+ * @author Sascha Häusler <saeschdivara@gmail.com>
+ * @since 0.2
+ */
 class WEBFRAMEWORKQTSHARED_EXPORT AbstractTemplatePage : public StatefulPageInterface
 {
     public:
         virtual ~AbstractTemplatePage();
 
         /**
-         * @brief
+         * @brief Returns the parsed template file
          *
          * @return
+         *
+         * @author Sascha Häusler <saeschdivara@gmail.com>
+         * @since 0.2
          */
         virtual QByteArray getContent() Q_DECL_OVERRIDE;
 
+        /**
+         * @brief Sets session for the user
+         *
+         * @param s Session
+         *
+         * @author Sascha Häusler <saeschdivara@gmail.com>
+         * @since 0.2
+         */
         virtual void setSession(website::WebSession *s) Q_DECL_OVERRIDE;
+
+        /**
+         * @brief Sets request pointer and stores it
+         *
+         * @param r Request pointer
+         *
+         * @author Sascha Häusler <saeschdivara@gmail.com>
+         * @since 0.2
+         */
         virtual void setRequest(Tufao::HttpServerRequest *r) Q_DECL_OVERRIDE;
+
+        /**
+         * @brief Stores response pointer
+         *
+         * @param r Response pointer
+         *
+         * @author Sascha Häusler <saeschdivara@gmail.com>
+         * @since 0.2
+         */
         virtual void setResponse(Tufao::HttpServerResponse *r) Q_DECL_OVERRIDE;
 
+        /**
+         * @brief Stores the post data
+         *
+         * @param data Post variables and their values
+         *
+         * @author Sascha Häusler <saeschdivara@gmail.com>
+         * @since 0.2
+         */
         virtual void setPostRequestData(QMap<QByteArray, QByteArray> data) Q_DECL_OVERRIDE;
+
+        /**
+         * @brief Clears the storage of the post variables
+         *
+         * @author Sascha Häusler <saeschdivara@gmail.com>
+         * @since 0.2
+         */
         virtual void clearPostRequestData() Q_DECL_OVERRIDE;
 
+        /**
+         * @brief Stores the get data
+         *
+         * @param data Get variables and their values
+         *
+         * @author Sascha Häusler <saeschdivara@gmail.com>
+         * @since 0.2
+         */
         virtual void setGetRequestData(QMap<QByteArray, QByteArray> data) Q_DECL_OVERRIDE;
+
+        /**
+         * @brief Clears the storage of the get variables
+         *
+         * @author Sascha Häusler <saeschdivara@gmail.com>
+         * @since 0.2
+         */
         virtual void clearGetRequestData() Q_DECL_OVERRIDE;
 
+        /**
+         * @brief Stores the request path under which the page
+         * is registered
+         *
+         * @param path Request path
+         *
+         * @author Sascha Häusler <saeschdivara@gmail.com>
+         * @since 0.2
+         */
         virtual void setRequestPath(const QString & path) Q_DECL_OVERRIDE;
 
+        /**
+         * @brief
+         *
+         * @return
+         *
+         * @author Sascha Häusler <saeschdivara@gmail.com>
+         * @since 0.2
+         */
         virtual bool isFileUploadAllowed() Q_DECL_OVERRIDE;
         virtual bool isWaitingForFileUploadToFinish() Q_DECL_OVERRIDE;
         virtual void onFileUploadFinished() Q_DECL_OVERRIDE;
@@ -116,6 +198,12 @@ class WEBFRAMEWORKQTSHARED_EXPORT AbstractTemplatePage : public StatefulPageInte
          */
         void unloadModel(const QString & name);
 
+        /**
+         * @brief render
+         *
+         * @author Sascha Häusler <saeschdivara@gmail.com>
+         * @since 0.2
+         */
         virtual void render();
 
     private:

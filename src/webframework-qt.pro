@@ -95,7 +95,8 @@ HEADERS +=\
     page/model/ImageModel.h \
     page/model/DirListMapModel.h \
     page/SecureContentInterface.h \
-    security/Right.h
+    security/Right.h \
+    page/templates/tags/TagInterface.h
 
 unix:!symbian {
     maemo5 {

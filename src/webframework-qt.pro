@@ -48,7 +48,9 @@ SOURCES += \
     page/model/DirListModel.cpp \
     page/model/ImageModel.cpp \
     page/model/DirListMapModel.cpp \
-    util/UserDataHelper.cpp
+    util/UserDataHelper.cpp \
+    page/templates/tags/TemplateTag.cpp \
+    page/templates/tags/TagRenderer.cpp
 
 HEADERS +=\
         webframework-qt_global.h \
@@ -98,7 +100,9 @@ HEADERS +=\
     page/SecureContentInterface.h \
     security/Right.h \
     page/templates/tags/TagInterface.h \
-    util/UserDataHelper.h
+    util/UserDataHelper.h \
+    page/templates/tags/TemplateTag.h \
+    page/templates/tags/TagRenderer.h
 
 unix:!symbian {
     maemo5 {

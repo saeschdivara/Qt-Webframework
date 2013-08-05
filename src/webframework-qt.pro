@@ -47,7 +47,8 @@ SOURCES += \
     security/SecurityController.cpp \
     page/model/DirListModel.cpp \
     page/model/ImageModel.cpp \
-    page/model/DirListMapModel.cpp
+    page/model/DirListMapModel.cpp \
+    util/UserDataHelper.cpp
 
 HEADERS +=\
         webframework-qt_global.h \
@@ -96,7 +97,8 @@ HEADERS +=\
     page/model/DirListMapModel.h \
     page/SecureContentInterface.h \
     security/Right.h \
-    page/templates/tags/TagInterface.h
+    page/templates/tags/TagInterface.h \
+    util/UserDataHelper.h
 
 unix:!symbian {
     maemo5 {

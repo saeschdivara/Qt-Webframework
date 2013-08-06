@@ -160,109 +160,114 @@ void AbstractTemplatePage::render()
 {
     Q_D(AbstractTemplatePage);
 
-    QDomDocument doc;
-    QString errMsg;
-    int errLine, errColumn;
-    doc.setContent(d->pageData, false, &errMsg, &errLine, &errColumn);
+//    QDomDocument doc;
+//    QString errMsg;
+//    int errLine, errColumn;
+//    doc.setContent(d->pageData, false, &errMsg, &errLine, &errColumn);
 
-    QDomNodeList templates = doc.elementsByTagName("tpl");
-    const int templateSize = templates.size();
-    // We need to go backwards because otherwise the deleting of nodes doesnt work
-    for (int i = templateSize-1; i >= 0 ; --i) {
-            QDomElement element = templates.item(i).toElement();
-            QDomNode parentNode = element.parentNode();
+//    QDomNodeList templates = doc.elementsByTagName("tpl");
+//    const int templateSize = templates.size();
+//    // We need to go backwards because otherwise the deleting of nodes doesnt work
+//    for (int i = templateSize-1; i >= 0 ; --i) {
+//            QDomElement element = templates.item(i).toElement();
+//            QDomNode parentNode = element.parentNode();
 
-            if (element.hasAttribute("src")) {
-                    QString tplName = element.attribute("src");
-                    bool isAllowedToShow = true;
+//            if (element.hasAttribute("src")) {
+//                    QString tplName = element.attribute("src");
+//                    bool isAllowedToShow = true;
 
-                    if (element.hasAttribute("if")) {
-                            QString ifAttribute = element.attribute("if");
-                            isAllowedToShow = d->isTemplateAllowed(ifAttribute, d->pageModel);
-                        }
-                    else if (element.hasAttribute("if-not")) {
-                            QString ifAttribute = element.attribute("if-not");
-                            isAllowedToShow = !d->isTemplateAllowed(ifAttribute, d->pageModel);
-                        }
+//                    if (element.hasAttribute("if")) {
+//                            QString ifAttribute = element.attribute("if");
+//                            isAllowedToShow = d->isTemplateAllowed(ifAttribute, d->pageModel);
+//                        }
+//                    else if (element.hasAttribute("if-not")) {
+//                            QString ifAttribute = element.attribute("if-not");
+//                            isAllowedToShow = !d->isTemplateAllowed(ifAttribute, d->pageModel);
+//                        }
 
-                    if (isAllowedToShow) {
+//                    if (isAllowedToShow) {
 
-                            QString templateStartTag = QStringLiteral("<tpl>");
-                            QString templateEndTag = QStringLiteral("</tpl>");
-                            QString templateContent = d->templates[tplName].replace(templateStartTag, "").replace(templateEndTag, "");
-                            QString templateFilled;
+//                            QString templateStartTag = QStringLiteral("<tpl>");
+//                            QString templateEndTag = QStringLiteral("</tpl>");
+//                            QString templateContent = d->templates[tplName].replace(templateStartTag, "").replace(templateEndTag, "");
+//                            QString templateFilled;
 
-                            if (element.hasAttribute("model")) {
-                                    QString modelName = element.attribute("model");
-                                    web::page::model::AbstractListModel *model = d->templateModels[modelName];
-                                    model->load();
-                                    QList<web::page::model::AbstractModel *> modelList = model->models();
-                                    QString modelIfAttribute;
-                                    int modelCountAttribute = -1;
-                                    int modelStartCountAttribute = -1;
+//                            if (element.hasAttribute("model")) {
+//                                    QString modelName = element.attribute("model");
+//                                    web::page::model::AbstractListModel *model = d->templateModels[modelName];
+//                                    model->load();
+//                                    QList<web::page::model::AbstractModel *> modelList = model->models();
+//                                    QString modelIfAttribute;
+//                                    int modelCountAttribute = -1;
+//                                    int modelStartCountAttribute = -1;
 
-                                    bool hasIfAttribute = false;
+//                                    bool hasIfAttribute = false;
 
-                                    if (element.hasAttribute("if-model")) {
-                                            modelIfAttribute = element.attribute("if-model");
-                                            hasIfAttribute = true;
-                                        }
+//                                    if (element.hasAttribute("if-model")) {
+//                                            modelIfAttribute = element.attribute("if-model");
+//                                            hasIfAttribute = true;
+//                                        }
 
-                                    if (element.hasAttribute("model-start-count")) {
-                                        modelStartCountAttribute = d->getTemplateAttribute<int>(element,
-                                                                                                "model-start-count",
-                                                                                                d->pageModel);
-                                    }
+//                                    if (element.hasAttribute("model-start-count")) {
+//                                        modelStartCountAttribute = d->getTemplateAttribute<int>(element,
+//                                                                                                "model-start-count",
+//                                                                                                d->pageModel);
+//                                    }
 
-                                    if (element.hasAttribute("model-count")) {
-                                        modelCountAttribute = d->getTemplateAttribute<int>(element,
-                                                                                           "model-count",
-                                                                                           d->pageModel);
-                                    }
+//                                    if (element.hasAttribute("model-count")) {
+//                                        modelCountAttribute = d->getTemplateAttribute<int>(element,
+//                                                                                           "model-count",
+//                                                                                           d->pageModel);
+//                                    }
 
-                                    if ( modelStartCountAttribute < 0 ) {
-                                        modelStartCountAttribute = 0;
-                                    }
+//                                    if ( modelStartCountAttribute < 0 ) {
+//                                        modelStartCountAttribute = 0;
+//                                    }
 
-                                    if ( modelCountAttribute <= 0 ) {
-                                        modelCountAttribute  = modelList.size();
-                                    }
-                                    else {
-                                        modelCountAttribute = modelStartCountAttribute + modelCountAttribute;
-                                    }
+//                                    if ( modelCountAttribute <= 0 ) {
+//                                        modelCountAttribute  = modelList.size();
+//                                    }
+//                                    else {
+//                                        modelCountAttribute = modelStartCountAttribute + modelCountAttribute;
+//                                    }
 
-                                    const int maxCount = modelList.size();
+//                                    const int maxCount = modelList.size();
 
-                                    for (int i = modelStartCountAttribute; i < modelCountAttribute && i < maxCount; ++i) {
-                                            QString modelTemplate = templateContent;
-                                            web::page::model::AbstractModel *templateModel = modelList.at(i);
+//                                    for (int i = modelStartCountAttribute; i < modelCountAttribute && i < maxCount; ++i) {
+//                                            QString modelTemplate = templateContent;
+//                                            web::page::model::AbstractModel *templateModel = modelList.at(i);
 
-                                            if (d->isTemplateAllowed(modelIfAttribute, templateModel) || !hasIfAttribute) {
-                                                    d->replaceModelPlaceholders(modelTemplate, templateModel);
-                                                    templateFilled += modelTemplate;
-                                                }
+//                                            if (d->isTemplateAllowed(modelIfAttribute, templateModel) || !hasIfAttribute) {
+//                                                    d->replaceModelPlaceholders(modelTemplate, templateModel);
+//                                                    templateFilled += modelTemplate;
+//                                                }
 
-                                            model->unload();
-                                        }
-                                } else {
-                                    templateFilled = templateContent;
-                                }
+//                                            model->unload();
+//                                        }
+//                                } else {
+//                                    templateFilled = templateContent;
+//                                }
 
-                            templateFilled = QStringLiteral("<div>") + templateFilled + QStringLiteral("</div>");
-                            QDomDocument tplDoc;
-                            tplDoc.setContent(templateFilled, false, &errMsg, &errLine, &errColumn);
+//                            templateFilled = QStringLiteral("<div>") + templateFilled + QStringLiteral("</div>");
+//                            QDomDocument tplDoc;
+//                            tplDoc.setContent(templateFilled, false, &errMsg, &errLine, &errColumn);
 
-                            parentNode.replaceChild(tplDoc.documentElement(), element);
-                        } else {
-                            parentNode.removeChild(element);
-                        }
-                }
-            else {
-                    parentNode.removeChild(element);
-                }
-        }
+//                            parentNode.replaceChild(tplDoc.documentElement(), element);
+//                        } else {
+//                            parentNode.removeChild(element);
+//                        }
+//                }
+//            else {
+//                    parentNode.removeChild(element);
+//                }
+//        }
 
-    QString content = doc.toString();
+//    QString content = doc.toString();
+    d->renderer.setContent(d->pageData);
+    d->renderer.setPageModel(d->pageModel);
+    d->renderer.setModelList(d->templateModels);
+
+    QString content = d->renderer.render();
     d->replaceModelPlaceholders(content, d->pageModel);
 
     d->content = content.toUtf8();

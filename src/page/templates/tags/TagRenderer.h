@@ -26,8 +26,11 @@ class WEBFRAMEWORKQTSHARED_EXPORT TagRenderer
         TagRenderer();
         ~TagRenderer();
 
-        void setContent(const QByteArray & content);
-        QByteArray render();
+        void setContent(QByteArray content);
+        void setPageModel(model::AbstractModel * pageModel);
+        void setModelList(QHash<QString, model::AbstractListModel *> templateModels);
+
+        QString render();
 
     protected:
         TagRendererPrivate * d_ptr;

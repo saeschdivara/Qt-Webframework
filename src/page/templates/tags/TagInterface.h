@@ -25,6 +25,8 @@ namespace tags
 class WEBFRAMEWORKQTSHARED_EXPORT TagInterface
 {
     public:
+        virtual ~TagInterface() {}
+
         /**
          * @brief This method is supposed to return
          * the tag name like "br"
@@ -34,7 +36,7 @@ class WEBFRAMEWORKQTSHARED_EXPORT TagInterface
          * @author Sascha Häusler <saeschdivara@gmail.com>
          * @since 0.3
          */
-        virtual QString & tag() const = 0;
+        virtual QString tag() const = 0;
 
         /**
          * @brief This method is here to save the dom attributes

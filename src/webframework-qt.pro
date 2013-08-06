@@ -50,7 +50,8 @@ SOURCES += \
     page/model/DirListMapModel.cpp \
     util/UserDataHelper.cpp \
     page/templates/tags/TemplateTag.cpp \
-    page/templates/tags/TagRenderer.cpp
+    page/templates/tags/TagRenderer.cpp \
+    util/TemplateRenderHelper.cpp
 
 HEADERS +=\
         webframework-qt_global.h \
@@ -102,7 +103,8 @@ HEADERS +=\
     page/templates/tags/TagInterface.h \
     util/UserDataHelper.h \
     page/templates/tags/TemplateTag.h \
-    page/templates/tags/TagRenderer.h
+    page/templates/tags/TagRenderer.h \
+    util/TemplateRenderHelper.h
 
 unix:!symbian {
     maemo5 {

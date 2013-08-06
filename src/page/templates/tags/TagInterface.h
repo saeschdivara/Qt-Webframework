@@ -2,6 +2,9 @@
 #define TAGINTERFACE_H
 
 #include "webframework-qt_global.h"
+#include "../../model/AbstractListModel.h"
+#include "../../model/AbstractModel.h"
+
 #include <QtXml/QDomNamedNodeMap>
 
 namespace web
@@ -52,7 +55,39 @@ class WEBFRAMEWORKQTSHARED_EXPORT TagInterface
          * @author Sascha Häusler <saeschdivara@gmail.com>
          * @since 0.3
          */
-        virtual void setTagContent(const QByteArray & content);
+        virtual void setTagContent(const QByteArray & content) = 0;
+
+        /**
+         * @brief If the page model is needed, with this method it
+         * can be saved
+         *
+         * @param pageModel
+         *
+         * @author Sascha Häusler <saeschdivara@gmail.com>
+         * @since 0.3
+         */
+        virtual void setPageModel(model::AbstractModel * pageModel) = 0;
+
+        /**
+         * @brief setModelList
+         *
+         * @param templateModels
+         *
+         * @author Sascha Häusler <saeschdivara@gmail.com>
+         * @since 0.3
+         */
+        virtual void setModelList(QHash<QString, model::AbstractListModel *> templateModels) = 0;
+
+        /**
+         * @brief Only if this method returns true, the content
+         * is shown in the page
+         *
+         * @return
+         *
+         * @author Sascha Häusler <saeschdivara@gmail.com>
+         * @since 0.3
+         */
+        virtual bool isContentAllowed() = 0;
 
         /**
          * @brief Renderes what the content shall be in the

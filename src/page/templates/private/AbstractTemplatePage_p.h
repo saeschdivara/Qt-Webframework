@@ -3,6 +3,7 @@
 
 #include "page/model/AbstractListModel.h"
 #include "page/model/AbstractModel.h"
+#include "page/templates/tags/TagRenderer.h"
 #include "website/WebSession.h"
 
 #include <httpserverrequest.h>
@@ -50,6 +51,8 @@ class AbstractTemplatePagePrivate
 
         model::AbstractModel *pageModel;
         QHash<QString, model::AbstractListModel *> templateModels;
+
+        tags::TagRenderer renderer;
 
         /**
          * @brief Checks if there were any post variables in the request

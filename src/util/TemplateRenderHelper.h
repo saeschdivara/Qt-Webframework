@@ -35,15 +35,7 @@ class WEBFRAMEWORKQTSHARED_EXPORT TemplateRenderHelper
          * @since 0.3
          */
         template<class T>
-        static T getTemplateAttribute(QDomElement & ele, const QString & attr, web::page::model::AbstractModel *model) {
-            QString domAttribute = ele.attribute(attr);
-            if (domAttribute.startsWith('$') && domAttribute.endsWith('$')) {
-                T v = model->property(domAttribute.remove('$').toUtf8().data()).value<T>();
-                return v;
-            }
-
-            return QVariant(domAttribute).value<T>();
-        }
+        static T getTemplateAttribute(QDomElement & ele, const QString & attr, web::page::model::AbstractModel *model);
 
         /**
          * @brief Through the model attribute it can be decided if the user
@@ -57,14 +49,7 @@ class WEBFRAMEWORKQTSHARED_EXPORT TemplateRenderHelper
          * @author Sascha Häusler <saeschdivara@gmail.com>
          * @since 0.3
          */
-        static bool isTemplateAllowed(QString ifAttribute, web::page::model::AbstractModel *model) {
-            QVariant ifProperty = model->property(ifAttribute.toUtf8().data());
-            if (ifProperty.isValid()) {
-                    return ifProperty.toBool();
-                }
-
-            return false;
-        }
+        static bool isTemplateAllowed(QString ifAttribute, web::page::model::AbstractModel *model);
 
     private:
         TemplateRenderHelper();

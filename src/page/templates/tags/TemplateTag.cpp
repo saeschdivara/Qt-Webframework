@@ -26,10 +26,15 @@ TemplateTag::TemplateTag() :
 {
 }
 
-QString &TemplateTag::tag() const
+QString TemplateTag::tag() const
 {
     Q_D(const TemplateTag);
     return d->tagName;
+}
+
+void TemplateTag::setTagContent(const QByteArray & content)
+{
+    Q_UNUSED(content); // There shouldn't be any
 }
 
 void TemplateTag::setAttributes(QDomNamedNodeMap attributes)

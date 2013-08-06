@@ -34,7 +34,7 @@ class TemplateTag : public TagInterface
          * @author Sascha Häusler <saeschdivara@gmail.com>
          * @since 0.3
          */
-        virtual QString &tag() const Q_DECL_OVERRIDE;
+        virtual QString tag() const Q_DECL_OVERRIDE;
 
         /**
          * @brief Doesn't store the content because there shouldn't

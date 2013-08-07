@@ -29,6 +29,7 @@ class WEBFRAMEWORKQTSHARED_EXPORT TagRenderer
         void setContent(QByteArray content);
         void setPageModel(model::AbstractModel * pageModel);
         void setModelList(QHash<QString, model::AbstractListModel *> templateModels);
+        void setTemplateList(QHash<QString, QByteArray> templates);
 
         QString render();
 

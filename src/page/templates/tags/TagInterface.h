@@ -39,14 +39,15 @@ class WEBFRAMEWORKQTSHARED_EXPORT TagInterface
         virtual QString tag() const = 0;
 
         /**
-         * @brief This method is here to save the dom attributes
+         * @brief This method is here to save the dom element
+         * and its attributes
          *
-         * @param attributes
+         * @param element
          *
          * @author Sascha Häusler <saeschdivara@gmail.com>
          * @since 0.3
          */
-        virtual void setAttributes(QDomNamedNodeMap attributes) = 0;
+        virtual void setElement(QDomElement element) = 0;
 
         /**
          * @brief This method is to save the content between
@@ -71,7 +72,8 @@ class WEBFRAMEWORKQTSHARED_EXPORT TagInterface
         virtual void setPageModel(model::AbstractModel * pageModel) = 0;
 
         /**
-         * @brief setModelList
+         * @brief All the extra models from the page are set by
+         * this method
          *
          * @param templateModels
          *
@@ -79,6 +81,17 @@ class WEBFRAMEWORKQTSHARED_EXPORT TagInterface
          * @since 0.3
          */
         virtual void setModelList(QHash<QString, model::AbstractListModel *> templateModels) = 0;
+
+        /**
+         * @brief With this method all templates which the page
+         * contains are set
+         *
+         * @param templates
+         *
+         * @author Sascha Häusler <saeschdivara@gmail.com>
+         * @since 0.3
+         */
+        virtual void setTemplateList(QHash<QString, QByteArray> templates);
 
         /**
          * @brief Only if this method returns true, the content

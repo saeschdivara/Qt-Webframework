@@ -14,6 +14,7 @@ class TemplateTagPrivate
 {
     public:
         QString tagName;
+        QDomElement element;
         QDomNamedNodeMap attributes;
         QHash<QString, model::AbstractListModel *> templateModels;
         model::AbstractModel * pageModel;
@@ -37,10 +38,11 @@ void TemplateTag::setTagContent(const QByteArray & content)
     Q_UNUSED(content); // There shouldn't be any
 }
 
-void TemplateTag::setAttributes(QDomNamedNodeMap attributes)
+void TemplateTag::setElement(QDomElement element)
 {
     Q_D(TemplateTag);
-    d->attributes = attributes;
+    d->element = element;
+    d->attributes = element.attributes();
 }
 
 void TemplateTag::setPageModel(model::AbstractModel * pageModel)
@@ -69,6 +71,29 @@ void TemplateTag::render()
     if ( !d->attributes.contains("src") ) {
         d->isContentAllowed = false;
         return;
+    }
+
+    QString templateName = d->element.attribute("src");
+
+    if ( d->attributes.contains("if") ) {
+        QString ifAttribute = util::TemplateRenderHelper::getTemplateAttribute<QString>(
+                    d->element,
+                    "if",
+                    d->pageModel
+                    );
+
+        d->isContentAllowed = util::TemplateRenderHelper::isTemplateAllowed(ifAttribute, d->pageModel);
+        if ( !d->isContentAllowed ) return;
+    }
+    else if ( d->attributes.contains("if-not") ) {
+        QString ifNotAttribute = util::TemplateRenderHelper::getTemplateAttribute<QString>(
+                    d->element,
+                    "if-not",
+                    d->pageModel
+                    );
+
+        d->isContentAllowed = util::TemplateRenderHelper::isTemplateAllowed(ifNotAttribute, d->pageModel);
+        if ( !d->isContentAllowed ) return;
     }
 }
 

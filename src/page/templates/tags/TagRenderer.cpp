@@ -19,6 +19,7 @@ class TagRendererPrivate
         QByteArray content;
         model::AbstractModel * pageModel;
         QHash<QString, model::AbstractListModel *> templateModels;
+        QHash<QString, QByteArray> templates;
 
         QStringList getTags(QDomDocumentType docType) {
             Q_UNUSED(docType);
@@ -63,6 +64,12 @@ void TagRenderer::setModelList(QHash<QString, model::AbstractListModel *> templa
     d->templateModels = templateModels;
 }
 
+void TagRenderer::setTemplateList(QHash<QString, QByteArray> templates)
+{
+    Q_D(TagRenderer);
+    d->templates = templates;
+}
+
 QString TagRenderer::render()
 {
     Q_D(TagRenderer);
@@ -76,19 +83,20 @@ QString TagRenderer::render()
     for ( QString tagString : tags ) {
         TagInterface * tag = d->getTagObjectForTagString(tagString);
         if ( tag ) {
-            QDomNodeList templates = doc.elementsByTagName(tagString);
-            const int templateSize = templates.size();
+            QDomNodeList tagNodeList = doc.elementsByTagName(tagString);
+            const int tagListSize = tagNodeList.size();
 
             tag->setPageModel(d->pageModel);
 
             // We need to go backwards because otherwise the deleting of nodes doesnt work
-            for (int i = templateSize-1; i >= 0 ; --i) {
-                QDomElement element = templates.item(i).toElement();
+            for (int i = tagListSize-1; i >= 0 ; --i) {
+                QDomElement element = tagNodeList.item(i).toElement();
                 QDomNode parentNode = element.parentNode();
 
                 tag->setTagContent(element.text());
-                tag->setAttributes(element.attributes());
+                tag->setElement(element);
                 tag->setModelList(d->templateModels);
+                tag->setTemplateList(d->templates);
 
                 tag->render();
 

@@ -62,7 +62,7 @@ class TemplateTag : public TagInterface
          * @author Sascha Häusler <saeschdivara@gmail.com>
          * @since 0.3
          */
-        virtual void setAttributes(QDomNamedNodeMap attributes) Q_DECL_OVERRIDE;
+        virtual void setElement(QDomElement element) Q_DECL_OVERRIDE;
 
         /**
          * @brief If the page model is needed, with this method it

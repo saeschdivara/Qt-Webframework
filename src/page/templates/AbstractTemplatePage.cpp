@@ -266,6 +266,7 @@ void AbstractTemplatePage::render()
     d->renderer.setContent(d->pageData);
     d->renderer.setPageModel(d->pageModel);
     d->renderer.setModelList(d->templateModels);
+    d->renderer.setTemplateList(d->templates);
 
     QString content = d->renderer.render();
     d->replaceModelPlaceholders(content, d->pageModel);

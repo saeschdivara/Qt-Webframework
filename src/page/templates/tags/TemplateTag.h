@@ -86,6 +86,17 @@ class TemplateTag : public TagInterface
         virtual void setModelList(QHash<QString, model::AbstractListModel *> templateModels) Q_DECL_OVERRIDE;
 
         /**
+         * @brief With this method all templates which the page
+         * contains are set
+         *
+         * @param templates
+         *
+         * @author Sascha Häusler <saeschdivara@gmail.com>
+         * @since 0.3
+         */
+        virtual void setTemplateList(QHash<QString, QByteArray> templates) Q_DECL_OVERRIDE;
+
+        /**
          * @brief Only if this method returns true, the content
          * is shown in the page
          *

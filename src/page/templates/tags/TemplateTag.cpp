@@ -1,4 +1,6 @@
 #include "TemplateTag.h"
+#include "private/TagInterfacePrivate.h"
+
 #include <util/TemplateRenderHelper.h>
 
 namespace web
@@ -10,16 +12,9 @@ namespace templates
 namespace tags
 {
 
-class TemplateTagPrivate
+class TemplateTagPrivate : public TagInterfacePrivate
 {
     public:
-        QString tagName;
-        QDomElement element;
-        QDomNamedNodeMap attributes;
-        QHash<QString, model::AbstractListModel *> templateModels;
-        model::AbstractModel * pageModel;
-        QByteArray content;
-        bool isContentAllowed;
 };
 
 TemplateTag::TemplateTag() :
@@ -57,6 +52,12 @@ void TemplateTag::setModelList(QHash<QString, model::AbstractListModel *> templa
     d->templateModels = templateModels;
 }
 
+void TemplateTag::setTemplateList(QHash<QString, QByteArray> templates)
+{
+    Q_D(TemplateTag);
+    d->templates = templates;
+}
+
 bool TemplateTag::isContentAllowed()
 {
     Q_D(TemplateTag);
@@ -73,12 +74,12 @@ void TemplateTag::render()
         return;
     }
 
-    QString templateName = d->element.attribute("src");
-
+    // If the tag has an if-attribute, the page models
+    // property with the if-attribute is checked
     if ( d->attributes.contains("if") ) {
         QString ifAttribute = util::TemplateRenderHelper::getTemplateAttribute<QString>(
                     d->element,
-                    "if",
+                    QString("if"),
                     d->pageModel
                     );
 
@@ -88,12 +89,75 @@ void TemplateTag::render()
     else if ( d->attributes.contains("if-not") ) {
         QString ifNotAttribute = util::TemplateRenderHelper::getTemplateAttribute<QString>(
                     d->element,
-                    "if-not",
+                    QString("if-not"),
                     d->pageModel
                     );
 
         d->isContentAllowed = util::TemplateRenderHelper::isTemplateAllowed(ifNotAttribute, d->pageModel);
         if ( !d->isContentAllowed ) return;
+    }
+
+    QString templateName = d->element.attribute("src");
+
+    QByteArray templateContent = util::TemplateRenderHelper::getTrimmedTemplate(d->tagName,
+                                                                                d->templates[templateName]);
+
+    // If there is no model to work with, we just
+    // use the template without any replacements
+    if (  !d->attributes.contains("model") ) {
+        d->content = templateContent;
+        return;
+    }
+
+    QString listModelName = d->element.attribute("model");
+    model::AbstractListModel * listModel = d->templateModels[listModelName];
+    QList<web::page::model::AbstractModel *> modelList = listModel->models();
+
+    QString modelIfAttribute;
+    int modelCountAttribute = -1;
+    int modelStartCountAttribute = -1;
+
+    bool hasIfAttribute = false;
+
+    if (d->element.hasAttribute("if-model")) {
+        modelIfAttribute = d->element.attribute("if-model");
+        hasIfAttribute = true;
+    }
+
+    if (d->element.hasAttribute("model-start-count")) {
+        modelStartCountAttribute = util::TemplateRenderHelper::getTemplateAttribute<int>(d->element,
+                                                                                         "model-start-count",
+                                                                                         d->pageModel
+                                                                                         );
+    }
+
+    if (d->element.hasAttribute("model-count")) {
+        modelCountAttribute = util::TemplateRenderHelper::getTemplateAttribute<int>(d->element,
+                                                                                    "model-count",
+                                                                                    d->pageModel);
+    }
+
+    if ( modelStartCountAttribute < 0 ) {
+        modelStartCountAttribute = 0;
+    }
+
+    if ( modelCountAttribute <= 0 ) {
+        modelCountAttribute  = modelList.size();
+    }
+    else {
+        modelCountAttribute = modelStartCountAttribute + modelCountAttribute;
+    }
+
+    const int maxCount = modelList.size();
+
+    for (int i = modelStartCountAttribute; i < modelCountAttribute && i < maxCount; ++i) {
+        QString modelTemplate = templateContent;
+        web::page::model::AbstractModel *templateModel = modelList.at(i);
+
+        if (util::TemplateRenderHelper::isTemplateAllowed(modelIfAttribute, templateModel) || !hasIfAttribute) {
+            util::TemplateRenderHelper::replaceModelPlaceholders(modelTemplate, templateModel);
+            d->content += modelTemplate;
+        }
     }
 }
 

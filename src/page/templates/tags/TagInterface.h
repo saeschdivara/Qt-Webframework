@@ -91,7 +91,7 @@ class WEBFRAMEWORKQTSHARED_EXPORT TagInterface
          * @author Sascha Häusler <saeschdivara@gmail.com>
          * @since 0.3
          */
-        virtual void setTemplateList(QHash<QString, QByteArray> templates);
+        virtual void setTemplateList(QHash<QString, QByteArray> templates) = 0;
 
         /**
          * @brief Only if this method returns true, the content

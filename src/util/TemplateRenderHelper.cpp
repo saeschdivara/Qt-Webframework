@@ -1,5 +1,7 @@
 #include "TemplateRenderHelper.h"
 
+#include <QRegularExpression>
+
 namespace web
 {
 namespace util
@@ -15,16 +17,29 @@ bool TemplateRenderHelper::isTemplateAllowed(QString ifAttribute, page::model::A
     return false;
 }
 
-template<class T>
-T TemplateRenderHelper::getTemplateAttribute(QDomElement & ele, const QString & attr, page::model::AbstractModel * model)
+QByteArray TemplateRenderHelper::getTrimmedTemplate(const QString & tag, QByteArray templateContent)
 {
-    QString domAttribute = ele.attribute(attr);
-    if (domAttribute.startsWith('$') && domAttribute.endsWith('$')) {
-        T v = model->property(domAttribute.remove('$').toUtf8().data()).value<T>();
-        return v;
-    }
+    QString startTag("<%1>");
+    QString endTag("</%1>");
 
-    return QVariant(domAttribute).value<T>();
+    templateContent.replace(startTag.arg(tag), "");
+    templateContent.replace(endTag.arg(tag), "");
+
+    return templateContent;
+}
+
+void TemplateRenderHelper::replaceModelPlaceholders(QString & pageContent, page::model::AbstractModel * model)
+{
+    QRegularExpression regex("\\$(.*)\\$");
+    QRegularExpressionMatchIterator matchIterator = regex.globalMatch(pageContent);
+    while ( matchIterator.hasNext() ) {
+            QRegularExpressionMatch match = matchIterator.next();
+            QString toReplacingString = match.captured(0);
+            QString placeholderName = match.captured(1);
+
+            QString replacingString = model->property(placeholderName.toUtf8().data()).toString();
+            pageContent.replace(toReplacingString, replacingString);
+        }
 }
 
 }

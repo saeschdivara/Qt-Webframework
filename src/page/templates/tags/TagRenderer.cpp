@@ -93,7 +93,7 @@ QString TagRenderer::render()
                 QDomElement element = tagNodeList.item(i).toElement();
                 QDomNode parentNode = element.parentNode();
 
-                tag->setTagContent(element.text());
+                tag->setTagContent(element.text().toUtf8());
                 tag->setElement(element);
                 tag->setModelList(d->templateModels);
                 tag->setTemplateList(d->templates);
@@ -102,11 +102,9 @@ QString TagRenderer::render()
 
                 if ( tag->isContentAllowed() ) {
                     QByteArray renderedTagContent = tag->getRenderedContent();
-                    QString newTag("<%1>%2</%1>");
-                    newTag.arg(tagString).arg(renderedTagContent);
 
                     QDomDocument tagDoc;
-                    tagDoc.setContent(newTag.toUtf8());
+                    tagDoc.setContent(renderedTagContent);
                     parentNode.replaceChild(tagDoc.documentElement(), element);
                 }
                 else {

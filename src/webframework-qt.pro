@@ -104,7 +104,8 @@ HEADERS +=\
     util/UserDataHelper.h \
     page/templates/tags/TemplateTag.h \
     page/templates/tags/TagRenderer.h \
-    util/TemplateRenderHelper.h
+    util/TemplateRenderHelper.h \
+    page/templates/tags/private/TagInterfacePrivate.h
 
 unix:!symbian {
     maemo5 {

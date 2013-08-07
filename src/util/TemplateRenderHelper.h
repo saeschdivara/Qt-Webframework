@@ -35,7 +35,15 @@ class WEBFRAMEWORKQTSHARED_EXPORT TemplateRenderHelper
          * @since 0.3
          */
         template<class T>
-        static T getTemplateAttribute(QDomElement & ele, const QString & attr, web::page::model::AbstractModel *model);
+        static T getTemplateAttribute(QDomElement & ele, const QString & attr, web::page::model::AbstractModel *model) {
+            QString domAttribute = ele.attribute(attr);
+            if (domAttribute.startsWith('$') && domAttribute.endsWith('$')) {
+                T v = model->property(domAttribute.remove('$').toUtf8().data()).value<T>();
+                return v;
+            }
+
+            return QVariant(domAttribute).value<T>();
+        }
 
         /**
          * @brief Through the model attribute it can be decided if the user
@@ -50,6 +58,33 @@ class WEBFRAMEWORKQTSHARED_EXPORT TemplateRenderHelper
          * @since 0.3
          */
         static bool isTemplateAllowed(QString ifAttribute, web::page::model::AbstractModel *model);
+
+        /**
+         * @brief getTrimmedTemplate
+         *
+         * @param tag
+         * @param templateContent
+         *
+         * @return
+         *
+         * @author Sascha Häusler <saeschdivara@gmail.com>
+         * @since 0.3
+         */
+        static QByteArray getTrimmedTemplate(const QString & tag, QByteArray templateContent);
+
+        /**
+         * @brief This method replaces every placeholder which has to be like this:
+         * $place_holder_name$. The placeholdername has to match a Qt object property.
+         * Thanks to the property method the method replaces every placeholder, if they don't
+         * exists with an empty space.
+         *
+         * @param pageContent   The content which contains the template in which the placeholders are replaced
+         * @param model         Model which holds the properties for the template
+         *
+         * @author Sascha Häusler <saeschdivara@gmail.com>
+         * @since 0.3
+         */
+        static void replaceModelPlaceholders(QString &pageContent, web::page::model::AbstractModel *model);
 
     private:
         TemplateRenderHelper();

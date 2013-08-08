@@ -93,7 +93,7 @@ void TemplateTag::render()
                     d->pageModel
                     );
 
-        d->isContentAllowed = util::TemplateRenderHelper::isTemplateAllowed(ifNotAttribute, d->pageModel);
+        d->isContentAllowed = !util::TemplateRenderHelper::isTemplateAllowed(ifNotAttribute, d->pageModel);
         if ( !d->isContentAllowed ) return;
     }
 

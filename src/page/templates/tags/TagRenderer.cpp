@@ -102,10 +102,13 @@ QString TagRenderer::render()
 
                 if ( tag->isContentAllowed() ) {
                     QByteArray renderedTagContent = tag->getRenderedContent();
+                    QString newTag("<%1>%2</%1>");
 
                     QDomDocument tagDoc;
-                    tagDoc.setContent(renderedTagContent);
-                    parentNode.replaceChild(tagDoc.documentElement(), element);
+                    tagDoc.setContent(
+                                newTag.arg("span").arg(QString::fromUtf8(renderedTagContent))
+                                );
+                    parentNode.replaceChild(tagDoc, element);
                 }
                 else {
                     parentNode.removeChild(element);

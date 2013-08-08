@@ -50,8 +50,8 @@ void AbstractWebsite::publish()
                  this, &AbstractWebsite::handleRequest
                  );
 
-        bool isListening = d->server->listen(QHostAddress::Any, 9999);
-        if ( !isListening ) qFatal("Couldn't listen on port 9999");
+        bool isListening = d->server->listen(QHostAddress::Any, d->port);
+        if ( !isListening ) qFatal("Couldn't listen on port %i", d->port);
     }
 
     internationalisation::I18nManager::globalInstance()->loadLanguageTexts("de");

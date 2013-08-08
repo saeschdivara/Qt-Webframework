@@ -23,6 +23,7 @@ class AbstractWebsitePrivate
 {
 public:
         QUrl url;
+        quint16 port = 9999;
         QHash<QString ,page::PageInterface *> pages;
         QScopedPointer<Tufao::HttpServer> server;
         Tufao::SimpleSessionStore sessionStore;

@@ -15,7 +15,8 @@ namespace tags
 class TemplateTagPrivate;
 
 /**
- * @brief The TemplateTag class
+ * @brief This tag class makes it possible to include
+ * sub html templates which can have placeholders.
  *
  * @author Sascha Häusler <saeschdivara@gmail.com>
  * @since 0.3

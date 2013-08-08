@@ -68,6 +68,8 @@ void TemplateTag::render()
 {
     Q_D(TemplateTag);
 
+    d->isContentAllowed = true;
+
     // We need a src attribute
     if ( !d->attributes.contains("src") ) {
         d->isContentAllowed = false;

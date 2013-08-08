@@ -12,6 +12,7 @@
 #include <url.h>
 
 #include <QtCore/QDir>
+#include <QtCore/QDebug>
 #include <QtCore/QFile>
 #include <QtCore/QTimer>
 #include <QtCore/QUuid>
@@ -49,7 +50,8 @@ void AbstractWebsite::publish()
                  this, &AbstractWebsite::handleRequest
                  );
 
-        d->server->listen(QHostAddress::Any, 9999);
+        bool isListening = d->server->listen(QHostAddress::Any, 9999);
+        if ( !isListening ) qFatal("Couldn't listen on port 9999");
     }
 
     internationalisation::I18nManager::globalInstance()->loadLanguageTexts("de");

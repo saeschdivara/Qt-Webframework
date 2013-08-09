@@ -156,7 +156,7 @@ void TemplateTag::render()
         QString modelTemplate = templateContent;
         web::page::model::AbstractModel *templateModel = modelList.at(i);
 
-        if (util::TemplateRenderHelper::isTemplateAllowed(modelIfAttribute, templateModel) || !hasIfAttribute) {
+        if ( !hasIfAttribute || util::TemplateRenderHelper::isTemplateAllowed(modelIfAttribute, templateModel) ) {
             util::TemplateRenderHelper::replaceModelPlaceholders(modelTemplate, templateModel);
             d->content += modelTemplate;
         }

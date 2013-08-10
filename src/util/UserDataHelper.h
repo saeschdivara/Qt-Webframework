@@ -1,6 +1,7 @@
 #ifndef USERDATAHELPER_H
 #define USERDATAHELPER_H
 
+#include "webframework-qt_global.h"
 #include <QtCore/QMap>
 
 namespace web
@@ -15,7 +16,7 @@ namespace util
  * @author Sascha Häusler <saeschdivara@gmail.com>
  * @since 0.3
  */
-class UserDataHelper
+class WEBFRAMEWORKQTSHARED_EXPORT UserDataHelper
 {
     public:
         /**

@@ -31,7 +31,7 @@ namespace util
 QByteArray TemplateOutputHelper::getEmbeddedImage(const QString & mimeType, const QByteArray & data)
 {
     QString url("data:%1;base64,%2");
-    url.arg(mimeType).arg(QString::fromLocal8Bit(data.toBase64()));
+    url = url.arg(mimeType).arg(QString::fromLocal8Bit(data.toBase64()));
 
     return url.toUtf8();
 }

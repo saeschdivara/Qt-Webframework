@@ -29,6 +29,10 @@ QByteArray AbstractTemplatePage::getContent()
 {
     Q_D(AbstractTemplatePage);
 
+#ifdef QT_WEBFRAMEWORK_DEBUG
+    initPage();
+    initTemplates();
+#else
     if ( d->pageData.isEmpty() ) {
             initPage();
         }
@@ -36,6 +40,7 @@ QByteArray AbstractTemplatePage::getContent()
     if ( d->templates.isEmpty() ) {
             initTemplates();
         }
+#endif
 
     initModels();
 

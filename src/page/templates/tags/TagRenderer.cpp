@@ -105,10 +105,21 @@ QString TagRenderer::render()
                     QString newTag("<%1>%2</%1>");
 
                     QDomDocument tagDoc;
+                    // We need to wrap the content so we can be sure
+                    // the doc parses everything correctly
                     tagDoc.setContent(
-                                newTag.arg("span").arg(QString::fromUtf8(renderedTagContent))
+                                newTag.arg(tag->tag()).arg(QString::fromUtf8(renderedTagContent))
                                 );
-                    parentNode.replaceChild(tagDoc, element);
+
+                    // No tag shall be around the generated content
+                    QDomNodeList nodes = tagDoc.documentElement().childNodes();
+                    for (int i = 0; i < nodes.count(); ++i) {
+                        QDomNode node = nodes.at(i);
+                        QDomNode clonedNode = node.cloneNode();
+                        parentNode.insertAfter(clonedNode, element);
+                    }
+
+                    parentNode.removeChild(element);
                 }
                 else {
                     parentNode.removeChild(element);

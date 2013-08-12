@@ -25,6 +25,16 @@ QByteArray SimplePage::getContent()
 {
     Q_D(SimplePage);
 
+#ifdef QT_WEBFRAMEWORK_DEBUG
+    d->file.open( QIODevice::ReadOnly );
+
+    while ( !d->file.atEnd() ) {
+            d->data.append(d->file.read(2000));
+            QCoreApplication::processEvents();
+        }
+
+    d->file.close();
+#else
     if ( d->data.isEmpty() ) {
             d->file.open( QIODevice::ReadOnly );
 
@@ -43,6 +53,7 @@ QByteArray SimplePage::getContent()
 
             d->timer.start();
         }
+#endif
 
     return d->data;
 }

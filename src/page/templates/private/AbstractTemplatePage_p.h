@@ -58,7 +58,7 @@ class AbstractTemplatePagePrivate
          * @since 0.2
          */
         inline bool hasPostVariables() {
-            return post.isEmpty();
+            return !post.isEmpty();
         }
 
         /**
@@ -70,7 +70,7 @@ class AbstractTemplatePagePrivate
          * @since 0.2
          */
         inline bool hasGetVariables() {
-            return get.isEmpty();
+            return !get.isEmpty();
         }
 };
 

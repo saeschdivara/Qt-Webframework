@@ -1,4 +1,6 @@
 #include "SimplePage.h"
+
+#include <QtCore/QDebug>
 #include <QtCore/QFile>
 #include <QtCore/QTimer>
 #include <QtCore/QCoreApplication>
@@ -26,7 +28,10 @@ QByteArray SimplePage::getContent()
     Q_D(SimplePage);
 
 #ifdef QT_WEBFRAMEWORK_DEBUG
-    d->file.open( QIODevice::ReadOnly );
+    if ( !d->file.open( QIODevice::ReadOnly ) ) {
+        qWarning() << Q_FUNC_INFO << "Couldn't open the file: " << d->file.fileName();
+        return QByteArrayLiteral("");
+    }
 
     while ( !d->file.atEnd() ) {
             d->data.append(d->file.read(2000));

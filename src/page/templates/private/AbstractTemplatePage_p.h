@@ -72,6 +72,36 @@ class AbstractTemplatePagePrivate
         inline bool hasGetVariables() {
             return !get.isEmpty();
         }
+
+        /**
+         * @brief Checks if the variable exists in the post variables
+         * container
+         *
+         * @param name Post variable name
+         *
+         * @return
+         *
+         * @author Sascha Häusler <saeschdivara@gmail.com>
+         * @since 0.3
+         */
+        inline bool hasPostVariable(const QByteArray & name) {
+            return post.contains(name);
+        }
+
+        /**
+         * @brief Checks if the variable exists in the get variables
+         * container
+         *
+         * @param name Get variable name
+         *
+         * @return
+         *
+         * @author Sascha Häusler <saeschdivara@gmail.com>
+         * @since 0.3
+         */
+        inline bool hasGetVariable(const QByteArray & name) {
+            return get.contains(name);
+        }
 };
 
 }

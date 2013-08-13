@@ -131,7 +131,7 @@ void AbstractWebsite::handleRequest(Tufao::HttpServerRequest *request, Tufao::Ht
 
                     auto connData = std::make_shared<QMetaObject::Connection>();
                     *connData = connect(request, &Tufao::HttpServerRequest::data,
-                                        [this, request, boundary, urlpath](QByteArray data)
+                                        [this, request, urlpath](QByteArray data)
                     {
                         handleData(request, urlpath, data);
                     });
@@ -336,10 +336,10 @@ void AbstractWebsite::handleRequestEnd(HttpServerRequest * request, const QByteA
         }
 
         postData.insert(postDataName, postDataChunk);
-
-        page::StatefulPageInterface * page = dynamic_cast<page::StatefulPageInterface *>(d->pages.value(path));
-        page->setPostRequestData(postData);
     }
+
+    page::StatefulPageInterface * page = dynamic_cast<page::StatefulPageInterface *>(d->pages.value(path));
+    page->setPostRequestData(postData);
 }
 
 }

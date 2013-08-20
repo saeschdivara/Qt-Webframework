@@ -1,6 +1,8 @@
 #include "AbstractWebsite.h"
-#include "internationalisation/I18nManager.h"
 #include "private/AbstractWebsite_p.h"
+
+#include "internationalisation/I18nManager.h"
+#include "page/InteractivePageInterface.h"
 #include "page/SecureContentInterface.h"
 #include "page/resource/AbstractResource.h"
 #include "page/resource/ImageResource.h"
@@ -103,14 +105,28 @@ void AbstractWebsite::handleRequest(Tufao::HttpServerRequest *request, Tufao::Ht
 
     Url url(request->url());
     QString urlpath = url.path();
+    bool isAjaxCall = false;
+
+    if ( urlpath.contains(QStringLiteral("/ajax/")) ) {
+        urlpath.replace(QStringLiteral("/ajax/"), "");
+        isAjaxCall = true;
+    }
 
     if ( d->pages.contains(urlpath) ) {
         page::PageInterface *pageObj = d->pages.value(urlpath);
         page::SecureContentInterface * secureContent = Q_NULLPTR;
         page::StatefulPageInterface *statefulPage = Q_NULLPTR;
+        page::InteractivePageInterface * interactivePage = Q_NULLPTR;
         page::resource::AbstractResource *resource = Q_NULLPTR;
 
-        if ( (statefulPage = dynamic_cast<page::StatefulPageInterface *>(pageObj)) ) {
+
+        if ( (interactivePage = dynamic_cast<page::InteractivePageInterface *>(pageObj)) && isAjaxCall ) {
+            response->headers().insert(IByteArray("Content-Type"), interactivePage->ajaxMimeType());
+            response->writeHead(HttpServerResponse::OK);
+            response->end(interactivePage->getAjaxContent());
+            return;
+        }
+        else if ( (statefulPage = dynamic_cast<page::StatefulPageInterface *>(pageObj)) ) {
             statefulPage->setSession(d->session(request, response));
             statefulPage->setRequest(request);
             statefulPage->setResponse(response);

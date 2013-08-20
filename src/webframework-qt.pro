@@ -52,7 +52,8 @@ SOURCES += \
     page/templates/tags/TemplateTag.cpp \
     page/templates/tags/TagRenderer.cpp \
     util/TemplateRenderHelper.cpp \
-    util/TemplateOutputHelper.cpp
+    util/TemplateOutputHelper.cpp \
+    util/InteractivePageHelper.cpp
 
 HEADERS +=\
         webframework-qt_global.h \
@@ -107,7 +108,8 @@ HEADERS +=\
     page/templates/tags/TagRenderer.h \
     util/TemplateRenderHelper.h \
     page/templates/tags/private/TagInterfacePrivate.h \
-    util/TemplateOutputHelper.h
+    util/TemplateOutputHelper.h \
+    util/InteractivePageHelper.h
 
 unix:!symbian {
     maemo5 {

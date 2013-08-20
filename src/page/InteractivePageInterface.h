@@ -15,7 +15,7 @@ namespace page
  * @author Sascha Häusler <saeschdivara@gmail.com>
  * @since 0.2
  */
-class WEBFRAMEWORKQTSHARED_EXPORT InteractivePageInterface : public StatefulPageInterface
+class WEBFRAMEWORKQTSHARED_EXPORT InteractivePageInterface
 {
     public:
         /**
@@ -25,6 +25,26 @@ class WEBFRAMEWORKQTSHARED_EXPORT InteractivePageInterface : public StatefulPage
          * @since 0.2
          */
         virtual ~InteractivePageInterface() {}
+
+        /**
+         * @brief ajaxMimeType
+         *
+         * @return
+         *
+         * @author Sascha Häusler <saeschdivara@gmail.com>
+         * @since 0.3
+         */
+        virtual QByteArray ajaxMimeType() = 0;
+
+        /**
+         * @brief ajaxContent
+         *
+         * @return
+         *
+         * @author Sascha Häusler <saeschdivara@gmail.com>
+         * @since 0.3
+         */
+        virtual QByteArray getAjaxContent() = 0;
 };
 
 }

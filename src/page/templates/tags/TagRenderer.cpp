@@ -105,11 +105,21 @@ QString TagRenderer::render()
                     QString newTag("<%1>%2</%1>");
 
                     QDomDocument tagDoc;
+                    // Checking if any error occured
+                    QString errorMessage;
+                    int errorLine;
+
                     // We need to wrap the content so we can be sure
                     // the doc parses everything correctly
+                    QString tagDocContent = newTag.arg(tag->tag()).arg(QString::fromUtf8(renderedTagContent));
                     tagDoc.setContent(
-                                newTag.arg(tag->tag()).arg(QString::fromUtf8(renderedTagContent))
+                                tagDocContent,
+                                &errorMessage,
+                                &errorLine
                                 );
+
+                    if ( !errorMessage.isEmpty() )
+                        qDebug() << Q_FUNC_INFO << "Error:" << errorMessage << errorLine;
 
                     // No tag shall be around the generated content
                     QDomNodeList nodes = tagDoc.documentElement().childNodes();

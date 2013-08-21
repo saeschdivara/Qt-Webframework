@@ -107,8 +107,8 @@ void AbstractWebsite::handleRequest(Tufao::HttpServerRequest *request, Tufao::Ht
     QString urlpath = url.path();
     bool isAjaxCall = false;
 
-    if ( urlpath.contains(QStringLiteral("/ajax/")) ) {
-        urlpath.replace(QStringLiteral("/ajax/"), "");
+    if ( urlpath.startsWith(QStringLiteral("/ajax/")) ) {
+        urlpath.replace(QStringLiteral("ajax/"), "");
         isAjaxCall = true;
     }
 
@@ -206,6 +206,8 @@ void AbstractWebsite::handleRequest(Tufao::HttpServerRequest *request, Tufao::Ht
         response->end(pageObj->getContent());
     }
     else {
+        qWarning() << Q_FUNC_INFO << "Warning: The following page wasn't found => " << urlpath;
+
         response->writeHead(HttpServerResponse::NOT_FOUND);
         response->end("Not found");
     }

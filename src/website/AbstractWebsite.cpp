@@ -238,6 +238,13 @@ void AbstractWebsite::handleRequestEnd(HttpServerRequest * request, const QByteA
     int endPosition = -1;
     const int boundryLength = boundaryString.length();
 
+    QString end = boundaryString.left(boundryLength - 2) + QStringLiteral("--");
+    int endIndex = data.indexOf(end);
+
+    if ( endIndex != -1 ) {
+        data = data.remove(endIndex, data.length());
+    }
+
     QByteArray tempDataForList;
 
     // Here is the data splitted

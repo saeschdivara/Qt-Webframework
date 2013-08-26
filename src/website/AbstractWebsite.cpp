@@ -331,6 +331,8 @@ void AbstractWebsite::handleRequestEnd(HttpServerRequest * request, const QByteA
             splittedDataChunk.remove(0, contentTypeEndPos);
             splittedDataChunk.remove(0, contentTypeEndString.size());
 
+            if ( splittedDataChunk == QByteArrayLiteral("\r\n") ) continue;
+
             // Now we create the file
             QString filePath(QString("temp/uploads/") + QTime::currentTime().toString(QString("hh_mm_ss_zzz/")));
             QDir::current().mkpath(filePath);

@@ -119,18 +119,30 @@ void AbstractWebsite::handleRequest(Tufao::HttpServerRequest *request, Tufao::Ht
         page::InteractivePageInterface * interactivePage = Q_NULLPTR;
         page::resource::AbstractResource *resource = Q_NULLPTR;
 
-
-        if ( (interactivePage = dynamic_cast<page::InteractivePageInterface *>(pageObj)) && isAjaxCall ) {
-            response->headers().insert(IByteArray("Content-Type"), interactivePage->ajaxMimeType());
-            response->writeHead(HttpServerResponse::OK);
-            response->end(interactivePage->getAjaxContent());
-            return;
-        }
-        else if ( (statefulPage = dynamic_cast<page::StatefulPageInterface *>(pageObj)) ) {
+        if ( (statefulPage = dynamic_cast<page::StatefulPageInterface *>(pageObj)) ) {
             statefulPage->setSession(d->session(request, response));
             statefulPage->setRequest(request);
             statefulPage->setResponse(response);
             statefulPage->setRequestPath(url.path());
+
+            // Handle get data
+            if ( !url.query().isEmpty() )
+                statefulPage->setGetRequestData(QueryString::parse(url.query().toUtf8()));
+            else
+                statefulPage->clearGetRequestData();
+
+            // Handle post data
+            if ( !request->body().isEmpty() )
+                statefulPage->setPostRequestData(QueryString::parse(request->body()));
+            else
+                statefulPage->clearPostRequestData();
+
+            if ( (interactivePage = dynamic_cast<page::InteractivePageInterface *>(pageObj)) && isAjaxCall ) {
+                response->headers().insert(IByteArray("Content-Type"), interactivePage->ajaxMimeType());
+                response->writeHead(HttpServerResponse::OK);
+                response->end(interactivePage->getAjaxContent());
+                return;
+            }
 
             if (statefulPage->isFileUploadAllowed() &&
                 request->headers().contains(IByteArray("Content-Type"))) {
@@ -176,18 +188,6 @@ void AbstractWebsite::handleRequest(Tufao::HttpServerRequest *request, Tufao::Ht
                     }
                 }
             }
-
-            // Handle get data
-            if ( !url.query().isEmpty() )
-                statefulPage->setGetRequestData(QueryString::parse(url.query().toUtf8()));
-            else
-                statefulPage->clearGetRequestData();
-
-            // Handle post data
-            if ( !request->body().isEmpty() )
-                statefulPage->setPostRequestData(QueryString::parse(request->body()));
-            else
-                statefulPage->clearPostRequestData();
         }
         else if ( (resource = dynamic_cast<page::resource::AbstractResource *>(pageObj)) ) {
             resource->setResponse(response);

@@ -23,10 +23,30 @@
 
 #include "InteractivePageHelper.h"
 
+#include <QtCore/QStringList>
+
 namespace web
 {
 namespace util
 {
+
+QString InteractivePageHelper::ajaxJsonCall(const QString & url, const QHash<QString, QString> data, const QString & doneFunc)
+{
+    QString jsonpCall("jQuery.ajax(\'%1\',{ dataType:\'json\', type:\'POST\', data: {%2} }).done(%3);");
+    QString callData;
+    QStringList keys = data.keys();
+    for ( QString key : keys ) {
+        QString value = data.value(key);
+        if ( key == keys.first() ) {
+            callData = QString("\'%1\' : \'%2\'").arg(key, value);
+        }
+        else {
+            callData += QString(", \'%1\' : \'%2\'").arg(key, value);
+        }
+    }
+
+    return jsonpCall.arg(url, callData, doneFunc);
+}
 
 }
 }

@@ -26,6 +26,8 @@
 
 #include "webframework-qt_global.h"
 
+#include <QtCore/QHash>
+
 namespace web
 {
 namespace util
@@ -39,6 +41,9 @@ namespace util
  */
 class WEBFRAMEWORKQTSHARED_EXPORT InteractivePageHelper
 {
+    public:
+        static QString ajaxJsonCall(const QString & url, const QHash<QString, QString> data, const QString & doneFunc);
+
     private:
         InteractivePageHelper();
 };

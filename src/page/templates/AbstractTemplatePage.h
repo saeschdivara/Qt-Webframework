@@ -199,12 +199,28 @@ class WEBFRAMEWORKQTSHARED_EXPORT AbstractTemplatePage : public StatefulPageInte
         void unloadModel(const QString & name);
 
         /**
+         * @brief preRender
+         *
+         * @author Sascha Häusler <saeschdivara@gmail.com>
+         * @since 0.6
+         */
+        virtual void preRender() {}
+
+        /**
          * @brief render
          *
          * @author Sascha Häusler <saeschdivara@gmail.com>
          * @since 0.2
          */
         virtual void render();
+
+        /**
+         * @brief afterRender
+         *
+         * @author Sascha Häusler <saeschdivara@gmail.com>
+         * @since 0.6
+         */
+        virtual void afterRender() {}
 
     private:
         Q_DECLARE_PRIVATE(AbstractTemplatePage)

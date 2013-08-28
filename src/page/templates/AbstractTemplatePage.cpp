@@ -44,7 +44,9 @@ QByteArray AbstractTemplatePage::getContent()
 
     initModels();
 
+    preRender();
     render();
+    afterRender();
 
     destroyModels();
 

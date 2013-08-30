@@ -123,10 +123,14 @@ QString TagRenderer::render()
 
                     // No tag shall be around the generated content
                     QDomNodeList nodes = tagDoc.documentElement().childNodes();
+                    // We need to keep track after which
+                    // node we need to insert the next node
+                    QDomNode beforeNode = element;
                     for (int i = 0; i < nodes.count(); ++i) {
                         QDomNode node = nodes.at(i);
                         QDomNode clonedNode = node.cloneNode();
-                        parentNode.insertAfter(clonedNode, element);
+                        parentNode.insertAfter(clonedNode, beforeNode);
+                        beforeNode = clonedNode;
                     }
 
                     parentNode.removeChild(element);

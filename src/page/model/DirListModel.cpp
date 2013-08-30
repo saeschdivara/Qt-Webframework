@@ -58,6 +58,7 @@ QList<AbstractModel *> DirListModel::models()
 void DirListModel::generateAllModels(const QString & dirPath, const QString & addressPath)
 {
     QDir dir(dirPath);
+    dir.setSorting(QDir::Name);
     QStringList folderItems = dir.entryList();
     for (int i = 0; i < folderItems.count(); ++i) {
         QString item = folderItems.at(i);

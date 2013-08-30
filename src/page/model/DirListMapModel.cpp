@@ -38,6 +38,7 @@ void DirListMapModel::generateAllModels(const QString & dirPath, const QString &
 {
     QDir dir(dirPath);
     dir.setFilter(QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
+    dir.setSorting(QDir::Name);
     QStringList allFiles = dir.entryList();
     for ( QString dir : allFiles ) {
             QString entry = addressPath + QDir::separator() + dir + QDir::separator();

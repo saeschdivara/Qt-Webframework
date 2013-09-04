@@ -36,31 +36,6 @@ QString DomOutputHelper::subElementsToString(QDomElement ele)
     const int total = childNodes.size();
     for (int i = 0; i < total; ++i) {
         QDomNode node = childNodes.at(i);
-        if ( !node.isElement() ) continue;
-
-        QDomElement childElement = node.toElement();
-        if ( i == 0 ) {
-            subElementsString = elementToString(childElement);
-        }
-        else {
-            subElementsString += QChar('\n') + elementToString(childElement);
-        }
-    }
-
-    return subElementsString;
-}
-
-QString DomOutputHelper::elementToString(QDomElement ele)
-{
-    QString elementString("<%1 %2>%3</%1>");
-    QString subElementsString;
-
-    QString attributesString = elementAttributesToString(ele.attributes());
-
-    QDomNodeList childNodes = ele.childNodes();
-    const int total = childNodes.size();
-    for (int i = 0; i < total; ++i) {
-        QDomNode node = childNodes.at(i);
         if ( node.isElement() ) {
             QDomElement childElement = node.toElement();
 
@@ -82,6 +57,15 @@ QString DomOutputHelper::elementToString(QDomElement ele)
             }
         }
     }
+
+    return subElementsString;
+}
+
+QString DomOutputHelper::elementToString(QDomElement ele)
+{
+    QString elementString("<%1 %2>%3</%1>");
+    QString attributesString = elementAttributesToString(ele.attributes());
+    QString subElementsString = subElementsToString(ele);
 
     return elementString.arg(ele.tagName(), attributesString, subElementsString);
 }

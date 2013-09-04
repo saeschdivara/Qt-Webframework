@@ -178,8 +178,8 @@ void TemplateTag::render()
         web::page::model::AbstractModel *templateModel = modelList.at(i);
 
         if ( !hasIfAttribute || util::TemplateRenderHelper::isTemplateAllowed(modelIfAttribute, templateModel) ) {
-            util::TemplateRenderHelper::replaceModelPlaceholders(modelTemplate, templateModel);
             modelTemplate = d->renderer->renderSubTag(modelTemplate, QLatin1String("if"), templateModel);
+            util::TemplateRenderHelper::replaceModelPlaceholders(modelTemplate, templateModel);
             d->content += modelTemplate;
         }
     }

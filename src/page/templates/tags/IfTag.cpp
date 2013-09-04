@@ -93,19 +93,27 @@ void IfTag::render()
 {
     Q_D(IfTag);
 
-    if ( !d->element.hasAttribute(QLatin1String("property")) ) return;
+    if ( !d->element.hasAttribute(QLatin1String("property")) ) {
+        d->isContentAllowed = false;
+        return;
+    }
 
     QString prop = d->pageModel->property(d->element.attribute("property").toLocal8Bit()).toString();
+    QString attr;
 
     if ( d->element.hasAttribute(QLatin1String("equals")) ) {
-        QString attr = d->element.attribute(QLatin1String("equals"));
+        attr = d->element.attribute(QLatin1String("equals"));
         if ( prop == attr )
             d->isContentAllowed = true;
+        else
+            d->isContentAllowed = false;
     }
     else if ( d->element.hasAttribute(QLatin1String("not-equals")) ) {
-        QString attr = d->element.attribute(QLatin1String("not-equals"));
+        attr = d->element.attribute(QLatin1String("not-equals"));
         if ( prop != attr )
             d->isContentAllowed = true;
+        else
+            d->isContentAllowed = false;
     }
 
     if ( d->isContentAllowed ) {

@@ -224,7 +224,7 @@ QString TagRenderer::renderSubTag(const QString & templateContent, const QString
         delete tag;
     }
 
-    return doc.toString();
+    return util::DomOutputHelper::subElementsToString(doc.documentElement());
 }
 
 }

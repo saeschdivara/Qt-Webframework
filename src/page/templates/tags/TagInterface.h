@@ -16,6 +16,8 @@ namespace templates
 namespace tags
 {
 
+class TagRenderer;
+
 /**
  * @brief The TagInterface class
  *
@@ -92,6 +94,17 @@ class WEBFRAMEWORKQTSHARED_EXPORT TagInterface
          * @since 0.3
          */
         virtual void setTemplateList(QHash<QString, QByteArray> templates) = 0;
+
+        /**
+         * @brief If the tag needs to render sub tags this
+         * is the help the renderer gives the tag
+         *
+         * @param renderer
+         *
+         * @author Sascha Häusler <saeschdivara@gmail.com>
+         * @since 0.3
+         */
+        virtual void setTemplateRenderer(TagRenderer * renderer) { Q_UNUSED(renderer); }
 
         /**
          * @brief Only if this method returns true, the content

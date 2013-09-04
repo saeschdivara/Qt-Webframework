@@ -21,7 +21,7 @@ class TemplateTagPrivate;
  * @author Sascha Häusler <saeschdivara@gmail.com>
  * @since 0.3
  */
-class TemplateTag : public TagInterface
+class WEBFRAMEWORKQTSHARED_EXPORT TemplateTag : public TagInterface
 {
         // TagInterface interface
     public:
@@ -96,6 +96,16 @@ class TemplateTag : public TagInterface
          * @since 0.3
          */
         virtual void setTemplateList(QHash<QString, QByteArray> templates) Q_DECL_OVERRIDE;
+
+        /**
+         * @brief We set the renderer so we can render sub tags
+         *
+         * @param renderer
+         *
+         * @author Sascha Häusler <saeschdivara@gmail.com>
+         * @since 0.3
+         */
+        virtual void setTemplateRenderer(TagRenderer * renderer) Q_DECL_OVERRIDE;
 
         /**
          * @brief Only if this method returns true, the content

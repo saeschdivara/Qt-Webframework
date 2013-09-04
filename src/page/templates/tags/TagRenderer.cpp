@@ -1,5 +1,8 @@
 #include "TagRenderer.h"
+
+#include "IfTag.h"
 #include "TemplateTag.h"
+#include "util/DomOutputHelper.h"
 
 #include <QtCore/QDebug>
 #include <QtCore/QStringList>
@@ -24,13 +27,16 @@ class TagRendererPrivate
         QStringList getTags(QDomDocumentType docType) {
             Q_UNUSED(docType);
             QStringList tags;
+
             tags << "tpl";
+            tags << "if";
 
             return tags;
         }
 
         tags::TagInterface * getTagObjectForTagString(const QString & tagString) {
             if ( tagString == "tpl" ) return new TemplateTag;
+            if ( tagString == "if" ) return new IfTag;
 
             return Q_NULLPTR;
         }
@@ -86,6 +92,7 @@ QString TagRenderer::render()
             QDomNodeList tagNodeList = doc.elementsByTagName(tagString);
             const int tagListSize = tagNodeList.size();
 
+            tag->setTemplateRenderer(this);
             tag->setPageModel(d->pageModel);
 
             // We need to go backwards because otherwise the deleting of nodes doesnt work
@@ -93,7 +100,8 @@ QString TagRenderer::render()
                 QDomElement element = tagNodeList.item(i).toElement();
                 QDomNode parentNode = element.parentNode();
 
-                tag->setTagContent(element.text().toUtf8());
+                QByteArray tagContent = util::DomOutputHelper::subElementsToString(element).toUtf8();
+                tag->setTagContent(tagContent);
                 tag->setElement(element);
                 tag->setModelList(d->templateModels);
                 tag->setTemplateList(d->templates);
@@ -142,6 +150,78 @@ QString TagRenderer::render()
 
             delete tag;
         }
+    }
+
+    return doc.toString();
+}
+
+QString TagRenderer::renderSubTag(const QString & templateContent, const QString & tagString, model::AbstractModel * model)
+{
+    Q_D(TagRenderer);
+
+    QDomDocument doc;
+
+    doc.setContent(QString("<rendering>%1</rendering>").arg(templateContent));
+    TagInterface * tag = d->getTagObjectForTagString(tagString);
+    if ( tag ) {
+        QDomNodeList tagNodeList = doc.elementsByTagName(tagString);
+        const int tagListSize = tagNodeList.size();
+
+        tag->setTemplateRenderer(this);
+        tag->setPageModel(model);
+
+        // We need to go backwards because otherwise the deleting of nodes doesnt work
+        for (int i = tagListSize-1; i >= 0 ; --i) {
+            QDomElement element = tagNodeList.item(i).toElement();
+            QDomNode parentNode = element.parentNode();
+
+            QByteArray tagContent = util::DomOutputHelper::subElementsToString(element).toUtf8();
+            tag->setTagContent(tagContent);
+            tag->setElement(element);
+
+            tag->render();
+
+            if ( tag->isContentAllowed() ) {
+                QByteArray renderedTagContent = tag->getRenderedContent();
+                QString newTag("<%1>%2</%1>");
+
+                QDomDocument tagDoc;
+                // Checking if any error occured
+                QString errorMessage;
+                int errorLine;
+
+                // We need to wrap the content so we can be sure
+                // the doc parses everything correctly
+                QString tagDocContent = newTag.arg(tag->tag()).arg(QString::fromUtf8(renderedTagContent));
+                tagDoc.setContent(
+                            tagDocContent,
+                            &errorMessage,
+                            &errorLine
+                            );
+
+                if ( !errorMessage.isEmpty() )
+                    qDebug() << Q_FUNC_INFO << "Error:" << errorMessage << errorLine;
+
+                // No tag shall be around the generated content
+                QDomNodeList nodes = tagDoc.documentElement().childNodes();
+                // We need to keep track after which
+                // node we need to insert the next node
+                QDomNode beforeNode = element;
+                for (int i = 0; i < nodes.count(); ++i) {
+                    QDomNode node = nodes.at(i);
+                    QDomNode clonedNode = node.cloneNode();
+                    parentNode.insertAfter(clonedNode, beforeNode);
+                    beforeNode = clonedNode;
+                }
+
+                parentNode.removeChild(element);
+            }
+            else {
+                parentNode.removeChild(element);
+            }
+        }
+
+        delete tag;
     }
 
     return doc.toString();

@@ -1,6 +1,8 @@
 #include "TemplateTag.h"
 #include "private/TagInterfacePrivate.h"
 
+#include "TagRenderer.h"
+
 #include <util/TemplateRenderHelper.h>
 
 namespace web
@@ -15,6 +17,22 @@ namespace tags
 class TemplateTagPrivate : public TagInterfacePrivate
 {
     public:
+        TagRenderer * renderer;
+
+        inline QString getTemplateName() {
+            QString templateName = element.attribute("src");
+            return templateName;
+        }
+
+        inline QByteArray getTemplate() {
+            if ( content.isEmpty() ) {
+                QString templateName = getTemplateName();
+                return util::TemplateRenderHelper::getTrimmedTemplate(tagName, templates[templateName]);
+            }
+            else {
+                return content;
+            }
+        }
 };
 
 TemplateTag::TemplateTag() :
@@ -58,6 +76,12 @@ void TemplateTag::setTemplateList(QHash<QString, QByteArray> templates)
     d->templates = templates;
 }
 
+void TemplateTag::setTemplateRenderer(TagRenderer * renderer)
+{
+    Q_D(TemplateTag);
+    d->renderer = renderer;
+}
+
 bool TemplateTag::isContentAllowed()
 {
     Q_D(TemplateTag);
@@ -71,7 +95,7 @@ void TemplateTag::render()
     d->isContentAllowed = true;
 
     // We need a src attribute
-    if ( !d->attributes.contains("src") ) {
+    if ( !d->attributes.contains("src") && d->content.isEmpty() ) {
         d->isContentAllowed = false;
         return;
     }
@@ -99,10 +123,7 @@ void TemplateTag::render()
         if ( !d->isContentAllowed ) return;
     }
 
-    QString templateName = d->element.attribute("src");
-
-    QByteArray templateContent = util::TemplateRenderHelper::getTrimmedTemplate(d->tagName,
-                                                                                d->templates[templateName]);
+    QByteArray templateContent = d->getTemplate();
 
     // If there is no model to work with, we just
     // use the template without any replacements
@@ -158,6 +179,7 @@ void TemplateTag::render()
 
         if ( !hasIfAttribute || util::TemplateRenderHelper::isTemplateAllowed(modelIfAttribute, templateModel) ) {
             util::TemplateRenderHelper::replaceModelPlaceholders(modelTemplate, templateModel);
+            modelTemplate = d->renderer->renderSubTag(modelTemplate, QLatin1String("if"), templateModel);
             d->content += modelTemplate;
         }
     }

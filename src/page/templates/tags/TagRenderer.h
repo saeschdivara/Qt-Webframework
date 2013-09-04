@@ -79,6 +79,20 @@ class WEBFRAMEWORKQTSHARED_EXPORT TagRenderer
          */
         QString render();
 
+        /**
+         * @brief renderSubTag
+         *
+         * @param templateContent
+         * @param tag
+         * @param model
+         *
+         * @return
+         *
+         * @author Sascha Häusler <saeschdivara@gmail.com>
+         * @since 0.3
+         */
+        QString renderSubTag(const QString & templateContent, const QString & tagString, model::AbstractModel * model);
+
     protected:
         TagRendererPrivate * d_ptr;
 

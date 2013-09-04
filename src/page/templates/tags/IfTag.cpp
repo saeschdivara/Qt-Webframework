@@ -83,11 +83,6 @@ void IfTag::setTemplateList(QHash<QString, QByteArray> templates)
     Q_UNUSED(templates);
 }
 
-void IfTag::setTemplateRenderer(TagRenderer * renderer)
-{
-    Q_UNUSED(renderer);
-}
-
 bool IfTag::isContentAllowed()
 {
     Q_D(IfTag);

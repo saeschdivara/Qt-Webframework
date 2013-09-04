@@ -48,15 +48,101 @@ class WEBFRAMEWORKQTSHARED_EXPORT IfTag : public TagInterface
     public:
         IfTag();
 
+        /**
+         * @brief Returns the tag name if
+         *
+         * @return
+         *
+         * @author Sascha Häusler <saeschdivara@gmail.com>
+         * @since 0.3
+         */
         virtual QString tag() const Q_DECL_OVERRIDE;
+
+        /**
+         * @brief This method is here to save the dom element
+         * and its attributes which can be the following:
+         * property (required)
+         * equals / not-equals
+         *
+         * @param element
+         *
+         * @author Sascha Häusler <saeschdivara@gmail.com>
+         * @since 0.3
+         */
         virtual void setElement(QDomElement element) Q_DECL_OVERRIDE;
+
+        /**
+         * @brief This method is to save the content between
+         * the tags like <b>content</b>. The content can include
+         * html tags
+         *
+         * @param content
+         *
+         * @author Sascha Häusler <saeschdivara@gmail.com>
+         * @since 0.3
+         */
         virtual void setTagContent(const QByteArray & content) Q_DECL_OVERRIDE;
+
+        /**
+         * @brief This is the model which holds the property
+         *
+         * @param pageModel
+         *
+         * @author Sascha Häusler <saeschdivara@gmail.com>
+         * @since 0.3
+         */
         virtual void setPageModel(model::AbstractModel * pageModel) Q_DECL_OVERRIDE;
+
+        /**
+         * @brief This method is not used
+         *
+         * @param templateModels
+         *
+         * @author Sascha Häusler <saeschdivara@gmail.com>
+         * @since 0.3
+         */
         virtual void setModelList(QHash<QString, model::AbstractListModel *> templateModels) Q_DECL_OVERRIDE;
+
+        /**
+         * @brief This method is not used
+         *
+         * @param templates
+         *
+         * @author Sascha Häusler <saeschdivara@gmail.com>
+         * @since 0.3
+         */
         virtual void setTemplateList(QHash<QString, QByteArray> templates) Q_DECL_OVERRIDE;
-        virtual void setTemplateRenderer(TagRenderer * renderer) Q_DECL_OVERRIDE;
+
+        /**
+         * @brief Returns true if the property is equals or not equals
+         * the string in the attribute
+         *
+         * @return
+         *
+         * @author Sascha Häusler <saeschdivara@gmail.com>
+         * @since 0.3
+         */
         virtual bool isContentAllowed() Q_DECL_OVERRIDE;
+
+        /**
+         * @brief Renderes what the content shall be in the
+         * page content after the attributes and the content
+         * are set
+         *
+         * @author Sascha Häusler <saeschdivara@gmail.com>
+         * @since 0.3
+         */
         virtual void render() Q_DECL_OVERRIDE;
+
+        /**
+         * @brief This method should return the rendered tag content
+         * with its start and end tag
+         *
+         * @return
+         *
+         * @author Sascha Häusler <saeschdivara@gmail.com>
+         * @since 0.3
+         */
         virtual QByteArray getRenderedContent() Q_DECL_OVERRIDE;
 
     protected:

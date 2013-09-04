@@ -88,7 +88,7 @@ QString DomOutputHelper::elementToString(QDomElement ele)
 
 QString DomOutputHelper::textElementToString(QDomText text)
 {
-    //
+    return text.data();
 }
 
 QString DomOutputHelper::elementAttributesToString(QDomNamedNodeMap attributes)

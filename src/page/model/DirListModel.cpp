@@ -37,7 +37,7 @@ DirListModel::DirListModel(const QString & dirPath, const QString & addressPath,
 
 void DirListModel::load()
 {
-    for (int i = 0; i < m_folderContent.length(); ++i) {
+    for (int i = m_startPosition; i < m_limit; ++i) {
         AbstractModel * model = m_folderContent.at(i);
         model->load();
     }
@@ -45,10 +45,24 @@ void DirListModel::load()
 
 void DirListModel::unload()
 {
-    for (int i = 0; i < m_folderContent.length(); ++i) {
+    for (int i = m_startPosition; i < m_limit; ++i) {
         AbstractModel * model = m_folderContent.at(i);
         model->unload();
     }
+
+    // Reset start position and limit
+    m_startPosition = 0;
+    m_limit = m_folderContent.size();
+}
+
+void DirListModel::setStartPosition(uint i)
+{
+    m_startPosition = i;
+}
+
+void DirListModel::setLimit(uint i)
+{
+    m_limit = i;
 }
 
 QList<AbstractModel *> DirListModel::models()

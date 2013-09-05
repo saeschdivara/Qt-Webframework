@@ -20,6 +20,9 @@ class WEBFRAMEWORKQTSHARED_EXPORT DirListModel : public AbstractListModel
         virtual void load() Q_DECL_OVERRIDE;
         virtual void unload() Q_DECL_OVERRIDE;
 
+        virtual void setStartPosition(uint i) Q_DECL_OVERRIDE;
+        virtual void setLimit(uint i) Q_DECL_OVERRIDE;
+
         virtual QList<AbstractModel *> models() Q_DECL_OVERRIDE;
 
     protected:
@@ -27,6 +30,8 @@ class WEBFRAMEWORKQTSHARED_EXPORT DirListModel : public AbstractListModel
 
     private:
         QList<AbstractModel *> m_folderContent;
+        int m_startPosition;
+        int m_limit;
 };
 
 }

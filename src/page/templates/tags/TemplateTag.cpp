@@ -20,12 +20,12 @@ class TemplateTagPrivate : public TagInterfacePrivate
         TagRenderer * renderer;
 
         inline QString getTemplateName() {
-            QString templateName = element.attribute("src");
+            QString templateName = attributes.namedItem("src").toAttr().value();
             return templateName;
         }
 
         inline QByteArray getTemplate() {
-            if ( content.isEmpty() ) {
+            if ( content.isEmpty() || attributes.contains("src") ) {
                 QString templateName = getTemplateName();
                 return util::TemplateRenderHelper::getTrimmedTemplate(tagName, templates[templateName]);
             }

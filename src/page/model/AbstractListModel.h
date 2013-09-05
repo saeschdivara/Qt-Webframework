@@ -16,6 +16,10 @@ class WEBFRAMEWORKQTSHARED_EXPORT AbstractListModel : public AbstractModel
         Q_OBJECT
     public:
         AbstractListModel(QObject *parent = 0);
+
+        virtual void setStartPosition(uint i) { Q_UNUSED(i) }
+        virtual void setLimit(uint i) { Q_UNUSED(i) }
+
         virtual QList<AbstractModel *> models() = 0;
 };
 

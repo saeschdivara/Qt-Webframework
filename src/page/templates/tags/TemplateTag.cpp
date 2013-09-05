@@ -134,7 +134,6 @@ void TemplateTag::render()
 
     QString listModelName = d->element.attribute("model");
     model::AbstractListModel * listModel = d->templateModels[listModelName];
-    QList<web::page::model::AbstractModel *> modelList = listModel->models();
 
     QString modelIfAttribute;
     int modelCountAttribute = -1;
@@ -152,13 +151,18 @@ void TemplateTag::render()
                                                                                          "model-start-count",
                                                                                          d->pageModel
                                                                                          );
+        listModel->setStartPosition(uint(modelStartCountAttribute));
     }
 
     if (d->element.hasAttribute("model-count")) {
         modelCountAttribute = util::TemplateRenderHelper::getTemplateAttribute<int>(d->element,
                                                                                     "model-count",
                                                                                     d->pageModel);
+        listModel->setLimit(uint(modelCountAttribute));
     }
+
+    listModel->load();
+    QList<web::page::model::AbstractModel *> modelList = listModel->models();
 
     if ( modelStartCountAttribute < 0 ) {
         modelStartCountAttribute = 0;
@@ -183,6 +187,8 @@ void TemplateTag::render()
             d->content += modelTemplate;
         }
     }
+
+    listModel->unload();
 }
 
 QByteArray TemplateTag::getRenderedContent()

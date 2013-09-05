@@ -33,6 +33,8 @@ DirListModel::DirListModel(const QString & dirPath, const QString & addressPath,
     AbstractListModel(parent)
 {
     generateAllModels(dirPath, addressPath);
+    m_startPosition = 0;
+    m_limit = m_folderContent.size();
 }
 
 void DirListModel::load()

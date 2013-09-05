@@ -25,6 +25,7 @@ enum DirFileType {
 DirFileType getFileType(const QString & file) {
     IF_FILE_TYPE(file, ".jpg", DirFileType::ImageType);
     IF_FILE_TYPE(file, ".png", DirFileType::ImageType);
+    IF_FILE_TYPE(file, ".gif", DirFileType::ImageType);
     return DirFileType::NoType;
 }
 

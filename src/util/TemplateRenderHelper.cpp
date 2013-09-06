@@ -1,6 +1,7 @@
 #include "TemplateRenderHelper.h"
 
-#include <QRegularExpression>
+#include <QtCore/QDebug>
+#include <QtCore/QRegularExpression>
 
 namespace web
 {
@@ -30,7 +31,12 @@ QByteArray TemplateRenderHelper::getTrimmedTemplate(const QString & tag, QByteAr
 
 void TemplateRenderHelper::replaceModelPlaceholders(QString & pageContent, page::model::AbstractModel * model)
 {
-    QRegularExpression regex("\\$(.*)\\$");
+    if ( model == Q_NULLPTR ) {
+        qWarning() << Q_FUNC_INFO << "Model is nullptr, content: " << pageContent;
+        return;
+    }
+
+    QRegularExpression regex("\\$(\\w*)\\$");
     QRegularExpressionMatchIterator matchIterator = regex.globalMatch(pageContent);
     while ( matchIterator.hasNext() ) {
             QRegularExpressionMatch match = matchIterator.next();

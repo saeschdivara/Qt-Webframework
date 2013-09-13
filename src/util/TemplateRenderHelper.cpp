@@ -32,7 +32,7 @@ QByteArray TemplateRenderHelper::getTrimmedTemplate(const QString & tag, QByteAr
 void TemplateRenderHelper::replaceModelPlaceholders(QString & pageContent, page::model::AbstractModel * model)
 {
     if ( model == Q_NULLPTR ) {
-        qWarning() << Q_FUNC_INFO << "Model is nullptr, content: " << pageContent;
+        qWarning() << Q_FUNC_INFO << "Model is nullptr";
         return;
     }
 

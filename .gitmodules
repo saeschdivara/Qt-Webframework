@@ -1,0 +1,3 @@
+[submodule "Qt-Arango-DB-Driver"]
+	path = 3rdparty/Qt-Arango-DB-Driver
+	url = git@github.com:saeschdivara/Qt-Arango-DB-Driver.git

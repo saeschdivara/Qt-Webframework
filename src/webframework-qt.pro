@@ -132,10 +132,10 @@ DEPENDPATH += $$PWD/../../arangodb-driver/src
 
 CONFIG(release, debug|release) {
 LIBS += -L$$PWD/../3rdparty/tufao-release/ -ltufao
-LIBS += -L$$PWD/../../arangodb-driver-dist/release/ -larangodb-driver
+LIBS += -L$$PWD/../3rdparty/Qt-Arango-DB-Driver-release/ -larangodb-driver
 }
 CONFIG(debug, debug|release) {
 DEFINES += QT_WEBFRAMEWORK_DEBUG
 LIBS += -L$$PWD/../3rdparty/tufao-debug/ -ltufao
-LIBS += -L$$PWD/../../arangodb-driver-dist/debug/ -larangodb-driver
+LIBS += -L$$PWD/../3rdparty/Qt-Arango-DB-Driver-debug/ -larangodb-driver
 }

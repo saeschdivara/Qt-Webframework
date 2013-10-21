@@ -7,6 +7,7 @@
 *.o
 *.so
 *.so.*
+moc_*
 
 # Packages #
 ############
@@ -24,3 +25,13 @@
 # Makefiles #
 #############
 Makefile
+
+# Project files #
+#################
+*.pro.user
+*.pro.user.*
+
+# Directories #
+###############
+# Doxy documentation should not be included
+doxy/

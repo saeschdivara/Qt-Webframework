@@ -60,15 +60,15 @@ void I18nManager::loadLanguageTexts(const QString &language)
             languageText = texts->document();
 
             languageText->updateStatus();
-            I18N_WAIT(languageText);
+            languageText->waitForResult();
 
             if (!languageText->isCurrent()) {
                     languageText->sync();
-                    I18N_WAIT(languageText);
+                    languageText->waitForResult();
                 }
         } else {
             languageText = d->nosql->getDocument(I18N_COLLECTION_NAME + QStringLiteral("/") + language);
-            I18N_WAIT(languageText);
+            languageText->waitForResult();
 
             // if the language texts don't exist
             if (languageText->hasErrorOccurred()) {
@@ -79,7 +79,7 @@ void I18nManager::loadLanguageTexts(const QString &language)
                     languageText = d->nosql->createDocument(I18N_COLLECTION_NAME, language);
 
                     languageText->save();
-                    I18N_WAIT(languageText);
+                    languageText->waitForResult();
                 }
 
             // Register the language texts for one language

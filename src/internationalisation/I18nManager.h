@@ -10,29 +10,6 @@
 #include <QtCore/QGlobalStatic>
 #include <QtCore/QString>
 
-#define I18N_OUTPUT_WAIT(doc) \
-    do { \
-        if ( doc->hasErrorOccurred() )  \
-            qDebug() << doc->errorMessage();\
-    } while(0)
-
-#define I18N_WAIT(doc) \
-    do { \
-        bool b = true; \
-        QMetaObject::Connection conn1 = QObject::connect(doc, &arangodb::Document::ready, [&] { \
-                b = false; \
-            });\
-        QMetaObject::Connection conn2 = QObject::connect(doc, &arangodb::Document::error, [&] { \
-                b = false; \
-            }); \
-        while (b) { \
-                qApp->processEvents(); \
-            } \
-        QObject::disconnect(conn1); \
-        QObject::disconnect(conn2); \
-        I18N_OUTPUT_WAIT(doc); \
-    } while(0)
-
 namespace web
 {
 namespace internationalisation
